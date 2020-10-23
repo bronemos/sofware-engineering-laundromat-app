@@ -138,10 +138,10 @@
 				\noindent \underbar{\textbf{UC1 - Registracija}}
 				\begin{packed_item}
 					
-					\item \textbf{Glavni sudionik: } Korisnik
-					\item  \textbf{Cilj:} Stvoriti korisnički račun za pristup sustavu
-					\item  \textbf{Sudionici:}  Baza podataka + pitanje (ako radnik treba potvrditi, je li i on sudionik?)
-					\item  \textbf{Preduvjet:} -
+					\item \textbf{Glavni sudionik: Korisnik}
+					\item  \textbf{Cilj: Stvoriti korisnički račun za pristup sustavu}
+					\item  \textbf{Sudionici: Baza podataka + pitanje (ako radnik treba potvrditi, je li i on sudionik?)}
+					\item  \textbf{Preduvjet: -}
 					\item  \textbf{Opis osnovnog tijeka:}
 					
 					\item[] \begin{packed_enum}
@@ -161,7 +161,8 @@
 						\item[2.a] Odabir već zauzete ili nepostojeće adrese e-pošte te neispravno popunjavanje obrasca
 						\item[] \begin{packed_enum}
 							
-							\item Sustav obavještava korisnika o neuspjeloj registraciji i vraća ga na natrag stranicu za registraciju korisnika
+							\item Sustav obavještava korisnika o neuspjeloj registraciji i vraća ga na natrag stranicu za registraciju
+korisnika
 							\item Korisnik mijenja potrebne podatke te se ponovno pokušava registrirati ili odustaje od registracije
 							
 						\end{packed_enum}
@@ -189,146 +190,46 @@
 						\end{packed_enum}
 						
 						
-					\end{packed_item}	
-				\end{packed_item}
+					\end{packed_item}
 				
-				\noindent \underbar{\textbf{UC2 - Pregled podataka o praonici}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik: } Korisnik
-					\item  \textbf{Cilj:} Prikaz podataka o praonici
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} -
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
+					\noindent \underbar{\textbf{UC2 -Pregled podataka o praonici}}
+					\begin{packed_item}
 						
-						\item Korisnik odabire opciju za prikaz podataka o praonici
-						\item Korisniku se prikazuju podaci o praonici
+						\item \textbf{Glavni sudionik: Korisnik}
+						\item  \textbf{Cilj: Prikaz podataka o praonici}
+						\item  \textbf{Sudionici: Baza podataka}
+						\item  \textbf{Preduvjet: -}
+						\item  \textbf{Opis osnovnog tijeka:}
 						
-					\end{packed_enum}
-					
-				\end{packed_item}
-				
-				\noindent \underbar{\textbf{UC3 - Pregled oglasa za posao}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik:} Korisnik
-					\item  \textbf{Cilj:} Prikaz oglasa za posao
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} -
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
-						
-						\item Korisnik odabire opciju za prikaz oglasa za posao
-						\item Korisniku se prikazuju oglasi
-						
-					\end{packed_enum}
-					
-				\end{packed_item}
-					
-				\noindent \underbar{\textbf{UC 4.1 - Objava oglasa za posao}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik: } Administrator
-					\item  \textbf{Cilj:} Objaviti oglas za studentski posao
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} Postoji otvorena pozicija u praonici
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
-						
-						\item Administrator odabire opciju za stvaranje novog oglasa
-						\item Administrator ispunjava tekst i podatke oglasa
-						\item Oglas se objavljuje odabirom opcije za objavljivanje oglasa.
-					\end{packed_enum}
-					
-					\item  \textbf{Opis mogućih odstupanja:}
-					
-					\item[] \begin{packed_item}
-						
-						\item[2.a] Pogrešno uneseni podaci o natječaju
 						\item[] \begin{packed_enum}
 							
-							\item Omogućiti editiranje oglasa nakon objave
-							
-						\end{packed_enum}				
+							\item Korisnik odabire opciju za prikaz podataka o praonici
+							\item Korisniku se prikazuju podaci o praonici
+			
+						\end{packed_enum}
+						
 					\end{packed_item}
-				\end{packed_item}
-			
-				\noindent \underbar{\textbf{UC 4.2 - Promjena radnog vremena}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik: } Administrator
-					\item  \textbf{Cilj:} Promijeniti radno vrijeme praonice
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} -
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
+				
+					\noindent \underbar{\textbf{UC3 -Pregled oglasa za posao}}
+					\begin{packed_item}
 						
-						\item Administrator odabire opciju promjene radnog vremena
-						\item Prikaže se modal za odabir novog radnog vremena
-						\item Administrator unosi novo radno vrijeme
-						\item Administrator odabire opciju za potvrdu novog radnog vremena
-					\end{packed_enum}
-				\end{packed_item}
-			
-				\noindent \underbar{\textbf{UC 4.3 - Promjena cijene pranja}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik: } Administrator
-					\item  \textbf{Cilj:} Promijeniti cijenu jednog pranja
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} -
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
+						\item \textbf{Glavni sudionik: Korisnik}
+						\item  \textbf{Cilj: Prikaz oglasa za posao}
+						\item  \textbf{Sudionici: Baza podataka}
+						\item  \textbf{Preduvjet: -}
+						\item  \textbf{Opis osnovnog tijeka:}
 						
-						\item Administrator odabire opciju promjene cijene pranja
-						\item Prikaže se modal za unos nove cijene pranja
-						\item Administrator unosi novu cijenu pranja
-						\item Administrator odabire opciju za potvrdu nove cijene pranja
-					\end{packed_enum}
-				\end{packed_item}
-			
-				\noindent \underbar{\textbf{UC 4.4 - Promjena cijene sušenja}}
-				\begin{packed_item}
-					
-					\item \textbf{Glavni sudionik: } Administrator
-					\item  \textbf{Cilj:} Promijeniti cijenu jednog sušenja
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} -
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
+						\item[] \begin{packed_enum}
+							
+							\item Korisnik odabire opciju za prikaz oglasa za posao
+							\item Korisniku se prikazuju oglasi
+							
+						\end{packed_enum}
 						
-						\item Administrator odabire opciju promjene cijene sušenja
-						\item Prikaže se modal za unos nove cijene sušenja
-						\item Administrator unosi novu cijenu sušenja
-						\item Administrator odabire opciju za potvrdu nove cijene sušenja
-					\end{packed_enum}
-				\end{packed_item}
-			
-				\noindent \underbar{\textbf{UC 4.5 - Zabrana pristupa korisniku}}
-				\begin{packed_item}
+					\end{packed_item}
 					
-					\item \textbf{Glavni sudionik: } Administrator
-					\item  \textbf{Cilj:} Promijeniti cijenu jednog sušenja
-					\item  \textbf{Sudionici:} Baza podataka
-					\item  \textbf{Preduvjet:} -
-					\item  \textbf{Opis osnovnog tijeka:}
-					
-					\item[] \begin{packed_enum}
-						
-						\item Administrator odabire opciju zabrane pristupa korisnicima
-						\item Prikaže se lista svih ispravno registriranih korisnika
-						\item Administrator odabire korisnika ili više njih
-						\item Administrator odabire opciju za potvrdu zabrane pristupa
-					\end{packed_enum}
 				\end{packed_item}
-			
+					
 				\subsubsection{Dijagrami obrazaca uporabe}
 					
 					\textit{Prikazati odnos aktora i obrazaca uporabe odgovarajućim UML dijagramom. Nije nužno nacrtati sve na jednom dijagramu. Modelirati po razinama apstrakcije i skupovima srodnih funkcionalnosti.}
