@@ -13,9 +13,11 @@
 			
 			\begin{packed_enum}
 				
-				\item Dionik 1
-				\item Dionik 2				
-				\item ...
+				\item Studentski centar Sveučilišta u Zagrebu (naručitelj)
+				\item Korisnici praonice veša				
+				\item Zaposlenici praonice veša
+				\item Administrator sustava
+				\item Razvojni tim
 				
 			\end{packed_enum}
 			
@@ -23,30 +25,48 @@
 			
 			
 			\begin{packed_enum}
-				\item  \underbar{Aktor 1 (inicijator) može:}
+				\item  \underbar{1. Neregistrirani/neprijavljeni korisnik (inicijator) može:}
 				
 				\begin{packed_enum}
 					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
+					\item napraviti novi korisnički račun za koji su mu potrebni adresa e-pošte, lozinka, ime, prezime i broj kreditne kartice
+					\item vidjeti oglase za posao (osobe koje ne žive u domu i nisu studenti, odnosno nemaju pravo koristiti praonicu, mogu se zaposliti u praonici, prijave za oglas ne idu putem aplikacije, već še molba i životopis šalju na adresu e-pošte navedenu u oglasu)
+					\item vidjeti podatke o praonici 
+					
 					\begin{packed_enum}
-						
-						\item  podfunkcionalnost 1 
-						\item  podfunkcionalnost 2
-				
+						\item radno vrijeme praonice
+						\item cijene pranja i sušenja
 					\end{packed_enum}
-					\item  funkcionalnost 3
 					
 				\end{packed_enum}
 			
-				\item  \underbar{Aktor 2 (sudionik) može:}
+				\item  \underbar{Zaposlenik (inicijator) može:}
 				
 				\begin{packed_enum}
 					
-					\item funkcionalnost 1
+					\item ink
 					\item funkcionalnost 2
 					
 				\end{packed_enum}
+			
+				\item  \underbar{Administrator (inicijator) može:}
+				
+				\begin{packed_enum}
+					
+					\item ivan
+					\item funkcionalnost 2
+					
+				\end{packed_enum}
+			
+				\item  \underbar{Baza podataka (sudionik) može:}
+				
+				\begin{packed_enum}
+					
+					\item spigl
+					\item funkcionalnost 2
+					
+				\end{packed_enum}
+			
 			\end{packed_enum}
 			
 			\eject 
@@ -96,6 +116,99 @@
 						\end{packed_item}
 					\end{packed_item}
 				
+				\noindent \underbar{\textbf{UC1 - Registracija}}
+				\begin{packed_item}
+					
+					\item \textbf{Glavni sudionik: Korisnik}
+					\item  \textbf{Cilj: Stvoriti korisnički račun za pristup sustavu}
+					\item  \textbf{Sudionici: Baza podataka + pitanje (ako radnik treba potvrditi, je li i on sudionik?)}
+					\item  \textbf{Preduvjet: -}
+					\item  \textbf{Opis osnovnog tijeka:}
+					
+					\item[] \begin{packed_enum}
+						
+						\item Korisnik odabire opciju za registraciju
+						\item Korisnik unosi potrebne korisničke podatke
+						\item Korisnik dobiva obavijest o slanju registracije na potvrdu
+						\item Korisnik odlazi osobno u praonicu s potvrdom da stanuje u domu 
+						\item Radnik u praonici potvrđuje prijavu nakon uvjeravanja da osoba stanuje u domu
+						\item Korisnik prima obavijest o uspješnoj registraciji
+					\end{packed_enum}
+					
+					\item  \textbf{Opis mogućih odstupanja:}
+					
+					\item[] \begin{packed_item}
+						
+						\item[2.a] Odabir već zauzete ili nepostojeće adrese e-pošte te neispravno popunjavanje obrasca
+						\item[] \begin{packed_enum}
+							
+							\item Sustav obavještava korisnika o neuspjeloj registraciji i vraća ga na natrag stranicu za registracijukorisnika
+							\item Korisnik mijenja potrebne podatke te se ponovno pokušava registrirati ili odustaje od registracije
+							
+						\end{packed_enum}
+					
+						\item[4.a] Korisnik zaboravi odnijeti potvrdu o stanovanju u studentskom domu u praonicu
+						\item[] \begin{packed_enum}
+							
+							\item Sustav obavještava korisnika da odnese potvrdu u praonicu
+							\item Nakon određenog vremena pokušaj registracije briše se iz sustava ????
+							
+						\end{packed_enum}
+					
+						\item[5.a] Radnik u praonici nije potvrdio registraciju korisnika
+						\item[] \begin{packed_enum}
+							
+							\item Korisnik ponovno odlazi u praonicu s potvrdom
+							
+						\end{packed_enum}
+					
+						\item[5.a] Radnik u praonici potvrdio je ili odbio zahtjev za registracijom krivog korisnika
+						\item[] \begin{packed_enum}
+							
+							\item Radnik obavještava administratora o tome kojeg je korisnika zabunom potvrdio ili odbio, te administrator promijeni podatke u bazi podataka
+							
+						\end{packed_enum}
+						
+						
+					\end{packed_item}
+				
+					\noindent \underbar{\textbf{UC2 -Pregled podataka o praonici}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: Korisnik}
+						\item  \textbf{Cilj: Prikaz podataka o praonici}
+						\item  \textbf{Sudionici: Baza podataka}
+						\item  \textbf{Preduvjet: -}
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item Korisnik odabire opciju za prikaz podataka o praonici
+							\item Korisniku se prikazuju podaci o praonici
+			
+						\end{packed_enum}
+						
+					\end{packed_item}
+				
+					\noindent \underbar{\textbf{UC3 -Pregled oglasa za posao}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: Korisnik}
+						\item  \textbf{Cilj: Prikaz oglasa za posao}
+						\item  \textbf{Sudionici: Baza podataka}
+						\item  \textbf{Preduvjet: -}
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item Korisnik odabire opciju za prikaz oglasa za posao
+							\item Korisniku se prikazuju oglasi
+							
+						\end{packed_enum}
+						
+					\end{packed_item}
+					
+				\end{packed_item}
 					
 				\subsubsection{Dijagrami obrazaca uporabe}
 					
