@@ -58,8 +58,12 @@
 	
 	\begin{packed_enum}
 		
-		\item ink
-		\item funkcionalnost 2
+		\item Promijeniti radno vrijeme
+		\item Promijeniti vrijeme pauze
+		\item Označiti tko je posudio košaru za rublje
+		\item Poslati obavijest na mail osobi kojoj je gotovo rublje
+		\item Označiti da se netko nije pojavio u terminu i osloboditi ga
+		\item Objaviti fotografiju izgubljenog (zaboravljenog) odjevnog predmeta u praonici
 		
 	\end{packed_enum}
 	
@@ -326,7 +330,164 @@
 		\item Administrator odabire opciju za potvrdu zabrane pristupa
 	\end{packed_enum}
 \end{packed_item}
-
+\noindent \underbar{\textbf{UC 5 - Oznaka posudbe košare za rublje}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: }Zaposlenik
+	\item  \textbf{Cilj:} Označiti osobu koja je posudila košaru za rublje
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Zaposlenik odabire korisnika koji je posudio košaru
+		\item Zaposlenik odabire opciju za posudbu  
+		
+	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Korisnik već ima posuđenu košaru 
+		\item[] \begin{packed_enum}
+			
+			\item Onemogućuje mu se posudba nove košare dok ne vrati staru
+			
+		\end{packed_enum}
+		\item[2.b] Korisnik ne vrati posuđenu košaru
+		\item[] \begin{packed_enum}
+			
+			\item Korisnik dobiva opomenu
+			
+		\end{packed_enum}
+		
+		
+	\end{packed_item}
+\end{packed_item}
+\noindent \underbar{\textbf{UC 6 - Slanje obavijesti na mail}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: }Zaposlenik
+	\item  \textbf{Cilj:} Obavijestiti korisnika kojem je rublje gotovo
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Zaposlenik odabire korisnika kojem je rublje gotovo
+		\item Zaposlenik odabire njegovu mail adresu 
+		\item Zaposlenik šalje obavijest
+		\item Korisnik prima obavijest
+		
+	\end{packed_enum}
+	
+\end{packed_item}
+\noindent \underbar{\textbf{UC 7 - Promjena radnog vremena}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: }Zaposlenik
+	\item  \textbf{Cilj:} Obavijestiti korisnike o promjeni radnog vremena praonice 
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Zaposlenik odabire opciju "Radno vrijeme"
+		\item Zaposlenik postavlja novo radno vrijeme
+		\item Korisniku to vrijeme postaje vidljivo u aplikaciji
+		
+	\end{packed_enum}
+	
+\end{packed_item}
+\noindent \underbar{\textbf{UC 8 - Promjena vremena pauze}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: }Zaposlenik
+	\item  \textbf{Cilj:} Obavijestiti korisnike o promjeni vremena pauze
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Zaposlenik odabire opciju "Vrijeme pauze"
+		\item Zaposlenik postavlja novo vrijeme pauze
+		\item Korisniku to vrijeme postaje vidljivo u aplikaciji
+		
+	\end{packed_enum}
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Pokušava se postaviti vrijeme pauze koje nije dozvoljeno (u vrijeme zamjene rublja) 
+		\item[] \begin{packed_enum}
+			
+			\item Sustav obještava zaposlenika da to vrijeme pauze nije dozvoljeno i nudi mu opciju mijenjanja termina pauze
+			
+		\end{packed_enum}
+		
+		
+	\end{packed_item}
+\end{packed_item}
+\noindent \underbar{\textbf{UC 9 - Oznaka da se netko nije pojavio u terminu i njegovo oslođenje}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: }Zaposlenik
+	\item  \textbf{Cilj:} Obavijestiti korisnike o oslobođenju termina i zabilježba osobe koja je propustila svoj termin
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Zaposlenik odabire korisnika koji se nije pojavio u svom terminu
+		\item Zaposlenik dodjeljuje negativne bodove korisniku
+		\item Zaposlenik njegov termin označava oslobođenim
+		\item Termin postaje vidljiv u aplikaciji i spreman za ponovnu rezervaciju
+		
+	\end{packed_enum}
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[1.a] Korisnik svoj termin otkaže 24 sata prije samog termina 
+		\item[] \begin{packed_enum}
+			
+			\item Zaposlenik mu ne dodjeljuje negativne bodove
+			
+		\end{packed_enum}
+		\item[1.b] Korisnik ima previše negativnih bodova
+		\item[] \begin{packed_enum}
+			
+			\item Sustav mu onemogućava daljnju rezervaciju termina i obavještava ga o naplati kazne
+			
+		\end{packed_enum}
+		
+	\end{packed_item}
+\end{packed_item}
+\noindent \underbar{\textbf{UC 10 - Objava slike izgubljenog odjevnog predmeta u praonici}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: }Zaposlenik
+	\item  \textbf{Cilj:} Obavijestiti korisnike o izgubljenom predmetu u praonici
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Zaposlenik fotografira odjevni predmet
+		\item Zaposlenik je učitava na zid s objavama
+		\item Fotografija postaje vidljiva u aplikaciji 
+		
+	\end{packed_enum}
+	
+	
+\end{packed_item}
 \subsubsection{Dijagrami obrazaca uporabe}
 
 \textit{Prikazati odnos aktora i obrazaca uporabe odgovarajućim UML dijagramom. Nije nužno nacrtati sve na jednom dijagramu. Modelirati po razinama apstrakcije i skupovima srodnih funkcionalnosti.}
