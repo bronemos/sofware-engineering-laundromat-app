@@ -7,7 +7,7 @@ backend setup from terminal:
 
     django setup:
         cd backend
-        mkvirtualenv social-network
+        mkvirtualenv <env_name>
         setvirtualenvproject
         pip install -r requirements.txt
         ./manage.py migrate
