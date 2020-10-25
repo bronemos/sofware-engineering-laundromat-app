@@ -46,10 +46,144 @@
 					
 				\end{longtabu}
 			
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Uredaj}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Uredaj}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				
+				\cellcolor{LightGreen}id & INT	&  Id uređaja u praonici.	\\ \hline
+				ime	& VARCHAR &   Ime uređaja (npr. Perilica1, Sušilica5...).	\\ \hline 
+				vrsta & BOOLEAN &  Vrsta uređaja(perilica ili sušilica). Ako je perilica, vrijednost je 1, a ako je sušilica, vrijednost je 0.\\ \hline 
+				
+				
+			\end{longtabu}
+		
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{RezerviraniTermin}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{RezerviraniTermin}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				
+				\cellcolor{LightGreen}termin & TIMESTAMP	&  	Datu rezerviranog termina u praonici i vrijeme početka. 	\\ \hline
+				\cellcolor{LightGreen}idUredaj	& INT &  Id uređaja kojeg rezerviramo u terminu. 	\\ \hline 
+				cijena & FLOAT &  Cijena usluge koju korisnik plaća (pranje ili sušenje). \\ \hline 
+				biljeska & VARCHAR	& Korisnik može ostaviti bilješku zaposleniku (koja odjeća ne ide u sušilicu ili kašnjenje). Bilješku može mijenjati prije termina i za vrijeme termina.  		\\ \hline 
+				placeno & BOOLEAN	& Korisnik bira hoće li platiti termin online ili uživo. U slučaju plaćanja online, nakon potvrde plaćanja, vrijednost je 1. Ako korisnik želi platiti uživo, zaposlenik praonice potvrđuje plaćanje i postavlja vrijednost u 1. Inače je vrijednsot 0.		\\ \hline 
+				posudjenaKosara & BOOLEAN	& Korisnik može posuditi jednu košaru iz praonice. 	\\ \hline 
+				\cellcolor{LightBlue} idKorisnik	& INT &  Id korisnika koji je rezervirao termin. 	\\ \hline 
+				\cellcolor{LightBlue} idZaposlenik	& INT &  Id zaposlenika koji radi za vrijeme rezerviranog termina. 	\\ \hline
+				
+			\end{longtabu}
+		
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Korisnik}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Korisnik}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				
+				\cellcolor{LightGreen}id & INT	&  Id korisnika.	\\ \hline
+				ime	& VARCHAR &   Ime korisnika.	\\ \hline 
+				prezime	& VARCHAR &   Prezime korisnika.	\\ \hline
+				lozinka	& VARCHAR &   Lozinka korisničkog računa.	\\ \hline
+				email	& VARCHAR &   Jedinstveni email korisnika.	\\ \hline
+				aktivan & BOOLEAN &  Svi korisnici čije registracije su potvrđene od zaposlenika su aktivni. Administrator može blokirati korisnika i promijeniti zastavicu u 0. Neaktivni korisnici nemaju pristup uslugama praonice.\\ \hline 
+				ocjena & FLOAT &  Aritmetička sredina svih dobivenih ocjena za pojedinog djelatnika.\\ \hline 
+				zaposlenik & BOOLEAN &  Korisnici mogu biti i zaposlenici. Ako je korisnik ujedno i zaposlenik vrijednost zastavice je 1. Zaposlenici imaju više ovlasti od običnih korisnika.\\ \hline 
+			
+				
+				
+			\end{longtabu}
+		
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Objava}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Objava}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				
+				\cellcolor{LightGreen}id & INT	&  Id objave.	\\ \hline
+				
+				
+				slika	& BYTEA &   Slika priložena uz objavu.	\\ \hline 
+				tekst	& VARCHAR &   Tekst objave.	\\ \hline
+				datumObjave	& DATE &  Datum objavljivanja objave.	\\ \hline
+				LF	& BOOLEAN &   Ako je vrijednost zastavice, objava se prikazuje na "LostAndFound" stranici. 	\\ \hline
+				\cellcolor{LightBlue} idZaposlenik	& INT &  Id zaposlenika koji radi za vrijeme rezerviranog termina. 	\\ \hline		
+						
+				
+				
+			\end{longtabu}
+		
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Recenzije}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Recenzije}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				
+				\cellcolor{LightGreen}id & INT	&  Id recenzije.	\\ \hline
+				\cellcolor{LightBlue} idKorisnik	& INT &  Id korisnika koji je ostavio recenziju. 	\\ \hline
+				\cellcolor{LightBlue} idZaposlenik	& INT &  Id recenziranog zaposlenika. 	\\ \hline
+				recenzija	& VARCHAR &   Tekst recenzije.	\\ \hline
+				ocjena	& INT & Ocjena zaposlenika od 1 do 5.	\\ \hline
+				
+			\end{longtabu}
+			
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Praonica}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Praonica}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				
+				\cellcolor{LightGreen}datum & DATUM	&  Trenutni datum.	\\ \hline
+				pocetakRada	& TIME &   Početak radnog vremena.	\\ \hline
+				krajRada	& TIME & Kraj radnog vremena.	\\ \hline
+				pauza	& TIME & Početak pauze.	\\ \hline
+				pranjeCijena	& FLOAT & Cijena jednog pranja.	\\ \hline
+				susenjeCijena	& FLOAT & Cijena jednog sušenja.	\\ \hline
+				
+				
+			\end{longtabu}
+			
 			
 			\subsection{Dijagram baze podataka}
 				\textit{ U ovom potpoglavlju potrebno je umetnuti dijagram baze podataka. Primarni i strani ključevi moraju biti označeni, a tablice povezane. Bazu podataka je potrebno normalizirati. Podsjetite se kolegija "Baze podataka".}
-			
+				
+				\begin{figure}[H]
+					\includegraphics[scale=0.2]{slike/BAZA.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+					\centering
+					\caption{Relacijska shema baze podataka}
+					\label{fig:promjene}
+				\end{figure}
 			\eject
 			
 			
