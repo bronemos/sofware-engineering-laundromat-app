@@ -506,6 +506,19 @@
 
 \textit{Nefunkcionalni zahtjevi i zahtjevi domene primjene dopunjuju funkcionalne zahtjeve. Oni opisuju \textbf{kako se sustav treba ponašati} i koja \textbf{ograničenja} treba poštivati (performanse, korisničko iskustvo, pouzdanost, standardi kvalitete, sigurnost...). Primjeri takvih zahtjeva u Vašem projektu mogu biti: podržani jezici korisničkog sučelja, vrijeme odziva, najveći mogući podržani broj korisnika, podržane web/mobilne platforme, razina zaštite (protokoli komunikacije, kriptiranje...)... Svaki takav zahtjev potrebno je navesti u jednoj ili dvije rečenice.}
 
-
+\begin{packed_item}
+	\item Treba biti omogućen rad više korisnika u stvarnom vremenu
+	\item Sustav i korisničko sučelje moraju imati podršku za sve znakove hrvatske abecede
+	\item Dizajn korisničkog sučelja treba biti responzivan, odnosno takav da se može koristiti na svakom uređaju bez obzira na veličinu ekrana
+	\item Potrebno je omogućiti korisniku zamjenu ili uređenje odabranog termina 24 sata prije početka
+	\item Neispravno korištenje korisničkog sučelja mora dati povratnu informaciju korisniku u stvarnom vremenu
+	\item Sustav treba omogućiti korištenje kolačića (engl. \textit{cookies}) u svrhu pohrane privremeno korištenih podatka
+	\item Sve novčane transakcije koristi HRK kao valutu
+	\item Sustav treba biti dovoljno jednostavan kako bi ga mogla koristiti osoba bez opširnih uputa
+	\item Lozinke korisnika u bazi podatka trebaju biti zaštićene PBKDF2 \textit{(Password-Based Key Derivation Function 2)}
+kriptografskim algoritmom kako bi se smanjila mogućnost narušavanja sigurnosti sustava
+	\item Pristup sustavu omogućen je korištenjem protokola HTTP/2
+	
+\end{packed_item}
 
 
