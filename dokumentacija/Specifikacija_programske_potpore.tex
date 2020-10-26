@@ -235,13 +235,13 @@
 	
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC 4.1 - Objava oglasa za posao}}
+\noindent \underbar{\textbf{UC4.1 - Objava oglasa za posao}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Objaviti oglas za studentski posao
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} Postoji otvorena pozicija u praonici
+	\item  \textbf{Preduvjet:} Postoji otvorena pozicija u praonici i korisnik je registriran i dodijeljena su mu prava administratora
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -264,13 +264,13 @@
 	\end{packed_item}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC 4.2 - Promjena radnog vremena}}
+\noindent \underbar{\textbf{UC4.2 - Promjena radnog vremena}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Promijeniti radno vrijeme praonice
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -282,13 +282,13 @@
 	\end{packed_enum}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC 4.3 - Promjena cijene pranja}}
+\noindent \underbar{\textbf{UC4.3 - Promjena cijene pranja}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Promijeniti cijenu jednog pranja
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -300,13 +300,13 @@
 	\end{packed_enum}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC 4.4 - Promjena cijene sušenja}}
+\noindent \underbar{\textbf{UC4.4 - Promjena cijene sušenja}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Promijeniti cijenu jednog sušenja
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -318,13 +318,13 @@
 	\end{packed_enum}
 \end{packed_item}
 
-\noindent \underbar{\textbf{UC 4.5 - Zabrana pristupa korisniku}}
+\noindent \underbar{\textbf{UC4.5 - Zabrana pristupa korisniku}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Zabraniti pristup uslugama praonice korisniku
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} -
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -335,7 +335,121 @@
 		\item Administrator odabire opciju za potvrdu zabrane pristupa
 	\end{packed_enum}
 \end{packed_item}
-\noindent \underbar{\textbf{UC 5 - Oznaka posudbe košare za rublje}}
+
+\noindent \underbar{\textbf{UC4.6 - Uređivanje oglasa za posao}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: } Administrator
+	\item  \textbf{Cilj:} Promijeniti podatke unesene u oglasu za posao
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje objavljeni oglasi
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Administrator odabire opciju pregleda oglasa
+		\item Prikaže se lista svih objavljenih oglasa
+		\item Administrator odabire oglas koji želi urediti
+		\item Administrator unosi izmjene
+		\item Administrator odabire opciju za potvrdu izmjena
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC4.7 - Brisanje oglasa za posao}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: } Administrator
+	\item  \textbf{Cilj:} Obrisati oglas za posao
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje objavljeni oglasi
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Administrator odabire opciju pregleda oglasa
+		\item Prikaže se lista svih objavljenih oglasa
+		\item Administrator odabire oglas koji želi obrisati
+		\item Administrator odabire opciju za brisanje
+		\item Administrator odabire opciju za potvrdu izmjena
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC4.8 - Dodavanje novih korisnika}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: } Administrator
+	\item  \textbf{Cilj:} Dodati novog korisnika
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Administrator odabire opciju pregleda korisnika
+		\item Prikaže se lista svih registriranih korisnika i zaposlenika
+		\item Administrator odabire opciju za stvaranje novog korisnika
+		\item Administrator unosi podatke o novom korisniku
+		\item Administrator odabire opciju za potvrdu izmjena
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC4.9 - Brisanje korisnika}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: } Administrator
+	\item  \textbf{Cilj:} Obrisati korisnika
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje registrirani korisnici
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Administrator odabire opciju pregleda korisnika
+		\item Prikaže se lista svih registriranih korisnika i zaposlenika
+		\item Administrator odabire korisnika kojeg želi obrisati
+		\item Administrator odabire opciju za brisanje korisnika
+		\item Administrator odabire opciju za potvrdu izmjena
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC4.10 - Uređivanje korisnika}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: } Administrator
+	\item  \textbf{Cilj:} Urediti podatke o korisniku
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje registrirani korisnici
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Administrator odabire opciju pregleda korisnika
+		\item Prikaže se lista svih registriranih korisnika i zaposlenika
+		\item Administrator odabire korisnika čije podatke želi urediti
+		\item Administrator unosi izmjene
+		\item Administrator odabire opciju za potvrdu izmjena
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC4.11 - Pregled recenzija svih zaposlenika}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: } Administrator
+	\item  \textbf{Cilj:} Pregled recenzije zaposlenika
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje recenzije zaposlenika
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Administrator odabire opciju pregleda zaposlenika
+		\item Prikaže se lista svih zaposlenika
+		\item Administrator odabire zaposlenika čije recenzije želi pogledati
+		\item Administrator odabire opciju za pregled recenzija
+	\end{packed_enum}
+\end{packed_item}
+
+\noindent \underbar{\textbf{UC5 - Oznaka posudbe košare za rublje}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -371,7 +485,7 @@
 		
 	\end{packed_item}
 \end{packed_item}
-\noindent \underbar{\textbf{UC 6 - Slanje obavijesti na mail}}
+\noindent \underbar{\textbf{UC6 - Slanje obavijesti na mail}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -390,7 +504,7 @@
 	\end{packed_enum}
 	
 \end{packed_item}
-\noindent \underbar{\textbf{UC 7 - Promjena radnog vremena}}
+\noindent \underbar{\textbf{UC7 - Promjena radnog vremena}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -408,7 +522,7 @@
 	\end{packed_enum}
 	
 \end{packed_item}
-\noindent \underbar{\textbf{UC 8 - Promjena vremena pauze}}
+\noindent \underbar{\textbf{UC8 - Promjena vremena pauze}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -438,7 +552,7 @@
 		
 	\end{packed_item}
 \end{packed_item}
-\noindent \underbar{\textbf{UC 9 - Oznaka da se netko nije pojavio u terminu i njegovo oslođenje}}
+\noindent \underbar{\textbf{UC9 - Oznaka da se netko nije pojavio u terminu i njegovo oslođenje}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -474,7 +588,7 @@
 		
 	\end{packed_item}
 \end{packed_item}
-\noindent \underbar{\textbf{UC 10 - Objava slike izgubljenog odjevnog predmeta u praonici}}
+\noindent \underbar{\textbf{UC10 - Objava slike izgubljenog odjevnog predmeta u praonici}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -493,7 +607,7 @@
 	
 	
 \end{packed_item}
-\noindent \underbar{\textbf{UC 11 - Pregled termina za radni dan}}
+\noindent \underbar{\textbf{UC11 - Pregled termina za radni dan}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -510,7 +624,7 @@
 		
 	\end{packed_enum}
 \end{packed_item}
-\noindent \underbar{\textbf{UC 12 - Potvrda registracije korisnika}}
+\noindent \underbar{\textbf{UC12 - Potvrda registracije korisnika}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Zaposlenik
@@ -540,6 +654,7 @@
 		
 	\end{packed_item}
 \end{packed_item}
+
 \subsubsection{Dijagrami obrazaca uporabe}
 
 \textit{Prikazati odnos aktora i obrazaca uporabe odgovarajućim UML dijagramom. Nije nužno nacrtati sve na jednom dijagramu. Modelirati po razinama apstrakcije i skupovima srodnih funkcionalnosti.}
