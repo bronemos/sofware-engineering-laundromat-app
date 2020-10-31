@@ -50,7 +50,7 @@
 		\item rezervirati termin za pranje i sušenje veša
 		\item prilikom rezervacije odabrati način plaćanja (putem aplikacije ili na blagajni doma)
 		\item postaviti bilješku na rezervaciju
-		\item urediti ili otkazati rezervirani termin (do 24 sata prije termina ???)
+		\item urediti ili otkazati rezervirani termin (do 24 sata prije termina)
 		\item ocijeniti radnika u praonici koji je bio u njihovom terminu pranja
 		\item pristupiti zidu s obavijestima o izgubljenim stvarima
 		\item pregled vlastitog profila i uređivanje podataka
@@ -300,6 +300,38 @@
 	\end{packed_item}
 \end{packed_item}
 
+\noindent \underbar{\textbf{UC4.1 - Plaćanje rezervacije}}
+\begin{packed_item}
+	
+	\item \textbf{Glavni sudionik: } Registrirani korisnik
+	\item  \textbf{Cilj:} Plaćanje pranja ili sušenja
+	\item  \textbf{Sudionici:} Baza podataka
+	\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
+	\item  \textbf{Opis osnovnog tijeka:}
+	
+	\item[] \begin{packed_enum}
+		
+		\item Korisnik odabire opciju plaćanja
+		\item Izvršava se plaćanje u sustavu ili na blagajni
+		
+	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Korisnik nema sredstava
+		\item[] \begin{packed_enum}
+			
+			\item Korisniku se ispisuje upozorenje da nema sredstava
+			\item Korisniku se nudi plaćanje na blagajni
+			
+		\end{packed_enum}
+		
+	\end{packed_item}
+\end{packed_item}
+
+
 \noindent \underbar{\textbf{UC5 - Pristup kalendaru sa terminima}}
 \begin{packed_item}
 	
@@ -354,7 +386,7 @@
 	
 	\item \textbf{Glavni sudionik: }Registrirani korisnik
 	\item  \textbf{Cilj:} Ocijeniti radnika u terminu korištenja praonice
-	\item  \textbf{Sudionici:} $<$sudionici$>$
+	\item  \textbf{Sudionici:} Baza podataka
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
 	\item  \textbf{Opis osnovnog tijeka:}
 	
@@ -372,7 +404,7 @@
 	
 	\item \textbf{Glavni sudionik: } Registrirani korisnik, Zaposlenik, Administrator 
 	\item  \textbf{Cilj:} Pristup zidu s obavijestima o izgubljenim stvarima
-	\item  \textbf{Sudionici:} $<$sudionici$>$
+	\item  \textbf{Sudionici:} Baza podataka
 	\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
 	\item  \textbf{Opis osnovnog tijeka:}
 	
@@ -386,7 +418,7 @@
 \noindent \underbar{\textbf{UC9 - Pregled podataka o praonici}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: } Registrirani korisnik
+	\item \textbf{Glavni sudionik: } Registrirani korisnik, neregistrirani korisnik
 	\item  \textbf{Cilj:} Prikaz podataka o praonici
 	\item  \textbf{Sudionici:} Baza podataka
 	\item  \textbf{Preduvjet:} -
@@ -404,7 +436,7 @@
 \noindent \underbar{\textbf{UC10 - Pregled oglasa za posao}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik:} Registrirani korisnik
+	\item \textbf{Glavni sudionik:} Registrirani korisnik, neregistrirani korisnik
 	\item  \textbf{Cilj:} Prikaz oglasa za posao
 	\item  \textbf{Sudionici:} Baza podataka
 	\item  \textbf{Preduvjet:} -
@@ -843,6 +875,12 @@
 
 \textit{Prikazati odnos aktora i obrazaca uporabe odgovarajućim UML dijagramom. Nije nužno nacrtati sve na jednom dijagramu. Modelirati po razinama apstrakcije i skupovima srodnih funkcionalnosti.}
 \eject		
+
+\begin{figure}[H]
+	\includegraphics[width=.9\linewidth]{slike/DOU1.PNG}
+	\caption{Slika dijagrama obrasca uporabe registriranih i neregistriranih korisnika}
+	\label{fig:dou1}
+\end{figure}
 
 \subsection{Sekvencijski dijagrami}
 
