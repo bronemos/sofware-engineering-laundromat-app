@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 from common import views
 from rest_framework import routers
 from rest_framework.documentation import include_docs_urls
@@ -13,7 +13,7 @@ router = routers.DefaultRouter()
 router.register(r'account', views.AccountViewSet, basename='account')
 
 urlpatterns = [
-    path('time/', views.TimeView.as_view(), name='time'),
+    path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset'))
 ]
 
 urlpatterns += router.urls

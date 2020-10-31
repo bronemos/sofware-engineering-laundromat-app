@@ -24,3 +24,11 @@ class UserSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+    def create(self):
+        obj = User.objects.create_user(**self.validated_data)
+        return obj
+
+    def save(self):
+        obj = User.objects.create_user(**self.validated_data)
+        return obj
