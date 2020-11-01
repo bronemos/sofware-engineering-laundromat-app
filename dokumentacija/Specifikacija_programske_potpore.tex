@@ -247,8 +247,8 @@
 		
 		\item Korisnik odabire opciju za prikaz vlastitog profila
 		\item Korisniku se prikazuju njegovi osobni podaci
-		\item Klikom na podatak korisniku se omogućuje njegova promjena
-
+		\item Klikom na gumb za izmjenu korisniku se otvara obrazac za promjenu
+		
 	\end{packed_enum}
 	
 	\item  \textbf{Opis mogućih odstupanja:}
@@ -289,11 +289,11 @@
 	
 	\item[] \begin{packed_item}
 		
-		\item[2.a] Korisnik odabire zauzeti termin
+		
+		\item[2.a] Nema slobodnih termina
 		\item[] \begin{packed_enum}
 			
-			\item Korisniku se ispisuje upozorenje da je odabrani termin već zauzet
-			\item Korisnika se vraća na izbor termina
+			\item Korisniku se ispisuje poruka da nema slobodnih termina
 			
 		\end{packed_enum}
 		
@@ -900,6 +900,31 @@
 	\label{fig:skvDReg}
 \end{figure}
 \eject
+
+\textbf{Obrazac uporabe UC3 - Pregled vlastitog profila i uređivanje podataka}\\
+
+{Registrirani korisnik, zaposlenik ili admin odabire opciju za prikaz vlastitog profila. Web aplikacija dohvaća podatke o korisniku iz baze podataka te ih prikazuje na stranici profila. Korisnik može urediti svoje podatke. Klikom na gumb ya ismjenu podataka otvara se obrazac. Korisnik popunjava obrazac, a web aplikacija provjerava ispravnost popunjenih podataka. Ukoliko su podaci krivo popunjeni, web aplikacija ispisuje upozorenje, a promjena ostaje nezabilježena. Ispravno popunjen obrazac se pohranjuje u bazu podataka. }
+
+
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{slike/UC3_Pregled_vlastitog_profila.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+	\centering
+	\caption{Sekvencijski dijagram za UC3}
+	\label{fig:promjene}
+\end{figure}
+
+\textbf{Obrazac uporabe UC4 - Rezervacija termina za pranje veša}\\
+
+{Registrirani korisnik odabire opciju za rezervaciju termina. Poslužitelj dohvaća podatke o terminima iz baze podataka i prikazuje kalendar sa slobodnim terminima registriranom korisniku. Korisnik odabire jedan od slobodnih termina, način plaćanja (online ili uživo) te može ostaviti bilješku. Podaci o terminu se pohranjuju u bazu podataka. Korisnik dobiva potvrdu o uspješnoj rezervaciji termina. Ukoliko nema slobodnih termina, korisniku se ispisuje poruka "Nema slobodnih termina".}
+
+
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{slike/UC4_ Rezervacija_termina_za_pranje_veša.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+	\centering
+	\caption{Sekvencijski dijagram za UC4}
+	\label{fig:promjene}
+\end{figure}
+
 
 \textbf{Obrazac uporabe UC11 - Objava oglasa za posao} \\
 
