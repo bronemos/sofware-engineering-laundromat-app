@@ -2,17 +2,17 @@
   <div class="hero">
       <div class="form-box">
          <div class="button-box">
-            <div id="btn"></div>
+            <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
             <button type="button" class=" toggle-btn" @click="login=true">Log In</button>
             <button type="button" class=" toggle-btn" @click="login=false">Register</button>
          </div>
-         <form id="login" class="input-group">
+         <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'">
             <input type="text" class="input-field" placeholder="User id" required v-model="form.username">
             <input type="text" class="input-field" placeholder="Enter Password" required v-model="form.password">
             <input type="checkbox" class="check-box"><span>Remember password</span>
             <button type="submit" class="submit-btn" @click="loginUser">Log in</button>
          </form>
-         <form id="register" class="input-group">
+         <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
             <input type="text" class="input-field" placeholder="User id" required>
             <input type="email" class="input-field" placeholder="Email id" required>
             <input type="text" class="input-field" placeholder="Enter Password" required>
@@ -26,22 +26,6 @@
 </template>
 
 <script>
-      var x = document.getElementById("login");
-      var y = document.getElementById("register");
-      var z = document.getElementById("btn");
-
-      function register() {
-         x.style.left = "-400px"
-         y.style.left = "50px"
-         z.style.left = "110px"
-      }
-
-      function login() {
-         x.style.left = "50px"
-         y.style.left = "450px"
-         z.style.left = "0"
-      }
-
 export default {
 
   data() {
@@ -78,12 +62,36 @@ export default {
    font-family: sans-serif;
 }
 
+.login_50 {
+  left: 50px;
+}
+
+.login_n400 {
+  left: -400px;
+}
+
+.register_450 {
+  left: 450;
+}
+
+.register_50 {
+  left: 50px;
+}
+
+.btn_0 {
+  left: 0px
+}
+
+.btn_110 {
+  left: 110px;
+}
+
 .hero {
    height: 100%;
    width: 100%;
    background-position: center;
    background-size: cover;
-   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(terminko1.jpg);
+   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('~@/static/images/terminko1.jpg');
    position: absolute;
 }
 
