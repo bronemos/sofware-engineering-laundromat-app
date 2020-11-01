@@ -892,7 +892,7 @@
 
 \textbf{Obrazac uporabe UC1 i UC2 - Registracija i Prijava korisnika}\\
 
-\textbf{TODO} napisati opise.
+Neregistrirani korisnik unosi podatke u formu. Web preglednik vrši provjeru podataka i vraća povratnu informaciju korisniku sve dok ne unese potrebne podatke ili ne odustane. Kada se unesu točni podaci šalje se zahtjev za stvaranje računa prema Web aplikaciji. Web aplikacija šalje upit prema bazi podataka kojim provjerava da li korisnik već postoji. Ako račun već postoji korisnika se obaviještava o pogrešci, inače račun se zapisuje u bazu podataka. Tada korisnik (student) treba otići u praonicu sa potvrdom o boravištu. Zaposlenik nakon provjere potvrde aktivira korisnikov račun. Nakon toga korisnik se može prijaviti u sustav. Prijavu započinje unosom podataka u formu za prijavu. Web aplikacija dohvaća podatke o korisniku iz baze podataka. Provjerom utvrđuje ispravnost unesenih podataka. Ako su ispravni korisniku se prikazuje početna stranica, inače se dojavljuje pogreška.
 
 
 \begin{figure}[H]
@@ -914,6 +914,7 @@
 	\caption{Sekvencijski dijagram za UC3}
 	\label{fig:promjene}
 \end{figure}
+\eject
 
 \textbf{Obrazac uporabe UC4 - Rezervacija termina za pranje veša}\\
 
@@ -926,12 +927,12 @@
 	\caption{Sekvencijski dijagram za UC4}
 	\label{fig:promjene}
 \end{figure}
+\eject
 
 
 \textbf{Obrazac uporabe UC11 - Objava oglasa za posao} \\
 
-\textbf{TODO} napisati opise.
-
+Administrator šalje zahtjev za prikaz svih oglasa. Web aplikacija dohvaća oglase iz baze podataka. Oglasi se prikazuju administratoru. Administrator odabire opciju za prikaz forme za unos novog oglasa. Nakon što je ispunjena forma, oglas se sprema u bazu podataka. Administratoru se prikazuje stranica sa oglasima.
 
 \begin{figure}[H]
 	\includegraphics[width=.9\linewidth]{slike/UC11_Objava_oglasa_za_posao.png}
