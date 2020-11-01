@@ -1,42 +1,45 @@
 \chapter{Arhitektura i dizajn sustava}
-		
+%			\textbf{\textit{dio 1. revizije}}\\	
+%			\textit{ Potrebno je opisati stil arhitekture te identificirati: podsustave, %preslikavanje na radnu platformu, spremišta podataka, mrežne protokole, globalni upravljački tok i sklopovsko-programske zahtjeve. Po točkama razraditi i popratiti odgovarajućim skicama:}
+%		\begin{itemize}
+%			\item 	\textit{izbor arhitekture temeljem principa oblikovanja pokazanih na predavanjima (objasniti zašto ste baš odabrali takvu arhitekturu)}
+%			\item 	\textit{organizaciju sustava s najviše razine apstrakcije (npr. klijent-poslužitelj, baza podataka, datotečni sustav, grafičko sučelje)}
+%			\item 	\textit{organizaciju aplikacije (npr. slojevi frontend i backend, MVC arhitektura) }		
+%		\end{itemize}
 	Arhitektura se može podjeliti na sljedeće sustave:
-\begin{packed_item}
-	\item 	Web preglednik
-	\item 	Web poslužitelj
-	\item 	Baza podataka
-\end{packed_item}	
+	\begin{packed_item}
+		\item 	Web preglednik
+		\item 	Web poslužitelj
+		\item 	Baza podataka
+	\end{packed_item}	
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.45]{slike/ARHITEKTURA.PNG}
-	\caption{Arhitektura sustava}
-	\label{fig:promjene}
-\end{figure}	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.45]{slike/ARHITEKTURA.PNG}
+		\caption{Arhitektura sustava}
+		\label{fig:promjene}
+	\end{figure}	
 
-\underline{\textit{Web preglednik}} je program čije je svrha omogućiti pregled web-stranice te njenog multimedijalnog sadržaja. Osim samog pregleda, web preglednik mora moći prevesti kod stoga je on ujedinio i kompajler. U našem slučaju web preglednik će prevoditi kod radnog okvira (\emph{engl. framework}) Nuxt.js koje je proširenje Vue.js frameworka.
+	\underline{\textit{Web preglednik}} je program čije je svrha omogućiti pregled web-stranice te njenog multimedijalnog sadržaja. Osim samog pregleda, web preglednik mora moći prevesti kod stoga je on ujedinio i kompajler. U našem slučaju web preglednik će prevoditi kod radnog okvira (\emph{engl. framework}) Nuxt.js koje je proširenje Vue.js frameworka.
 
-\underline{\textit{Web poslužitelj}} je sustav koji treba omogućiti odvijanje komunikacije web preglednika i baze podataka. Njegova zadaća je obrađivati zahtjeve koje zahtjeva web preglednik, po potrebi komunicirati s bazom podataka te vratiti rezultat obrade. Rezultat obrade biti se će SSR (engl. Server Side Rendered) - statički generirana stranica. Komunikacija s poslužiteljem odvija se putem protokola HTTP (\emph{engl. Hyper Text Transfer Protocol}). U našem slučaju za izradu web poslužitelja koristimo Python framework Django koji je besplatan i \emph{open source}.
+	\underline{\textit{Web poslužitelj}} je sustav koji treba omogućiti odvijanje komunikacije web preglednika i baze podataka. Njegova zadaća je obrađivati zahtjeve koje zahtjeva web preglednik, po potrebi komunicirati s bazom podataka te vratiti rezultat obrade. Rezultat obrade biti se će SSR (engl. Server Side Rendered) - statički generirana stranica. Komunikacija s poslužiteljem odvija se putem protokola HTTP (\emph{engl. Hyper Text Transfer Protocol}). U našem slučaju za izradu web poslužitelja koristimo Python framework Django koji je besplatan i \emph{open source}.
 
-\underline{\textit{Baza podataka}} je sustav za trajnu pohranu podataka. U našem slučaju koristimo relacijsku bazu podataka PostgreSQL.
+	\underline{\textit{Baza podataka}} je sustav za trajnu pohranu podataka. U našem slučaju koristimo relacijsku bazu podataka PostgreSQL.
 
-Zadana arhitektura temelji se na prikazu statički generirane stranice dobivene s web poslužitelja (Django servera). Prema zahtjevu web klijenta Nuxt.js generira zahtjev na API web poslužitelja te dobiva odgovor u obliku generirane statičke stranice. Web poslužitelj prema potrebi šalje zahtjev za dohvat podataka iz baze podataka kako bi mogao stranicu popuniti s relevantnim podacima i multimedijom.
+	Zadana arhitektura temelji se na prikazu statički generirane stranice dobivene s web poslužitelja (Django servera). Prema zahtjevu web klijenta Nuxt.js generira zahtjev na API web poslužitelja te dobiva odgovor u obliku generirane statičke stranice. Web poslužitelj prema potrebi šalje zahtjev za dohvat podataka iz baze podataka kako bi mogao stranicu popuniti s relevantnim podacima i multimedijom.
 
-Django nije tradicionalni MVC (Model-View-Controller) framework, ali se ponaša vrlo slično MVC koncept modelu. MVC koncept model sastoji se od sljedećih komponenata: 
-\begin{packed_item}
-	\item{\underline{\textit{Model}} - Dinamičke strukture podataka koje se popunjavaju iz baze podatka za svrhu prikaza ili se popunjavaju iz korisničkog sučelja u svrhu pohrane.}
-	\item{\underline{\textit{View}} - Korisničko sučelje preko kojega korisnik podatke prenosi u Model.}
-	\item{\underline{\textit{Controller}} - Sučelje između Modela i View-a. Manipulira podacima kako bi ih Model mogao obraditi ili manipulira podatke da ih View može prikazati.}
-\end{packed_item}
+	Django nije tradicionalni MVC (Model-View-Controller) framework, ali se ponaša vrlo slično MVC koncept modelu. MVC koncept model sastoji se od sljedećih komponenata: 
+	\begin{packed_item}
+		\item{\underline{\textit{Model}} - Dinamičke strukture podataka koje se popunjavaju iz baze podatka za svrhu prikaza ili se popunjavaju iz korisničkog sučelja u svrhu pohrane.}
+		\item{\underline{\textit{View}} - Korisničko sučelje preko kojega korisnik podatke prenosi u Model.}
+		\item{\underline{\textit{Controller}} - Sučelje između Modela i View-a. Manipulira podacima kako bi ih Model mogao obraditi ili manipulira podatke da ih View može prikazati.}
+	\end{packed_item}
 
-Django razvojni tim preferira koristi koncept MTV (Model-Template-View) modela. Razlika između MVC modela i MTV modela je što se komponenta View naziva Template, a komponenta Controller se naziva View.
+	Django razvojni tim preferira koristi koncept MTV (Model-Template-View) modela. Razlika između MVC modela i MTV modela je što se komponenta View naziva Template, a komponenta Controller se naziva View.
 
-\pagebreak
-	
-	
-
+	\pagebreak
 				
-		\section{Baza podataka}
+	\section{Baza podataka}
 			
 			\textbf{\textit{dio 1. revizije}}\\
 			
