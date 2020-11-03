@@ -3,22 +3,22 @@
       <div class="form-box">
          <div class="button-box">
             <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
-            <button type="button" class=" toggle-btn" @click="login=true">Log In</button>
-            <button type="button" class=" toggle-btn" @click="login=false">Register</button>
+            <button type="button" class=" toggle-btn" @click="login=true">Prijava</button>
+            <button type="button" class=" toggle-btn" @click="login=false">Registracija</button>
          </div>
          <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'">
-            <input type="text" class="input-field" placeholder="User id" required v-model="form.username">
-            <input type="text" class="input-field" placeholder="Enter Password" required v-model="form.password">
-            <input type="checkbox" class="check-box"><span>Remember password</span>
+            <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="form.username">
+            <input type="text" class="input-field" placeholder="Lozinka" required v-model="form.password">
+            <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>
             <button type="submit" class="submit-btn" @click="loginUser">Log in</button>
          </form>
          <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
-            <input type="text" class="input-field" placeholder="User id" required>
-            <input type="email" class="input-field" placeholder="Email id" required>
-            <input type="text" class="input-field" placeholder="Enter Password" required>
-            <input type="text" class="input-field" placeholder="Confirm Password" required>
-
-            <input type="checkbox" class="check-box"><span>I agree to the terms & conditions</span>
+            <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="r_form.username">
+            <input type="email" class="input-field" placeholder="Email" required v-model="r_form.email">
+            <input type="text" class="input-field" placeholder="Lozinka" required v-model="r_form.password">
+            <input type="text" class="input-field" placeholder="Ponovite lozinku" required v-model="r_form.password_again">
+            <input type="checkbox" class="check-box" > <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>
+          
             <button type="submit" class="submit-btn">Log in</button>
          </form>
       </div>
@@ -31,10 +31,17 @@ export default {
   data() {
     return {
       form: {
-        username: 'janez',
-        password: '12345678',
+        username: '',
+        password: '',
       },
-      login: true
+      login: true,
+      r_form: {
+        username: '',
+        email: '',
+        password: '',
+        password_again: '',
+      }
+
     };
   },
   methods: {
@@ -71,7 +78,7 @@ export default {
 }
 
 .register_450 {
-  left: 450;
+  left: 450px;
 }
 
 .register_50 {
@@ -83,7 +90,7 @@ export default {
 }
 
 .btn_110 {
-  left: 110px;
+  right: 110px;
 }
 
 .hero {
@@ -106,7 +113,7 @@ export default {
 }
 
 .button-box {
-   width: 220px;
+   width: 260px;
    margin: 35px auto;
    position: relative;
    box-shadow: 0 0 20px 9px #1e9aa0b4;
@@ -127,7 +134,7 @@ export default {
    top: 0;
    left: 0;
    position: absolute;
-   width: 110px;
+   width: 120px;
    height: 100%;
    background: linear-gradient(to right, #4e43e2, #4fdee6);
    border-radius: 30px;
@@ -167,22 +174,16 @@ export default {
 
 }
 
-.check-box {
-   margin: 30px 10px 30px 0;
-}
-
 span {
    color: #777;
    font-size: 12px;
    bottom: 68px;
    position: absolute;
 }
-
-#login {
-   left: 50px;
+.check-box {
+   margin: 20px 200px 30px 0px;
 }
 
-#register {
-   left: 450px;
-}
+
+
 </style>
