@@ -8,18 +8,18 @@
          </div>
          <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'">
             <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="form.username">
-            <input type="text" class="input-field" placeholder="Lozinka" required v-model="form.password">
+            <input type="password" class="input-field" placeholder="Lozinka" required v-model="form.password">
             <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>
-            <button type="submit" class="submit-btn" @click="loginUser">Log in</button>
+            <button type="button" class="submit-btn" @click="loginUser">Log in</button>  
          </form>
+
          <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
             <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="r_form.username">
             <input type="email" class="input-field" placeholder="Email" required v-model="r_form.email">
-            <input type="text" class="input-field" placeholder="Lozinka" required v-model="r_form.password">
-            <input type="text" class="input-field" placeholder="Ponovite lozinku" required v-model="r_form.password_again">
+            <input type="password" class="input-field" placeholder="Lozinka" required v-model="r_form.password">
+            <input type="password" class="input-field" placeholder="Ponovite lozinku" required v-model="r_form.password_again">
             <input type="checkbox" class="check-box" > <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>
-          
-            <button type="submit" class="submit-btn">Log in</button>
+            <button type="button" class="submit-btn">Register</button>
          </form>
       </div>
    </div>
@@ -49,10 +49,10 @@ export default {
       try {
         let response = await this.$axios.post(`/account/login/`, this.form);
         this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
-        // this.$store.commit('User/SET_LOGGED_USER', response.data.user); spremi usera u store
+        this.$store.commit('User/SET_LOGGED_USER', response.data.user);
 
         // redirect to user profile
-        this.$router.push('/')
+        //this.$router.push('/')
 
       } catch (e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
@@ -183,7 +183,4 @@ span {
 .check-box {
    margin: 20px 200px 30px 0px;
 }
-
-
-
 </style>
