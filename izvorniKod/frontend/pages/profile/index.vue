@@ -3,6 +3,7 @@
     <div class="form-box">
       <form class="input-group"></form>
       {{user.email}}
+      <nuxt-link to="/">Home</nuxt-link>
     </div>
 
   </div>
