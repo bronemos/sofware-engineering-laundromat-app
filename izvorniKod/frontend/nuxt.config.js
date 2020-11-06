@@ -58,8 +58,8 @@ export default {
       local: {
         endpoints: {
           login: { url: 'token-auth/', method: 'post', propertyName: 'token' },
+          user: { url: 'account/logged_user_data/', method: 'get', propertyName: 'user' },
           logout: false,
-          user: { url: 'account/logged_user_data/', method: 'get', propertyName: 'user' }
         },
         tokenType: 'Token',
       }

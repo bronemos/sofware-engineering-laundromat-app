@@ -50,7 +50,7 @@ export default {
   methods: {
    async loginUser() {
       try {
-        this.$auth.loginWith('local', {
+        await this.$auth.loginWith('local', {
            data: this.form
          })
         

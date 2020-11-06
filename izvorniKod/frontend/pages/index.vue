@@ -7,6 +7,10 @@
       <h2 class="subtitle">
         Frontend for Terminko
       </h2>
+      <nuxt-link to="profile/">Profil</nuxt-link>
+      <button @click="logout">
+        Logout
+      </button>
     </div>
   </div>
 </template>
@@ -14,6 +18,13 @@
 <script>
 
 export default {
+  methods: {
+    async logout() {
+      console.log('logout')
+      this.$auth.logout()
+    }
+  },
+
   mounted() {
     if (!this.$auth.loggedIn){
       this.$router.push("login")
