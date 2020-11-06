@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'corsheaders',
     'rest_framework',
-    'common',
+    'rest_framework.authtoken',
     'django_rest_passwordreset',
+    'common',
 ]
 
 MIDDLEWARE = [
@@ -94,7 +95,12 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'common.User'
 
-REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # <-- And here
+    ],
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

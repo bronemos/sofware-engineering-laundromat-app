@@ -43,13 +43,27 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/toast',
+    '@nuxtjs/auth',
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'http://localhost:8000/api'
+    baseURL: 'http://localhost:8000/api/'
+  },
+  //auth configuration
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'token-auth/', method: 'post', propertyName: 'token' },
+          logout: false,
+          user: { url: 'account/logged_user_data/', method: 'get', propertyName: 'user' }
+        },
+        tokenType: 'Token',
+      }
+    }
   },
   /*
   ** Build configuration

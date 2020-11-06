@@ -19,7 +19,7 @@
             <input type="password" class="input-field" placeholder="Lozinka" required v-model="r_form.password">
             <input type="password" class="input-field" placeholder="Ponovite lozinku" required v-model="r_form.password_again">
             <input type="checkbox" class="check-box" > <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>
-            <button type="button" class="submit-btn">Register</button>
+            <button type="submit" class="submit-btn">Register</button>
          </form>
       </div>
    </div>
@@ -47,17 +47,22 @@ export default {
   methods: {
    async loginUser() {
       try {
-        let response = await this.$axios.post(`/account/login/`, this.form);
-        this.$toast.show("Zahtjev uspješno poslan!", { duration: 8000 });
-        this.$store.commit('User/SET_LOGGED_USER', response.data.user);
-
+        this.$auth.loginWith('local', {
+           data: this.form
+         })
+        
         // redirect to user profile
-        //this.$router.push('/')
+        this.$router.push('/')
 
       } catch (e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
       }
     },
+  },
+  mounted() {
+     if (this.$auth.loggedIn){
+        this.$router.push('/')
+     }
   }
 }
 </script>

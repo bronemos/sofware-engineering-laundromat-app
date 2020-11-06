@@ -59,20 +59,14 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-    @action(detail=False, methods=['POST'], name='login')
-    def login(self, request, *args, **kwargs):
-        user = auth.authenticate(username=request.data.get('username'), password=request.data.get('password'))
-        if user is not None and user.is_active:
-            auth.login(request, user)
+    @action(detail=False, methods=['GET'], name='logged_user_data')
+    def logged_user_data(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_authenticated:
             return Response(
                 {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email',
                                                            'birth_date']).data},
-                status=status.HTTP_201_CREATED
+                status=status.HTTP_200_OK
             )
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-
-    @action(detail=False, methods=['GET'], name='logout')
-    def logout(self, request, *args, **kwargs):
-        auth.logout(request)
-        return Response(status=status.HTTP_200_OK)
