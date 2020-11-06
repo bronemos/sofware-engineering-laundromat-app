@@ -2,13 +2,22 @@
   <div>
     <div class="form-box">
       <form class="input-group"></form>
+      {{user.email}}
     </div>
 
   </div>
 </template>
 
 <script>
-  export default {}
+  export default {
+    middleware: 'auth',
+
+    computed: {
+      user() {
+        return this.$auth.user
+      }
+    }
+  }
 </script>
 
 <style>
