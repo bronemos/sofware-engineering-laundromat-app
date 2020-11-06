@@ -7,11 +7,11 @@
         <button type="button" class=" toggle-btn" @click="login=false">Registracija</button>
 
       </div>
-      <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'">
+      <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'" @submit.prevent="loginUser">
         <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="form.username">
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="form.password">
-        <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>
-        <button type="button" class="submit-btn" @click="loginUser">Log in</button>
+        <input type="checkbox" id="remember_pw" class="check-box"><label for="remember_pw">Zapamti zaporku</label>
+        <input type="submit" class="submit-btn" value="Log in">
       </form>
 
       <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
@@ -20,55 +20,55 @@
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="r_form.password">
         <input type="password" class="input-field" placeholder="Ponovite lozinku" required
                v-model="r_form.password_again">
-        <input type="checkbox" class="check-box">
-        <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>
-        <button type="button" class="submit-btn">Register</button>
+        <input type="checkbox" id="agree_terms" class="check-box">
+        <label for="agree_terms">Slažem se s uvjetima i odredbama</label>
+        <button type="submit" class="submit-btn">Register</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      form: {
-        username: '',
-        password: '',
-      },
-      login: true,
-      r_form: {
-        username: '',
-        email: '',
-        password: '',
-        password_again: '',
-      }
+  export default {
+    data() {
+      return {
+        form: {
+          username: '',
+          password: '',
+        },
+        login: true,
+        r_form: {
+          username: '',
+          email: '',
+          password: '',
+          password_again: '',
+        }
 
-    };
-  },
-
-  methods: {
-   async loginUser() {
-      try {
-        await this.$auth.loginWith('local', {
-           data: this.form
-         })
-        
-        // redirect to user profile
-        this.$router.push('/profile')
-
-      } catch (e) {
-        this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
-      }
+      };
     },
-  },
-  
-  mounted() {
-     if (this.$auth.loggedIn){
+
+    methods: {
+      loginUser: async function() {
+        try {
+          await this.$auth.loginWith('local', {
+            data: this.form
+          })
+          console.log('here')
+          // redirect to user profile
+          await this.$router.push('/profile')
+
+        } catch (e) {
+          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 8000});
+        }
+      },
+    },
+
+    mounted() {
+      if (this.$auth.loggedIn) {
         this.$router.push('/profile')
-     }
+      }
+    }
   }
-}
 </script>
 
 <style>
@@ -94,7 +94,7 @@ export default {
     left: 50px;
   }
 
-  button:focus{
+  button:focus {
     outline: none !important;
   }
 
@@ -209,6 +209,6 @@ export default {
   }
 
   .check-box {
-    margin: 20px 200px 30px 0px;
+    margin: 5px 10px 30px 0px;
   }
 </style>
