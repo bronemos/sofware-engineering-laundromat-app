@@ -1,35 +1,11 @@
 <template>
   <div class="hero">
-<<<<<<< HEAD
-      <div class="form-box">
-         <div class="button-box">
-            <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
-            <button type="button" class=" toggle-btn" @click="login=true">Prijava</button>
-            <button type="button" class=" toggle-btn" @click="login=false">Registracija</button>
-         </div>
-         <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'">
-            <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="form.username">
-            <input type="password" class="input-field" placeholder="Lozinka" required v-model="form.password">
-            <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>
-            <button type="button" class="submit-btn" @click="loginUser">Log in</button>  
-         </form>
-
-         <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
-            <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="r_form.username">
-            <input type="email" class="input-field" placeholder="Email" required v-model="r_form.email">
-            <input type="password" class="input-field" placeholder="Lozinka" required v-model="r_form.password">
-            <input type="password" class="input-field" placeholder="Ponovite lozinku" required v-model="r_form.password_again">
-            <input type="checkbox" class="check-box" > <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>
-            <button type="submit" class="submit-btn">Register</button>
-         </form>
-=======
     <div class="form-box">
       <div class="button-box">
         <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
         <button type="button" class=" toggle-btn" @click="login=true">Prijava</button>
         <button type="button" class=" toggle-btn" @click="login=false">Registracija</button>
 
->>>>>>> 9c62a43baaff3e61fd7b8af39e1188d1bbb35aa6
       </div>
       <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'">
         <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="form.username">
