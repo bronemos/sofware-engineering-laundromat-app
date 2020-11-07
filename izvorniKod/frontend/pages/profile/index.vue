@@ -6,22 +6,9 @@
           <NuxtLink to="/zaposlenik/pending">Zaposlenik</NuxtLink>
     </div>
     <div class="form-box">
+      <form class="input-group"></form>
+      {{user.email}}
       <nuxt-link to="/">Home</nuxt-link>
-      <fieldset>
-        <legend>Detalji korisnika</legend>
-        <div class="form-group">
-          <label for="first_name">Ime</label>
-          <input type="text" id="first_name" :value="user.first_name">
-        </div>
-        <div class="form-group">
-          <label for="last_name">Prezime</label>
-          <input type="text" id="last_name" :value="user.last_name">
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="text" id="email" :value="user.email">
-        </div>
-      </fieldset>
     </div>
 
   </div>
@@ -44,6 +31,30 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+  }
+
+  .login_50 {
+    left: 50px;
+  }
+
+  .login_n400 {
+    left: -400px;
+  }
+
+  .register_450 {
+    left: 450px;
+  }
+
+  .register_50 {
+    left: 50px;
+  }
+
+  .btn_0 {
+    left: 0px
+  }
+
+  .btn_110 {
+    right: 110px;
   }
 
   .hero {
@@ -101,9 +112,8 @@
     transition: .5s;
   }
 
-
   .input-field {
-    text-align: center;
+    width: 100%;
     padding: 10px 0;
     margin: 5px 0;
     border-left: 0;
@@ -128,48 +138,11 @@
 
   }
 
-  label {
-    float: left;
-  }
-
   span {
     color: #777;
     font-size: 12px;
     bottom: 68px;
     position: absolute;
-  }
-
-  #form {
-    background-color: #FFF;
-    height: 600px;
-    width: 600px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 0px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 0px;
-    text-align: center;
-  }
-
-  label {
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 18px;
-    color: #333;
-    height: 20px;
-    width: 200px;
-    margin-top: 10px;
-    margin-left: 10px;
-    text-align: right;
-    margin-right: 15px;
-    float: left;
-  }
-
-  input {
-    height: 20px;
-    width: 300px;
-    border: 1px solid #000;
-    margin-top: 10px;
   }
 
   .check-box {

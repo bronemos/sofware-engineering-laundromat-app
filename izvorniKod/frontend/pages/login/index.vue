@@ -12,68 +12,74 @@
         <button type="button" class=" toggle-btn" @click="login=false">Registracija</button>
 
       </div>
-      <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'" @submit.prevent="loginUser">
-        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="form.username">
-        <input type="password" class="input-field" placeholder="Lozinka" required v-model="form.password">
-        <input type="checkbox" id="remember_pw" class="check-box"><label for="remember_pw">Zapamti zaporku</label>
-        <input type="submit" class="submit-btn" value="Log in">
+      <form id="login" class="input-group-login" :class="login ? 'login_50' : 'login_n400'">
+        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="loginForm.username">
+        <input type="password" class="input-field" placeholder="Lozinka" required v-model="loginForm.password">
+       <!--- <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>--->
+        <button type="button" class="submit-btn" @click="loginUser">Prijava</button>
       </form>
 
       <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
-        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="r_form.username">
-        <input type="email" class="input-field" placeholder="Email" required v-model="r_form.email">
-        <input type="password" class="input-field" placeholder="Lozinka" required v-model="r_form.password">
-        <input type="password" class="input-field" placeholder="Ponovite lozinku" required
-               v-model="r_form.password_again">
-        <input type="checkbox" id="agree_terms" class="check-box">
-        <label for="agree_terms">Slažem se s uvjetima i odredbama</label>
-        <button type="submit" class="submit-btn">Register</button>
+        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model=" registerForm.username">
+        <input type="text" class="input-field" placeholder="Ime" required v-model=" registerForm.name">
+        <input type="text" class="input-field" placeholder="Prezime" required v-model=" registerForm.surname"> 
+        <input type="password" class="input-field" placeholder="Datum Rođenja" required
+               v-model=" registerForm.birth">
+        <input type="email" class="input-field" placeholder="Email" required v-model=" registerForm.email">
+        <input type="password" class="input-field" placeholder="Lozinka" required v-model=" registerForm.password">
+       
+       <!---  <input type="checkbox" class="check-box">
+       <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>--->
+        <button type="button" class="submit-btn">Registracija</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        form: {
-          username: '',
-          password: '',
-        },
-        login: true,
-        r_form: {
-          username: '',
-          email: '',
-          password: '',
-          password_again: '',
-        }
-
-      };
-    },
-
-    methods: {
-      loginUser: async function() {
-        try {
-          await this.$auth.loginWith('local', {
-            data: this.form
-          })
-          console.log('here')
-          // redirect to user profile
-          await this.$router.push('/profile')
-
-        } catch (e) {
-          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 8000});
-        }
+export default {
+  data() {
+    return {
+      loginForm: {
+        username: '',
+        password: '',
       },
-    },
-
-    mounted() {
-      if (this.$auth.loggedIn) {
-        this.$router.push('/profile')
+      login: true,
+      registerForm: {
+        username: '',
+        name:'',
+        surname:'',  
+        birth: '',
+        email: '',
+        password: '',
+      
       }
-    }
+
+    };
+  },
+
+  methods: {
+   async loginUser() {
+      try {
+        await this.$auth.loginWith('local', {
+           data: this.form
+         })
+        
+        // redirect to user profile
+        this.$router.push('/profile')
+
+      } catch (e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, { duration: 8000 });
+      }
+    },
+  },
+  
+  mounted() {
+     if (this.$auth.loggedIn){
+        this.$router.push('/profile')
+     }
   }
+}
 </script>
 
 <style>
@@ -99,7 +105,7 @@
     left: 50px;
   }
 
-  button:focus {
+  button:focus{
     outline: none !important;
   }
 
@@ -109,7 +115,7 @@
     position: absolute;
     width: 120px;
     height: 100%;
-    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    background: linear-gradient(to right, #3a2ee6, #4fdee6);
     border-radius: 30px;
     transition: .5s;
   }
@@ -135,7 +141,7 @@
   }
 
   .form-box {
-    height: 480px;
+    height: 500px;
     width: 380px;
     position: relative;
     margin: 6% auto;
@@ -174,6 +180,12 @@
   }
 
   .input-group {
+    top: 100px;
+    position: absolute;
+    width: 280px;
+    transition: .5s;
+  }
+   .input-group-login {
     top: 120px;
     position: absolute;
     width: 280px;
@@ -183,7 +195,7 @@
   .input-field {
     width: 100%;
     padding: 10px 0;
-    margin: 5px 0;
+    margin: 4px 0;
     border-left: 0;
     border-top: 0;
     border-right: 0;
@@ -197,7 +209,7 @@
     padding: 10px 30px;
     cursor: pointer;
     display: block;
-    margin: auto;
+    margin: 20px;
     background: linear-gradient(to right, #4e43e2, #4fdee6);
     border: 0;
     outline: none;
@@ -214,6 +226,6 @@
   }
 
   .check-box {
-    margin: 5px 10px 30px 0px;
+    margin: 20px 200px 30px 0px;
   }
 </style>
