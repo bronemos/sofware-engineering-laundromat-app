@@ -35,7 +35,7 @@
 		\item{\underline{\textit{Controller}} - Sučelje između Modela i View-a. Manipulira podacima kako bi ih Model mogao obraditi ili manipulira podatke da ih View može prikazati.}
 	\end{packed_item}
 
-	Django razvojni tim preferira koristi koncept MTV (Model-Template-View) modela. Razlika između MVC modela i MTV modela je što se komponenta View naziva Template, a komponenta Controller se naziva View.
+	Django razvojni tim preferira koristi koncept MTV (\emph{Model-Template-View}) modela. Razlika između MVC modela i MTV modela je što se komponenta View naziva Template, a komponenta Controller se naziva View.
 
 	\pagebreak
 				
@@ -233,12 +233,40 @@
 			
 			\textbf{\textit{dio 2. revizije}}\\			
 			
-			\textit{Prilikom druge predaje projekta dijagram razreda i opisi moraju odgovarati stvarnom stanju implementacije}
+			\textit{Prilikom druge predaje projekta dijagram razreda i opisi moraju odgovarati stvarnom stanju implementacije} \\
 			
-			Zbog toga što je web poslužitelj napisan u Pythonu, ne možemo reći da u našem web modelu postoje razredi u pravom smislu riječi. Naime, moguće je pisati razredu Pythonu, ali nije moguće koristiti vrste pristupa. Sve metode, razredi i atributi su javne. Moguće je naznačiti da želimo da se komponenta ponaša kao privatna korištenjem donje crtice u njenom imenu. Stoga zaključujemo da razredi u Pythonu postoje i moguće je izraditi dijagram razreda za komponente web aplikacije iako razredi nemaju potpune funkcionalnosti objektno orijentiranog jezika. Django koristi razrede prilikom svoje implementacije.
+			Zbog toga što je web poslužitelj napisan u Pythonu, ne možemo reći da u našem web modelu postoje razredi u pravom smislu riječi. Naime, moguće je pisati razred u Pythonu, ali nije moguće koristiti vrste pristupa. Sve metode, razredi i atributi su javne (i tako će biti označene na dijagramima). Moguće je naznačiti da želimo da se komponenta ponaša kao privatna korištenjem donje crtice u njenom imenu. Stoga zaključujemo da razredi u Pythonu postoje i moguće je izraditi dijagram razreda za komponente web aplikacije iako razredi nemaju potpune funkcionalnosti objektno orijentiranog jezika. Django koristi razrede prilikom svoje implementacije. Kao što je već navedeno, Django se temelji na modelu MTV (\emph{Model-Template-View}).\\\
 			
-			
+			\pagebreak
+			\emph{Models} u Djangu su Python razredi koji se automatski prenose u obliku relacija u bazu podataka korištenjem Djangovih karakterističnih \emph {migrate} funkcionalnosti.  Prilikom pisanja Modela potrebno je obratiti pozornost na njihovu povezanost i buduću brojnost u bazi podataka. 	
+			\begin{figure}[H]
+				\includegraphics[scale=0.55]{slike/Razredni_dijagrami_Models.PNG} 
+				\centering
+				\caption{Dijagram razreda - dio Models}
+				\label{fig:promjene}
+			\end{figure}
 		
+			\pagebreak
+			\emph{Views} sadrže svu funkcionalnost i strukture podataka potrebne da se povežu funkcionalnosti Templatea i Modela. Osim što povezuju ta dva dijela sustava, views mogu sadržavati dodatnu funkcionalnost.
+			\begin{figure}[H]
+				\includegraphics[scale=1.1]{slike/Razredni_dijagrami_Views.PNG}
+				\centering
+				\caption{Dijagram razreda - dio Views}
+				\label{fig:promjene}
+			\end{figure}  	
+		
+		 	\pagebreak			
+ 			\emph{Templates} sadrže sve strukture podataka potrebne da se podatak prenese s korisničkog sučelja u model. U našem slučaju korisničko sučelje dio je Nuxt.js radnog okvira. Nuxt.js uz pomoć \emph{axios} sustava prenosi podatke na View.
+ 			\begin{figure}[H]
+ 				\includegraphics[scale=0.88]{slike/Razredni_dijagrami_Templates.PNG}
+ 				\centering
+ 				\caption{Dijagram razreda - dio Templates}
+ 				\label{fig:promjene}
+ 			\end{figure} 	
+ 		
+			\pagebreak
+ 			
+ 			
 		\section{Dijagram stanja}
 			
 			
