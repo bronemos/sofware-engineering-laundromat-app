@@ -82,6 +82,7 @@ export default {
     margin: 6% 20%;
     background: #fff;
     height: 480px;
+    border-radius: 0.5rem;
     /* padding: 15px; */
     overflow: hidden;
     border-collapse: collapse;
@@ -91,7 +92,7 @@ export default {
   thead, tbody, tr {
     display: contents;
   }
-  
+
   th, td {
     padding: 15px;
     overflow: hidden;
@@ -119,7 +120,7 @@ export default {
   tr:nth-child(even) td {
     background: #f8f6ff;
   }
-  
+
   #myBtn {
     width: 120px;
     background: linear-gradient(to right, #4e43e2, #4fdee6);
