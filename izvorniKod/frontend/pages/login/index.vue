@@ -10,7 +10,6 @@
       <form id="login" class="input-group" :class="login ? 'login_50' : 'login_n400'" @submit.prevent="loginUser">
         <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="form.username">
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="form.password">
-        <input type="checkbox" id="remember_pw" class="check-box"><label for="remember_pw">Zapamti zaporku</label>
         <input type="submit" class="submit-btn" value="Log in">
       </form>
 
@@ -55,7 +54,6 @@
           await this.$auth.loginWith('local', {
             data: this.form
           })
-          console.log('here')
           // redirect to user profile
           await this.$router.push('/profile')
 
