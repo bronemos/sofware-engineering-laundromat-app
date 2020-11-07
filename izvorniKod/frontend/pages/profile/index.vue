@@ -1,21 +1,19 @@
 <template>
   <div class="hero">
     <div class="container emp-profile">
-      <form method="post">
+      <form>
         <div class="row">
           <div class="col-md-6">
             <div class="profile-head">
               <h5>
                 {{user.first_name}} {{user.last_name}}
               </h5>
-              <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <ul class="nav nav-tabs" id="myTab">
                 <li class="nav-item">
-                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                     aria-controls="home" aria-selected="true">Detalji</a>
+                  <button class="nav-link" v-bind:class="detailsSelected ? 'active' : ''" id="details" @click.prevent="detailsSelected=true">Detalji</button>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="profile-tab" data-toggle="tab" href="#previous_reservations" role="tab"
-                     aria-controls="profile" aria-selected="false">Lista rezervacija</a>
+                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations" @click.prevent="detailsSelected=false">Lista rezervacija</button>
                 </li>
               </ul>
             </div>
@@ -27,7 +25,7 @@
         <div class="row">
           <div class="col-md-8">
             <div class="tab-content profile-tab" id="myTabContent">
-              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+              <div class="tab-pane fade show active" id="details-tab" v-if="detailsSelected">
                 <div class="row">
                   <div class="col-md-6">
                     <label>Username</label>
@@ -69,7 +67,8 @@
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="previous_reservations" role="tabpanel" aria-labelledby="profile-tab">
+              <div class="tab-pane fade" id="reservations-tab" v-else>
+                abcdef
               </div>
             </div>
           </div>
@@ -83,6 +82,12 @@
   export default {
     middleware: 'auth',
 
+    data() {
+      return {
+        detailsSelected: null
+      }
+    },
+
     computed: {
       user() {
         return this.$auth.user
@@ -92,6 +97,10 @@
 </script>
 
 <style scoped>
+  button:focus {
+    outline: none !important;
+  }
+
   .hero {
     height: 100%;
     width: 100%;
@@ -149,9 +158,9 @@
     border-radius: 1.5rem;
     width: 70%;
     padding: 2%;
-    font-weight: 600;
-    color: #6c757d;
     cursor: pointer;
+    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    transition: .5s;
   }
 
   .proile-rating {

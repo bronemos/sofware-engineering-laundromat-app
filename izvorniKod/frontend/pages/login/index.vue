@@ -138,6 +138,7 @@
     position: relative;
     margin: 6% auto;
     background: #fff;
+    border-radius: 0.5rem;
     padding: 5px;
     overflow: hidden;
   }
