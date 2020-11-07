@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar toggleable="lg" style="background: linear-gradient(to right, #4e43e2, #4fdee6);" type="dark" variant="info">
       <b-navbar-brand href="/">Terminko</b-navbar-brand>
 
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -9,6 +9,7 @@
         <b-navbar-nav>
           <b-nav-item href="/login/" v-if="user === null">Prijavi se</b-nav-item>
           <b-nav-item href="/profile/" v-if="user !== null">Profil</b-nav-item>
+          <b-nav-item href="/zaboravljeno/" disabled v-if="user !== null">Zaboravljeno</b-nav-item>
           <b-nav-item href="/rezervacije/" disabled v-if="user !== null"
             >Rezervacije</b-nav-item
           >
