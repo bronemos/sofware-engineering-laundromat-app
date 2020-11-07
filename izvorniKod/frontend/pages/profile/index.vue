@@ -1,26 +1,81 @@
 <template>
   <div class="hero">
-
-    <div class="form-box">
-      <nuxt-link to="/">Home</nuxt-link>
-      <nuxt-link v-if="user.is_staff" to="/zaposlenik/">Zaposlenik</nuxt-link>
-      <fieldset>
-        <legend>Detalji korisnika</legend>
-        <div class="form-group">
-          <label for="first_name">Ime</label>
-          <input type="text" id="first_name" :value="user.first_name">
+    <div class="container emp-profile">
+      <form method="post">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="profile-head">
+              <h5>
+                {{user.first_name}} {{user.last_name}}
+              </h5>
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                     aria-controls="home" aria-selected="true">Detalji</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="profile-tab" data-toggle="tab" href="#previous_reservations" role="tab"
+                     aria-controls="profile" aria-selected="false">Lista rezervacija</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="last_name">Prezime</label>
-          <input type="text" id="last_name" :value="user.last_name">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContent">
+              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Username</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.username}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Ime i prezime</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.first_name}} {{user.last_name}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Email</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.email}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Datum rođenja</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.birth_date}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>JMBAG</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.JMBAG}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="previous_reservations" role="tabpanel" aria-labelledby="profile-tab">
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="text" id="email" :value="user.email">
-        </div>
-      </fieldset>
+      </form>
     </div>
-
   </div>
 </template>
 
@@ -36,13 +91,7 @@
   }
 </script>
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-  }
-
+<style scoped>
   .hero {
     height: 100%;
     width: 100%;
@@ -52,124 +101,114 @@
     position: absolute;
   }
 
-  .form-box {
-    height: 480px;
-    width: 380px;
-    position: relative;
-    margin: 6% auto;
+  .emp-profile {
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
     background: #fff;
-    padding: 5px;
-    overflow: hidden;
   }
 
-  .button-box {
-    width: 260px;
-    margin: 35px auto;
-    position: relative;
-    box-shadow: 0 0 20px 9px #1e9aa0b4;
-    border-radius: 30px;
-
+  .profile-img {
+    text-align: center;
   }
 
-  .toggle-btn {
-    padding: 10px 30px;
-    cursor: pointer;
-    background: transparent;
-    border: 0;
-    outline: none;
-    position: relative;
-  }
-
-  #btn {
-    top: 0;
-    left: 0;
-    position: absolute;
-    width: 120px;
+  .profile-img img {
+    width: 70%;
     height: 100%;
-    background: linear-gradient(to right, #4e43e2, #4fdee6);
-    border-radius: 30px;
-    transition: .5s;
   }
 
-  .input-group {
-    top: 120px;
+  .profile-img .file {
+    position: relative;
+    overflow: hidden;
+    margin-top: -20%;
+    width: 70%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+  }
+
+  .profile-img .file input {
     position: absolute;
-    width: 280px;
-    transition: .5s;
+    opacity: 0;
+    right: 0;
+    top: 0;
   }
 
-
-  .input-field {
-    text-align: center;
-    padding: 10px 0;
-    margin: 5px 0;
-    border-left: 0;
-    border-top: 0;
-    border-right: 0;
-    border-bottom: 1px solid #999;
-    outline: none;
-    background: transparent;
-  }
-
-  .submit-btn {
-    width: 85%;
-    padding: 10px 30px;
-    cursor: pointer;
-    display: block;
-    margin: auto;
-    background: linear-gradient(to right, #4e43e2, #4fdee6);
-    border: 0;
-    outline: none;
-    border-radius: 30px;
-
-
-  }
-
-  label {
-    float: left;
-  }
-
-  span {
-    color: #777;
-    font-size: 12px;
-    bottom: 68px;
-    position: absolute;
-  }
-
-  #form {
-    background-color: #FFF;
-    height: 600px;
-    width: 600px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 0px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding: 0px;
-    text-align: center;
-  }
-
-  label {
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 18px;
+  .profile-head h5 {
     color: #333;
-    height: 20px;
-    width: 200px;
-    margin-top: 10px;
-    margin-left: 10px;
-    text-align: right;
-    margin-right: 15px;
-    float: left;
   }
 
-  input {
-    height: 20px;
-    width: 300px;
-    border: 1px solid #000;
-    margin-top: 10px;
+  .profile-head h6 {
+    color: #0062cc;
   }
 
-  .check-box {
-    margin: 20px 200px 30px 0px;
+  .profile-edit-btn {
+    border: none;
+    border-radius: 1.5rem;
+    width: 70%;
+    padding: 2%;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+  }
+
+  .proile-rating {
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+  }
+
+  .proile-rating span {
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .profile-head .nav-tabs {
+    margin-bottom: 5%;
+  }
+
+  .profile-head .nav-tabs .nav-link {
+    font-weight: 600;
+    border: none;
+  }
+
+  .profile-head .nav-tabs .nav-link.active {
+    border: none;
+    border-bottom: 2px solid #0062cc;
+  }
+
+  .profile-work {
+    padding: 14%;
+    margin-top: -15%;
+  }
+
+  .profile-work p {
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+  }
+
+  .profile-work a {
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .profile-work ul {
+    list-style: none;
+  }
+
+  .profile-tab label {
+    font-weight: 600;
+  }
+
+  .profile-tab p {
+    font-weight: 600;
+    color: #0062cc;
   }
 </style>
