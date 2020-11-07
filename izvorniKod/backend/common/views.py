@@ -65,7 +65,7 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         if user.is_authenticated:
             return Response(
                 {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email',
-                                                           'birth_date']).data},
+                                                           'birth_date', 'is_superuser', 'is_staff']).data},
                 status=status.HTTP_200_OK
             )
 
