@@ -1,5 +1,10 @@
 <template>
   <div class="hero">
+    <div class="header">
+          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/login">Login</NuxtLink>
+          <NuxtLink to="/zaposlenik/pending">Zaposlenik</NuxtLink>
+    </div>
     <div class="form-box">
       <div class="button-box">
         <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
@@ -125,7 +130,7 @@
     width: 100%;
     background-position: center;
     background-size: cover;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('~@/static/images/terminko1.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('~@/static/images/laundry-saloon.jpg');
     position: absolute;
   }
 
