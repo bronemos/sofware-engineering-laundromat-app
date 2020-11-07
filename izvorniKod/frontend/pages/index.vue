@@ -7,7 +7,7 @@
       <h2 class="subtitle">
         Frontend for Terminko
       </h2>
-      <nuxt-link to="profile/">Profil</nuxt-link>
+      <nuxt-link to="profil/">Profil</nuxt-link>
       <button @click="logout">
         Logout
       </button>
