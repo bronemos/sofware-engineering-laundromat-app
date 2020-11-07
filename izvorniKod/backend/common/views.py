@@ -24,7 +24,7 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date']
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'birth_date', 'JMBAG']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm' or self.action == 'logout':
             return None
@@ -34,6 +34,7 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         return super().get_serializer(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
+        print(request.data)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -70,3 +71,10 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             )
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(detail=False, methods=['GET'], name='pending_users')
+    def pending_users(self, request, *args, **kwargs):
+        return Response({'pending': UserSerializer(User.objects.filter(is_active=False),
+                                                   only_fields=['first_name', 'last_name', 'JMBAG', 'id'],
+                                                   many=True).data
+                         })

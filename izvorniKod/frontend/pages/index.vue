@@ -20,16 +20,9 @@
 export default {
   methods: {
     async logout() {
-      console.log('logout')
       this.$auth.logout()
     }
   },
-
-  mounted() {
-    if (!this.$auth.loggedIn){
-      this.$router.push("login")
-    }
-  }
 }
 </script>
 

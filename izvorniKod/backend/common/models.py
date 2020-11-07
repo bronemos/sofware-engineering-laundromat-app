@@ -10,8 +10,7 @@ from django_rest_passwordreset.signals import reset_password_token_created
 
 @receiver(reset_password_token_created)
 def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
-    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'),
-                                                   reset_password_token.key)
+    email_plaintext_message = 'localhost:3000/reset-password?token={}'.format(reset_password_token.key)
 
     send_mail(
         # title:
@@ -28,49 +27,46 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 class User(AbstractUser):
     birth_date = models.DateField(null=True, blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ime = models.CharField(null=False, blank=False, max_length=255, default='xxx')
-    prezime = models.CharField(null=False, blank=False, max_length=255, default='xxx')
-    JMABG = models.CharField(null=False, unique=True, blank=False, max_length=10, default='xxx')
-    lozinka = models.CharField(null=False, blank=False, max_length=255, default='xxx')
-    email = models.CharField(null=False, unique=True, blank=False, max_length=255, default='xxx')
-    zaposlenik = models.BooleanField(null=False, blank=False, default=False)
-    kreditnaKartica = models.IntegerField(null=False, blank=False, default=0)
-    negativniBodovi = models.IntegerField(null=False, blank=False, default=0)
+    JMBAG = models.CharField(null=False, unique=True, blank=False, max_length=10, default='xxx')
+    cart_number = models.IntegerField(null=False, blank=False, default=0)
+    negative_points = models.IntegerField(null=False, blank=False, default=0)
 
-class Praonica(models.Model):
-    datum = models.DateField(primary_key=True, editable=False)
-    pocetakRada = models.DateTimeField(null=False, blank=False)
-    krajRada = models.DateTimeField(null=False, blank=False)
-    pauza = models.DateTimeField(null=False, blank=False)
-    pranjeCijena = models.FloatField(null=False, blank=False)
-    susenjeCijena = models.FloatField(null=False, blank=False)
 
-class Uredaj(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ime = models.CharField(null=False, blank=False, max_length=255)
-    vrsta = models.BooleanField(null=False, blank=False)
+class WashDay(models.Model):
+    date = models.DateField(unique=True, editable=False)
+    open_time = models.TimeField(null=False, blank=False)
+    close_time = models.TimeField(null=False, blank=False)
+    pause_start = models.TimeField(null=False, blank=False)
+    pause_end = models.TimeField(null=False, blank=False)
+    wash_price = models.FloatField(null=False, blank=False)
+    drying_price = models.FloatField(null=False, blank=False)
 
-class RezerviraniTermin(models.Model):
-    termin = models.TimeField(primary_key=True, editable=False)
-    idUredaj = models.ForeignKey(Uredaj, on_delete=models.CASCADE)
-    cijena = models.FloatField(null=False, blank=False)
-    biljeska = models.TextField(null=True, blank=True)
-    placeno = models.BooleanField(null=False, blank=False)
-    posudjenaKosara = models.BooleanField(null=False, blank=False)
-    idKorisnik =  models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_requests_created1')
-    idZaposlenik =  models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_requests_created2')
 
-class Objava(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    slika = models.ImageField(null=True, blank=True)
-    tekst = models.TextField(null=False, blank=False)
-    datumObjave = models.DateField(null=False, blank=False)
-    LF = models.BooleanField(null=False, blank=False)
-    idZaposlenik = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_requests_created1')
+class Machine(models.Model):
+    type = models.CharField(max_length=10, choices=[('washer', 'washer'), ('dryer', 'dryer')])
 
-class Recenzije(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    idKorisnik = models.ForeignKey(User, on_delete=models.CASCADE , related_name='%(class)s_requests_created1')
-    idZaposlenik = models.ForeignKey(User, on_delete=models.CASCADE , related_name='%(class)s_requests_created2')
-    recenzija = models.TextField(null=True, blank=True)
-    ocjena = models.IntegerField(null=False, blank=False)
+
+class Appointment(models.Model):
+    time = models.DateField(unique=True, editable=False)
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
+    price = models.FloatField(null=False, blank=False)
+    note = models.TextField(null=True, blank=True)
+    paid = models.BooleanField(null=False, blank=False)
+    basket_taken = models.BooleanField(null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointment')
+    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointment_worked')
+
+
+class Post(models.Model):
+    photo = models.ImageField(null=True, blank=True)
+    text = models.TextField(null=False, blank=False)
+    date = models.DateField(null=False, blank=False)
+    type = models.CharField(max_length=10, choices=[('lost', 'lost'), ('job', 'job')], default='lost')
+    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
+
+
+class Recension(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recension_written')
+    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recension')
+    text = models.TextField(null=True, blank=True)
+    grade = models.IntegerField(null=False, blank=False)
