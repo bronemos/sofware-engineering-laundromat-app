@@ -7,8 +7,8 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="/login/" v-if="user === null">Prijavi se</b-nav-item>
-          <b-nav-item href="/profile/" v-if="user !== null">Profil</b-nav-item>
+          <b-nav-item href="/prijava/" v-if="user === null">Prijavi se</b-nav-item>
+          <b-nav-item href="/profil/" v-if="user !== null">Profil</b-nav-item>
           <b-nav-item href="/zaboravljeno/" disabled v-if="user !== null">Zaboravljeno</b-nav-item>
           <b-nav-item href="/rezervacije/" disabled v-if="user !== null"
             >Rezervacije</b-nav-item

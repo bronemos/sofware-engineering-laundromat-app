@@ -63,6 +63,9 @@ export default {
         },
         tokenType: 'Token',
       }
+    },
+    redirect: {
+      login: '/prijava',
     }
   },
   /*

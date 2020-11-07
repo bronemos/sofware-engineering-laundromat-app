@@ -84,7 +84,7 @@
 
     data() {
       return {
-        detailsSelected: null
+        detailsSelected: true
       }
     },
 

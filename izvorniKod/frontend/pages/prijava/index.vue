@@ -54,8 +54,9 @@
           await this.$auth.loginWith('local', {
             data: this.form
           })
-          // redirect to user profile
-          await this.$router.push('/profile')
+          console.log('here')
+          // redirect to user profil
+          await this.$router.push('/profil')
 
         } catch (e) {
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 8000});
