@@ -1,8 +1,18 @@
 <template>
   <div>
+    <custom-header />
     <nuxt />
   </div>
 </template>
+
+<script>
+import header from '~/components/header.vue'
+export default {
+  components: {
+    'custom-header': header,
+  },
+}
+</script>
 
 <style>
 html {
