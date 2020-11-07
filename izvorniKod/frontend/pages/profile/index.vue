@@ -1,10 +1,6 @@
 <template>
   <div class="hero">
-    <div class="header">
-          <NuxtLink to="/">Home</NuxtLink>
-          <NuxtLink to="/login">Login</NuxtLink>
-          <NuxtLink to="/zaposlenik/pending">Zaposlenik</NuxtLink>
-    </div>
+
     <div class="form-box">
       <form class="input-group"></form>
       {{user.email}}
