@@ -1,8 +1,5 @@
 <template>
   <div class="root">
-      <div>
-          <NuxtLink to="/">Home</NuxtLink>
-      </div>
       <table>
         <thead>
           <tr>

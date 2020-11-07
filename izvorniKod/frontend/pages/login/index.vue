@@ -56,8 +56,8 @@
             data: this.form
           })
           console.log('here')
-          // redirect to user profile
-          await this.$router.push('/profile')
+          // redirect to user profil
+          await this.$router.push('/profil')
 
         } catch (e) {
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 8000});
