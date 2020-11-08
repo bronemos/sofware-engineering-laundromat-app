@@ -7,24 +7,24 @@
         <button type="button" class="toggle-btn" @click="login=false">Registracija</button>
 
       </div>
-      <form id="login" class="input-group-login" :class="login ? 'login_50' : 'login_n400'">
+      <form id="login" class="input-group-login" :class="login ? 'login_50' : 'login_n400'" @submit.prevent="loginUser">
         <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="loginForm.username">
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="loginForm.password">
        <!--- <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>--->
-        <button type="button" class="submit-btn" @click="loginUser">Prijava</button>
+        <button type="submit" class="submit-btn">Prijava</button>
       </form>
 
-      <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
+      <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'" @submit.prevent="registerUser">
         <input type="text" class="input-field" placeholder="Korisničko ime" required v-model=" registerForm.username">
         <input type="text" class="input-field" placeholder="Ime" required v-model=" registerForm.first_name">
-        <input type="text" class="input-field" placeholder="Prezime" required v-model=" registerForm.last_name"> 
+        <input type="text" class="input-field" placeholder="Prezime" required v-model=" registerForm.last_name">
         <input type="text" class="input-field" placeholder="JMBAG" required v-model=" registerForm.JMBAG">
         <input type="email" class="input-field" placeholder="Email" required v-model=" registerForm.email">
         <input type="password" class="input-field" placeholder="Lozinka" required v-model=" registerForm.password">
-       
+
        <!---  <input type="checkbox" class="check-box">
        <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>--->
-        <button type="button" class="submit-btn" @click="registerUser">Registracija</button>
+        <button type="submit" class="submit-btn">Registracija</button>
       </form>
     </div>
   </div>
@@ -42,11 +42,11 @@
       registerForm: {
         username: '',
         first_name:'',
-        last_name:'',  
+        last_name:'',
         JMBAG: '',
         email: '',
         password: '',
-      
+
       }
 
     };
@@ -77,7 +77,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   * {
     margin: 0;
     padding: 0;
