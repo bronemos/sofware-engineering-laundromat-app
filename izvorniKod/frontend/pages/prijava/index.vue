@@ -18,16 +18,17 @@
     <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="registerForm.username">
         <input type="text" class="input-field" placeholder="Ime" required v-model="registerForm.first_name">
         <input type="text" class="input-field" placeholder="Prezime" required v-model="registerForm.last_name">
-        <input type="text" class="input-field" placeholder="JMBAG" required v-model="registerForm.JMBAG"> 
+        <input type="text" class="input-field" placeholder="JMBAG" required v-model="registerForm.JMBAG">
         <div class="error" v-if="!$v.registerForm.JMBAG.numeric">JMBAG mora biti broj</div>
         <div class="error" v-if="!$v.registerForm.JMBAG.minLength">JMBAG mora imati točno 10 znamenaka</div>
         <div class="error" v-if="!$v.registerForm.JMBAG.maxLength">JMBAG mora imati točno 10 znamenaka</div>
-        
+
     <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email" >
         <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div>
-    
+
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="registerForm.password">
-        <div class="error" v-if="!$v.registerForm.password.minLength">Lozinka mora imati najmanje 8 znakova</div>
+        <!--<div class="error" v-if="!$v.registerForm.password.minLength">Lozinka mora imati najmanje 8 znakova</div> !-->
+        <div class="error" v-if="!$v.registerForm.password.verifyPw">Lozinka mora imati najmanje 8 znakova, sadržavati barem jedno malo i veliko slovo, broj i specijalni znak</div>
         <input type="password" class="input-field" placeholder="Ponovite lozinku" required v-model="registerForm.passwordAgain">
          <div class="error" v-if="!$v.registerForm.passwordAgain.sameAs">Lozinka nije ista</div>
 
@@ -50,6 +51,10 @@ const {
   alphaNum,
   numeric
 } = require("vuelidate/lib/validators");
+const verifyPw = password => {
+  const pwRegExp = RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$')
+  return pwRegExp.test(password)
+}
   export default {
       data() {
     return {
@@ -70,7 +75,7 @@ const {
       },
     };
   },
-      
+
 mixins: [validationMixin],
 validations: {
      registerForm: {
@@ -84,6 +89,7 @@ validations: {
     },
     password: {
        minLength: minLength(8),
+      verifyPw: verifyPw,
     },
     passwordAgain: {
       sameAs: sameAs('password'),
