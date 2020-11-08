@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.contrib.auth import password_validation
 from django.core.mail import send_mail
 
 from rest_framework import viewsets, mixins, status

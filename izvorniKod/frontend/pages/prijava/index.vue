@@ -58,19 +58,28 @@
           await this.$auth.loginWith('local', {
             data: this.loginForm
           })
-          console.log('here')
           // redirect to user profil
           await this.$router.push('/profil')
 
         } catch (e) {
-          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 8000});
+          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 5000});
         }
       },
       async registerUser() {
         try {
-          let resoonse = this.$axios.post('account/', this.registerForm)
-        } catch (error) {
-          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 8000});
+          let resoonse = await this.$axios.post('account/', this.registerForm)
+        } catch (e) {
+          this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 5000});
+          if(e.response.data){
+            for(let key in e.response.data){
+              if(key == 'non_field_errors'){
+                let nonFieldErrors =e.response.data[key][0]
+                nonFieldErrors = nonFieldErrors.substring(1, nonFieldErrors.length - 1)
+                this.$toast.error(`${nonFieldErrors}`, {duration: 5000});
+              }else
+                this.$toast.error(`${key}: ${e.response.data[key]}`, {duration: 5000});
+            }
+          }
         }
       }
     },
