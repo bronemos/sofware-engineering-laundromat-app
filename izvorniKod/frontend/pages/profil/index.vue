@@ -52,14 +52,6 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <label>Datum rođenja</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>{{user.birth_date}}</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
                     <label>JMBAG</label>
                   </div>
                   <div class="col-md-6">

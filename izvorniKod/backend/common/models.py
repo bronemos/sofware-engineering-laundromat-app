@@ -25,7 +25,6 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 
 
 class User(AbstractUser):
-    birth_date = models.DateField(null=True, blank=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     JMBAG = models.CharField(null=False, unique=True, blank=False, max_length=10, default='xxx')
     cart_number = models.IntegerField(null=False, blank=False, default=0)

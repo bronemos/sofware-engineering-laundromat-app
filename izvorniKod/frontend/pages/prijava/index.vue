@@ -3,8 +3,8 @@
     <div class="form-box">
       <div class="button-box">
         <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
-        <button type="button" class=" toggle-btn" @click="login=true">Prijava</button>
-        <button type="button" class=" toggle-btn" @click="login=false">Registracija</button>
+        <button type="button" class="toggle-btn" @click="login=true">Prijava</button>
+        <button type="button" class="toggle-btn" @click="login=false">Registracija</button>
 
       </div>
       <form id="login" class="input-group-login" :class="login ? 'login_50' : 'login_n400'">
@@ -16,15 +16,15 @@
 
       <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'">
         <input type="text" class="input-field" placeholder="Korisničko ime" required v-model=" registerForm.username">
-        <input type="text" class="input-field" placeholder="Ime" required v-model=" registerForm.name">
-        <input type="text" class="input-field" placeholder="Prezime" required v-model=" registerForm.surname"> 
-        <input type="password" class="input-field" placeholder="JMBAG" required v-model=" registerForm.jmbag">
+        <input type="text" class="input-field" placeholder="Ime" required v-model=" registerForm.first_name">
+        <input type="text" class="input-field" placeholder="Prezime" required v-model=" registerForm.last_name"> 
+        <input type="text" class="input-field" placeholder="JMBAG" required v-model=" registerForm.JMBAG">
         <input type="email" class="input-field" placeholder="Email" required v-model=" registerForm.email">
         <input type="password" class="input-field" placeholder="Lozinka" required v-model=" registerForm.password">
        
        <!---  <input type="checkbox" class="check-box">
        <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>--->
-        <button type="button" class="submit-btn">Registracija</button>
+        <button type="button" class="submit-btn" @click="registerUser">Registracija</button>
       </form>
     </div>
   </div>
@@ -41,9 +41,9 @@
       login: true,
       registerForm: {
         username: '',
-        name:'',
-        surname:'',  
-        jmbag: '',
+        first_name:'',
+        last_name:'',  
+        JMBAG: '',
         email: '',
         password: '',
       
@@ -56,7 +56,7 @@
       loginUser: async function() {
         try {
           await this.$auth.loginWith('local', {
-            data: this.form
+            data: this.loginForm
           })
           console.log('here')
           // redirect to user profil
@@ -68,7 +68,7 @@
       },
       async registerUser() {
         try {
-          let resoonse = this.$axios.post('account/', this.r_form)
+          let resoonse = this.$axios.post('account/', this.registerForm)
         } catch (error) {
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 8000});
         }
@@ -161,7 +161,7 @@
     border: 0;
     outline: none;
     position: relative;
-       color:white;
+    color:black;
   }
 
   .btn {
