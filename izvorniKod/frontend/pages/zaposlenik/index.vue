@@ -4,7 +4,7 @@
         <thead>
           <tr>
             <th>Ime Studenta</th>
-            <!-- <th>Prezime Studenta</th> -->
+            <th>Prezime Studenta</th>
             <th>JMBAG</th>
             <th></th>
           </tr>
@@ -13,7 +13,7 @@
           <!-- za našu bazu promijeniti isActive u aktivan -->
           <tr v-for="user in pendingUsers" :key="user" class="show_bt'">
             <td>{{user.first_name}}</td>
-            <!-- <td>{{user.last_name}}</td> -->
+            <td>{{user.last_name}}</td>
             <td>{{user.JMBAG}}</td>
             <td><button id="myBtn"  @click="activate(user.id)">Aktiviraj</button></td>
           </tr>
@@ -74,7 +74,7 @@ export default {
 
   table {
     display: grid;
-    grid-template-columns: minmax(150px, 2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    grid-template-columns: minmax(150px, 2fr) minmax(150px,2fr) minmax(150px, 1fr) minmax(150px, 1fr);
     grid-template-rows: 50px;
     margin: 6% 20%;
     background: #fff;
