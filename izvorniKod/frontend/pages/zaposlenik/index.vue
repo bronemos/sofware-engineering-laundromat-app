@@ -6,7 +6,7 @@
             <th>Ime Studenta</th>
             <!-- <th>Prezime Studenta</th> -->
             <th>JMBAG</th>
-            <th>Akcije</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -15,7 +15,7 @@
             <td>{{user.first_name}}</td>
             <!-- <td>{{user.last_name}}</td> -->
             <td>{{user.JMBAG}}</td>
-            <td><button id="myBtn"  @click="activate(user.id)">Activate</button></td>
+            <td><button id="myBtn"  @click="activate(user.id)">Aktiviraj</button></td>
           </tr>
         </tbody>
       </table>
@@ -57,8 +57,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .root {
+    box-sizing: border-box;
     height: 100%;
     width: 100%;
     margin: auto;
@@ -66,7 +67,6 @@ export default {
     background-size: cover;
     background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('~@/static/images/terminko1.jpg');
     position: absolute;
-    box-sizing: border-box;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -74,14 +74,15 @@ export default {
 
   table {
     display: grid;
-    grid-template-columns: minmax(150px, 2fr) minmax(150px, 1fr) minmax(150px, 2fr);
+    grid-template-columns: minmax(150px, 2fr) minmax(150px, 1fr) minmax(150px, 1fr);
     grid-template-rows: 50px;
     margin: 6% 20%;
     background: #fff;
-    height: 480px;
+    /* height: 480px; */
+    max-height: 450px;
     border-radius: 0.5rem;
     /* padding: 15px; */
-    overflow: hidden;
+    overflow: auto;
     border-collapse: collapse;
     /* min-width: 100%; */
   }
@@ -100,18 +101,18 @@ export default {
   th {
     position: sticky;
     top: 0;
-    background: #4e43e2;
+    background: #17a2b8;
     /* text-align: left; */
     font-weight: normal;
     font-size: 1.1rem;
     color: white;
   }
 
-
   td {
     padding-top: 10px;
     padding-bottom: 10px;
-    color: #262626 ;
+    color: #262626;
+    max-height: 44px;
   }
 
   tr:nth-child(even) td {
