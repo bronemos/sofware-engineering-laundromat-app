@@ -33,6 +33,8 @@ class UserSerializer(DynamicFieldsModelSerializer):
             password_validation.validate_password(data.get('password'))
         except Exception as error:
             raise serializers.ValidationError(error)
+        if data.get('JMBAG') is not None and len(data.get('JMBAG')) != 10:
+            raise serializers.ValidationError(' JMBAG length must be exactly 10!')
         return data
 
     def create(self):
