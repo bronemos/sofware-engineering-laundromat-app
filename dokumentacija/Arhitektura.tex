@@ -44,6 +44,20 @@
 			\textbf{\textit{dio 1. revizije}}\\
 			
 		\textit{Potrebno je opisati koju vrstu i implementaciju baze podataka ste odabrali, glavne komponente od kojih se sastoji i slično.}
+				
+		\noindent Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka PostgreSQL.
+		Baza se sastoji od relacija (tablica) i njihovih atributa. Bayu podataka koristimo za pohranu informacija o korisnicima, njihovim rezervacijama i podacima o praonici.
+		Baza podataka ove aplikacije sastoji se od sljedećih entiteta:
+		\begin{packed_item}
+			\item 	Machine
+			\item 	Appointment
+			\item 	User
+			\item 	Post
+			\item 	Recension
+			\item 	Washday
+		\end{packed_item}	
+	
+		\noindent Osim naših tablica, Django sam stvara nove tablice poput permissiona, sessiona i logova.
 		
 			\subsection{Opis tablica}
 			
@@ -70,133 +84,148 @@
 					
 				\end{longtabu}
 			
+			\noindent\textbf{Machine}  Ovaj entitet sadrži sve važne informacije vezane za uređaj u praonici. Sadrži atribute: id uređaja i type. Ovaj entitet u vezi je \textit{Many-to-One} s entitetom Appointment preko id-a uređaja.
+			
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Uredaj}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Machine}}	 \\[3pt] \hline
 				\endfirsthead
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Uredaj}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Machine}}	 \\[3pt] \hline
 				\endhead
 				
 				\hline 
 				\endlastfoot
 				
-				\cellcolor{LightGreen}id & INT	&  Id uređaja u praonici.	\\ \hline
-				ime	& VARCHAR &   Ime uređaja (npr. Perilica1, Sušilica5...).	\\ \hline 
-				vrsta & BOOLEAN &  Vrsta uređaja(perilica ili sušilica). Ako je perilica, vrijednost je 1, a ako je sušilica, vrijednost je 0.\\ \hline 
+				\textbf{id} & INT	&  jedinstveni brojčani identifikator	\\ \hline
+				type & BOOLEAN &  vrsta uređaja (perilica ili sušilica)\\ \hline 
 				
 				
 			\end{longtabu}
 		
-			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
-				
-				\hline \multicolumn{3}{|c|}{\textbf{RezerviraniTermin}}	 \\[3pt] \hline
-				\endfirsthead
-				
-				\hline \multicolumn{3}{|c|}{\textbf{RezerviraniTermin}}	 \\[3pt] \hline
-				\endhead
-				
-				\hline 
-				\endlastfoot
-				
-				\cellcolor{LightGreen}termin & TIMESTAMP	&  	Datu rezerviranog termina u praonici i vrijeme početka. 	\\ \hline
-				\cellcolor{LightGreen}idUredaj	& INT &  Id uređaja kojeg rezerviramo u terminu. 	\\ \hline 
-				cijena & FLOAT &  Cijena usluge koju korisnik plaća (pranje ili sušenje). \\ \hline 
-				biljeska & VARCHAR	& Korisnik može ostaviti bilješku zaposleniku (koja odjeća ne ide u sušilicu ili kašnjenje). Bilješku može mijenjati prije termina i za vrijeme termina.  		\\ \hline 
-				placeno & BOOLEAN	& Korisnik bira hoće li platiti termin online ili uživo. U slučaju plaćanja online, nakon potvrde plaćanja, vrijednost je 1. Ako korisnik želi platiti uživo, zaposlenik praonice potvrđuje plaćanje i postavlja vrijednost u 1. Inače je vrijednsot 0.		\\ \hline 
-				posudjenaKosara & BOOLEAN	& Korisnik može posuditi jednu košaru iz praonice. 	\\ \hline 
-				\cellcolor{LightBlue} idKorisnik	& INT &  Id korisnika koji je rezervirao termin. 	\\ \hline 
-				\cellcolor{LightBlue} idZaposlenik	& INT &  Id zaposlenika koji radi za vrijeme rezerviranog termina. 	\\ \hline
-				
-			\end{longtabu}
+			\noindent\textbf{Appointment}  Ovaj entitet sadrži sve važne informacije vezane za rezervirani termin u praonici. Sadrži atribute: id termina, time, machine\_id, price, opcionalni note, paid, basket\_taken, user\_id i employee\_id. Ovaj entitet u vezi je \textit{One-to-Many} s entitetom Machine preko id-a uređaja, vezi \textit{Many-to-One} s entitetom User preko id-a korisnika i id-a zaposlenika.
 		
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Korisnik}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Appointment}}	 \\[3pt] \hline
 				\endfirsthead
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Korisnik}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Appointment}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				\textbf{id} & INT	&  jedinstveni brojčani identifikator	\\ \hline
+				time & TIMESTAMP	&  	datum rezerviranog termina u praonici i vrijeme početka 	\\ \hline
+				machine\_id (FK)	& INT &  jedinstveni identifikator uređaja kojeg rezerviramo u terminu (machine.id) 	\\ \hline 
+				price & FLOAT &  cijena usluge koju korisnik plaća (pranje ili sušenje) \\ \hline 
+				note & VARCHAR	& opcionalna bilješka zaposleniku \\ \hline 
+				paid & BOOLEAN	& korisnik bira hoće li platiti termin online ili uživo	\\ \hline 
+				basket\_taken & BOOLEAN	& korisnik može posuditi jednu košaru iz praonice 	\\ \hline 
+				user\_id (FK)	& INT &  jedinstveni identifikator korisnika koji je rezervirao termin (user.id) 	\\ \hline 
+				employee\_id (FK)	& INT &  jedinstveni identifikator zaposlenika koji radi za vrijeme rezerviranog termina (user.id)	\\ \hline
+				
+			\end{longtabu}
+		
+			\noindent\textbf{User}  Ovaj entitet sadrži sve važne informacije vezane za različite korisnike u praonici. Sadrži atribute: id korisnika, username, password, first\_name, last\_name, jedinstveni JMBAG, jedinstveni email, is\_active, is\_staff, card\_number, negative\_points, date\_joined, last\_login, is\_superuser. Ovaj entitet u vezi je \textit{One-to-Many}  \textit{One-to-Many} s entitetom Appointment preko id-a korisnika, u vezi \textit{One-to-Many} s entitetom Post preko id-a korisnika i u vezi \textit{One-to-Many} s entitetom Recension preko id-a korisnika.
+		
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{User}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{User}}	 \\[3pt] \hline
 				\endhead
 				
 				\hline 
 				\endlastfoot
 				
-				\cellcolor{LightGreen}id & INT	&  Id korisnika.	\\ \hline
-				ime	& VARCHAR &   Ime korisnika.	\\ \hline 
-				prezime	& VARCHAR &   Prezime korisnika.	\\ \hline
-				JMBAG	& VARCHAR &   JMBAG korisnika.	\\ \hline
-				lozinka	& VARCHAR &   Lozinka korisničkog računa.	\\ \hline
-				email	& VARCHAR &   Jedinstveni email korisnika.	\\ \hline
-				aktivan & BOOLEAN &  Svi korisnici čije registracije su potvrđene od zaposlenika su aktivni. Administrator može blokirati korisnika i promijeniti zastavicu u 0. Neaktivni korisnici nemaju pristup uslugama praonice.\\ \hline 
-				ocjena & FLOAT &  Aritmetička sredina svih dobivenih ocjena za pojedinog djelatnika.\\ \hline 
-				zaposlenik & BOOLEAN &  Korisnici mogu biti i zaposlenici. Ako je korisnik ujedno i zaposlenik vrijednost zastavice je 1. Zaposlenici imaju više ovlasti od običnih korisnika.\\ \hline 
-				kreditnaKartica	& INT &   Broj kreditne kartice korisnika.	\\ \hline
-				negativniBodovi	& INT &   Broj negativnih bodova korisnika.	\\ \hline
+				\textbf{id} & INT	&  jedinstveni brojčani identifikator korisnika	\\ \hline
+				username	& VARCHAR &   korisničko ime	\\ \hline
+				password	& VARCHAR &   lozinka korisničkog računa	\\ \hline
+				first\_name	& VARCHAR &   ime korisnika	\\ \hline 
+				last\_name	& VARCHAR &   prezime korisnika	\\ \hline
+				JMBAG	& VARCHAR &   JMBAG korisnika	\\ \hline
+				email	& VARCHAR &   jedinstveni email korisnika	\\ \hline
+				is\_active & BOOLEAN &  svi korisnici čije registracije su potvrđene od zaposlenika i koji nisu blokirani\\ \hline 
+				is\_staff & BOOLEAN &  oznaka je li korisnik i zaposlenik\\ \hline 
+				is\_superuser	& BOOLEAN &   pokazuje je li korisnik ujedno i administrator	\\ \hline
+				card\_number	& VARCHAR &   broj kreditne kartice korisnika	\\ \hline
+				negative\_points	& INT &   broj negativnih bodova korisnika	\\ \hline
+				date\_joined	& DATE &   datum registracije korisnika	\\ \hline
+				last\_login	& TIMESTAMP &  vrijeme zadnje prijave u sustav	\\ \hline
 			
 				
 				
 			\end{longtabu}
 		
+			\noindent\textbf{Post}  Ovaj entitet sadrži sve važne informacije vezane za objavu. Sadrži atribute: id objave, photo, text, date, type i employee\_id. 
+			Ovaj entitet u vezi je \textit{Many-to-One} s entitetom User preko id-a zaposlenika.
+		
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Objava}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Post}}	 \\[3pt] \hline
 				\endfirsthead
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Objava}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Post}}	 \\[3pt] \hline
 				\endhead
 				
 				\hline 
 				\endlastfoot
 				
-				\cellcolor{LightGreen}id & INT	&  Id objave.	\\ \hline
-				
-				
-				slika	& BYTEA &   Slika priložena uz objavu.	\\ \hline 
-				tekst	& VARCHAR &   Tekst objave.	\\ \hline
-				datumObjave	& DATE &  Datum objavljivanja objave.	\\ \hline
-				LF	& BOOLEAN &   Ako je vrijednost zastavice, objava se prikazuje na "LostAndFound" stranici. 	\\ \hline
-				\cellcolor{LightBlue} idZaposlenik	& INT &  Id zaposlenika koji radi za vrijeme rezerviranog termina. 	\\ \hline		
+				\textbf{id} & INT	&  jedinstveni brojčani identifikator objave	\\ \hline
+				photo	& BYTEA &   opcionalna slika priložena uz objavu	\\ \hline 
+				text	& VARCHAR &   tekst objave	\\ \hline
+				date	& DATE &  datum objavljivanja objave	\\ \hline
+				type	& BOOLEAN &   ako je vrijednost zastavice 1, objava se prikazuje na "LostAndFound" stranici 	\\ \hline
+				employee\_id (FK)	& INT &  id zaposlenika koji radi za vrijeme rezerviranog termina (user.id) 	\\ \hline		
 						
 				
 				
 			\end{longtabu}
 		
+			\noindent\textbf{Recension}  Ovaj entitet sadrži sve važne informacije vezane za recenzije. Sadrži atribute: id recenzije, user\_id, employee\_id, text i grade. Ovaj entitet u vezi je \textit{Many-to-One} s entitetom User preko id-a zaposlenika i id-a korisnika.
+		
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Recenzije}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Recension}}	 \\[3pt] \hline
 				\endfirsthead
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Recenzije}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Recension}}	 \\[3pt] \hline
 				\endhead
 				
 				\hline 
 				\endlastfoot
 				
-				\cellcolor{LightGreen}id & INT	&  Id recenzije.	\\ \hline
-				\cellcolor{LightBlue} idKorisnik	& INT &  Id korisnika koji je ostavio recenziju. 	\\ \hline
-				\cellcolor{LightBlue} idZaposlenik	& INT &  Id recenziranog zaposlenika. 	\\ \hline
-				recenzija	& VARCHAR &   Tekst recenzije.	\\ \hline
-				ocjena	& INT & Ocjena zaposlenika od 1 do 5.	\\ \hline
+				\textbf{id} & INT	&  jedinstveni brojčani identifikator recenzije	\\ \hline
+				user\_id (FK)	& INT &  id korisnika koji je ostavio recenziju (user.id) 	\\ \hline
+				employee\_id (FK)	& INT &  id recenziranog zaposlenika (user.id)	\\ \hline
+				text	& VARCHAR &   tekst recenzije	\\ \hline
+				grade	& INT & ocjena zaposlenika od 1 do 5	\\ \hline
 				
 			\end{longtabu}
 			
+			\noindent\textbf{Washday}  Ovaj entitet sadrži sve važne informacije vezane za radni dan praonice. Sadrži atribute: id radnog dana, date, open\_time, close\_time, pause\_start, pause\_end i wash\_price. Ovaj entitet nije u vezi ni s jednim drugim entitetom.
+			
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Praonica}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Washday}}	 \\[3pt] \hline
 				\endfirsthead
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Praonica}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Washday}}	 \\[3pt] \hline
 				\endhead
 				
 				\hline 
 				\endlastfoot
 				
-				\cellcolor{LightGreen}datum & DATUM	&  Trenutni datum.	\\ \hline
-				pocetakRada	& TIME &   Početak radnog vremena.	\\ \hline
-				krajRada	& TIME & Kraj radnog vremena.	\\ \hline
-				pauza	& TIME & Početak pauze.	\\ \hline
-				pranjeCijena	& FLOAT & Cijena jednog pranja.	\\ \hline
-				susenjeCijena	& FLOAT & Cijena jednog sušenja.	\\ \hline
+				\textbf{id} & INT	&  jedinstveni brojčani  identifikator radnog dana praonice	\\ \hline
+				date & DATE	&  trenutni datum	\\ \hline
+				open\_time	& TIME &   početak radnog vremena	\\ \hline
+				close\_time	& TIME & kraj radnog vremena	\\ \hline
+				pause\_start	& TIME & početak pauze	\\ \hline
+				pause\_end	& TIME & kraj pauze	\\ \hline
+				wash\_price	& FLOAT & cijena jednog pranja	\\ \hline
+				drying\_price	& FLOAT & cijena jednog sušenja	\\ \hline
 				
 				
 			\end{longtabu}
@@ -215,7 +244,7 @@
 			
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.35]{slike/djangoBaza.jpeg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.3]{slike/djangoBaza.jpeg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Relacijska shema Django baze podataka}
 				\label{fig:promjene}
