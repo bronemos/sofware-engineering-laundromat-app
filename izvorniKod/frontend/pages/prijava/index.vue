@@ -14,13 +14,22 @@
         <button type="submit" class="submit-btn">Prijava</button>
       </form>
 
-      <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'" @submit.prevent="registerUser">
-        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model=" registerForm.username">
-        <input type="text" class="input-field" placeholder="Ime" required v-model=" registerForm.first_name">
-        <input type="text" class="input-field" placeholder="Prezime" required v-model=" registerForm.last_name">
-        <input type="text" class="input-field" placeholder="JMBAG" required v-model=" registerForm.JMBAG">
-        <input type="email" class="input-field" placeholder="Email" required v-model=" registerForm.email">
-        <input type="password" class="input-field" placeholder="Lozinka" required v-model=" registerForm.password">
+      <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'" @submit.prevent="registerUser" autocomplete="off">
+    <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="registerForm.username">
+        <input type="text" class="input-field" placeholder="Ime" required v-model="registerForm.first_name">
+        <input type="text" class="input-field" placeholder="Prezime" required v-model="registerForm.last_name">
+        <input type="text" class="input-field" placeholder="JMBAG" required v-model="registerForm.JMBAG"> 
+        <div class="error" v-if="!$v.registerForm.JMBAG.numeric">JMBAG mora biti broj</div>
+        <div class="error" v-if="!$v.registerForm.JMBAG.minLength">JMBAG mora imati točno 10 znamenaka</div>
+        <div class="error" v-if="!$v.registerForm.JMBAG.maxLength">JMBAG mora imati točno 10 znamenaka</div>
+        
+    <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email" >
+        <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div>
+    
+        <input type="password" class="input-field" placeholder="Lozinka" required v-model="registerForm.password">
+        <div class="error" v-if="!$v.registerForm.password.minLength">Lozinka mora imati najmanje 8 znakova</div>
+        <input type="password" class="input-field" placeholder="Ponovite lozinku" required v-model="registerForm.passwordAgain">
+         <div class="error" v-if="!$v.registerForm.passwordAgain.sameAs">Lozinka nije ista</div>
 
        <!---  <input type="checkbox" class="check-box">
        <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>--->
@@ -31,6 +40,16 @@
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+const {
+  required,
+  sameAs,
+  email,
+  maxLength,
+  minLength,
+  alphaNum,
+  numeric
+} = require("vuelidate/lib/validators");
   export default {
       data() {
     return {
@@ -46,13 +65,33 @@
         JMBAG: '',
         email: '',
         password: '',
+        passwordAgain:'',
 
-      }
-
+      },
     };
   },
-
+      
+mixins: [validationMixin],
+validations: {
+     registerForm: {
+       JMBAG: {
+       minLength: minLength(10),
+       maxLength: maxLength(10),
+       numeric: numeric
+    },
+    email: {
+      email: email
+    },
+    password: {
+       minLength: minLength(8),
+    },
+    passwordAgain: {
+      sameAs: sameAs('password'),
+    },
+  },
+},
     methods: {
+
       loginUser: async function() {
         try {
           await this.$auth.loginWith('local', {
@@ -145,13 +184,14 @@
   }
 
   .form-box {
-    height: 510px;
+    height: 550px;
     width: 380px;
     position: relative;
     margin: 6% auto;
     background: #fff;
     padding: 5px;
     overflow: hidden;
+    border-radius: 0.5rem
   }
 
   .button-box {
@@ -200,7 +240,7 @@
   .input-field {
     width: 100%;
     padding: 10px 0;
-    margin: 4px 0;
+    margin: 2.5px 0;
     border-left: 0;
     border-top: 0;
     border-right: 0;
@@ -234,4 +274,8 @@
   .check-box {
     margin: 20px 200px 30px 0px;
   }
+.error{
+  color: red;
+  font-size: 12px;
+}
 </style>
