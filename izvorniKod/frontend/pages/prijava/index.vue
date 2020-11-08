@@ -10,12 +10,13 @@
       <form id="login" class="input-group-login" :class="login ? 'login_50' : 'login_n400'" @submit.prevent="loginUser">
         <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="loginForm.username">
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="loginForm.password">
-       <!--- <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>--->
+        <!--- <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>--->
         <button type="submit" class="submit-btn">Prijava</button>
       </form>
 
-      <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'" @submit.prevent="registerUser" autocomplete="off">
-    <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="registerForm.username">
+      <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'"
+            @submit.prevent="registerUser" autocomplete="off">
+        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="registerForm.username">
         <input type="text" class="input-field" placeholder="Ime" required v-model="registerForm.first_name">
         <input type="text" class="input-field" placeholder="Prezime" required v-model="registerForm.last_name">
         <input type="text" class="input-field" placeholder="JMBAG" required v-model="registerForm.JMBAG">
@@ -23,17 +24,19 @@
         <div class="error" v-if="!$v.registerForm.JMBAG.minLength">JMBAG mora imati točno 10 znamenaka</div>
         <div class="error" v-if="!$v.registerForm.JMBAG.maxLength">JMBAG mora imati točno 10 znamenaka</div>
 
-    <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email" >
+        <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email">
         <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div>
 
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="registerForm.password">
-        <!--<div class="error" v-if="!$v.registerForm.password.minLength">Lozinka mora imati najmanje 8 znakova</div> !-->
-        <div class="error" v-if="!$v.registerForm.password.verifyPw">Lozinka mora imati najmanje 8 znakova, sadržavati barem jedno malo i veliko slovo, broj i specijalni znak</div>
-        <input type="password" class="input-field" placeholder="Ponovite lozinku" required v-model="registerForm.passwordAgain">
-         <div class="error" v-if="!$v.registerForm.passwordAgain.sameAs">Lozinka nije ista</div>
+        <div class="error" v-if="!$v.registerForm.password.verifyPw">Lozinka mora sadržavati najmanje 8 znakova te slova
+          i brojeve.
+        </div>
+        <input type="password" class="input-field" placeholder="Ponovite lozinku" required
+               v-model="registerForm.passwordAgain">
+        <div class="error" v-if="!$v.registerForm.passwordAgain.sameAs">Lozinka nije ista</div>
 
-       <!---  <input type="checkbox" class="check-box">
-       <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>--->
+        <!---  <input type="checkbox" class="check-box">
+        <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>--->
         <button type="submit" class="submit-btn">Registracija</button>
       </form>
     </div>
@@ -41,64 +44,66 @@
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-const {
-  required,
-  sameAs,
-  email,
-  maxLength,
-  minLength,
-  alphaNum,
-  numeric
-} = require("vuelidate/lib/validators");
-const verifyPw = password => {
-  const pwRegExp = RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$')
-  return pwRegExp.test(password)
-}
+  import {validationMixin} from "vuelidate";
+
+  const {
+    required,
+    sameAs,
+    email,
+    maxLength,
+    minLength,
+    alphaNum,
+    numeric
+  } = require("vuelidate/lib/validators");
+  const verifyPw = (password) => {
+    if (password == '') return true
+    const pwRegExp = RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$')
+    return pwRegExp.test(password)
+  }
   export default {
-      data() {
-    return {
-      loginForm: {
-        username: '',
-        password: '',
-      },
-      login: true,
+    data() {
+      return {
+        loginForm: {
+          username: '',
+          password: '',
+        },
+        login: true,
+        registerForm: {
+          username: '',
+          first_name: '',
+          last_name: '',
+          JMBAG: '',
+          email: '',
+          password: '',
+          passwordAgain: '',
+
+        },
+      };
+    },
+
+    mixins: [validationMixin],
+    validations: {
       registerForm: {
-        username: '',
-        first_name:'',
-        last_name:'',
-        JMBAG: '',
-        email: '',
-        password: '',
-        passwordAgain:'',
-
+        JMBAG: {
+          minLength: minLength(10),
+          maxLength: maxLength(10),
+          numeric: numeric,
+        },
+        email: {
+          email: email
+        },
+        password: {
+          verifyPw: verifyPw
+        },
+        passwordAgain: {
+          sameAs: sameAs('password'),
+        },
+        $invalid: false,
       },
-    };
-  },
-
-mixins: [validationMixin],
-validations: {
-     registerForm: {
-       JMBAG: {
-       minLength: minLength(10),
-       maxLength: maxLength(10),
-       numeric: numeric
     },
-    email: {
-      email: email
-    },
-    password: {
-       minLength: minLength(8),
-      verifyPw: verifyPw,
-    },
-    passwordAgain: {
-      sameAs: sameAs('password'),
-    },
-  },
-},
     methods: {
 
-      loginUser: async function() {
+      loginUser: async function () {
         try {
           await this.$auth.loginWith('local', {
             data: this.loginForm
@@ -111,17 +116,21 @@ validations: {
         }
       },
       async registerUser() {
+        if (this.$v.$invalid) {
+          this.$toast.error('Ispravite greške u formi za registraciju prije ponovnog pokušaja', {duration: 5000})
+          return
+        }
         try {
-          let resoonse = await this.$axios.post('account/', this.registerForm)
+          let response = await this.$axios.post('account/', this.registerForm)
         } catch (e) {
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 5000});
-          if(e.response.data){
-            for(let key in e.response.data){
-              if(key == 'non_field_errors'){
-                let nonFieldErrors =e.response.data[key][0]
+          if (e.response.data) {
+            for (let key in e.response.data) {
+              if (key == 'non_field_errors') {
+                let nonFieldErrors = e.response.data[key][0]
                 nonFieldErrors = nonFieldErrors.substring(1, nonFieldErrors.length - 1)
                 this.$toast.error(`${nonFieldErrors}`, {duration: 5000});
-              }else
+              } else
                 this.$toast.error(`${key}: ${e.response.data[key]}`, {duration: 5000});
             }
           }
@@ -154,7 +163,7 @@ validations: {
     left: 50px;
   }
 
-  button:focus{
+  button:focus {
     outline: none !important;
   }
 
@@ -216,7 +225,7 @@ validations: {
     border: 0;
     outline: none;
     position: relative;
-    color:black;
+    color: black;
   }
 
   .btn {
@@ -236,7 +245,8 @@ validations: {
     width: 280px;
     transition: .5s;
   }
-   .input-group-login {
+
+  .input-group-login {
     top: 120px;
     position: absolute;
     width: 280px;
@@ -265,7 +275,7 @@ validations: {
     border: 0;
     outline: none;
     border-radius: 30px;
-    color:white;
+    color: white;
 
 
   }
@@ -280,8 +290,9 @@ validations: {
   .check-box {
     margin: 20px 200px 30px 0px;
   }
-.error{
-  color: red;
-  font-size: 12px;
-}
+
+  .error {
+    color: red;
+    font-size: 12px;
+  }
 </style>
