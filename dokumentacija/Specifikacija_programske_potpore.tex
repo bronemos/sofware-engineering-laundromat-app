@@ -1,21 +1,21 @@
 \chapter{Specifikacija programske potpore}
 
 \section{Funkcionalni zahtjevi}
-
+\begin{comment}
 \textbf{\textit{dio 1. revizije}}\\
 
 \textit{Navesti \textbf{dionike} koji imaju \textbf{interes u ovom sustavu} ili  \textbf{su nositelji odgovornosti}. To su prije svega korisnici, ali i administratori sustava, naručitelji, razvojni tim.}\\
 
 \textit{Navesti \textbf{aktore} koji izravno \textbf{koriste} ili \textbf{komuniciraju sa sustavom}. Oni mogu imati inicijatorsku ulogu, tj. započinju određene procese u sustavu ili samo sudioničku ulogu, tj. obavljaju određeni posao. Za svakog aktora navesti funkcionalne zahtjeve koji se na njega odnose.}\\
-
+\end{comment}
 
 \noindent \textbf{Dionici:}
 
 \begin{packed_enum}
 	
 	\item Studentski centar Sveučilišta u Zagrebu (naručitelj)
-	\item Korisnici praonice veša				
-	\item Zaposlenici praonice veša
+	\item Korisnici praonice rublja				
+	\item Zaposlenici praonice rublja
 	\item Administrator sustava
 	\item Razvojni tim
 	
@@ -30,7 +30,7 @@
 	\begin{packed_enum}
 		
 		\item napraviti novi korisnički račun za koji su mu potrebni adresa e-pošte, lozinka, ime, prezime, JMBAG i broj mobitela
-		\item vidjeti oglase za posao (osobe koje ne žive u domu i nisu studenti, odnosno nemaju pravo koristiti praonicu, mogu se zaposliti u praonici, prijave za oglas ne idu putem aplikacije, već še molba i životopis šalju na adresu e-pošte navedenu u oglasu)
+		\item vidjeti oglase za posao (osobe koje ne žive u domu i nisu studenti, odnosno nemaju pravo koristiti praonicu, mogu se zaposliti u praonici, prijave za oglas ne idu putem aplikacije, već se molba i životopis šalju na adresu e-pošte navedenu u oglasu)
 		\item vidjeti podatke o praonici 
 		
 		\begin{packed_enum}
@@ -47,7 +47,7 @@
 		\item sve akcije navedene za neregistriranog korisnika
 		\item prijaviti se u sustav
 		\item pristupiti kalendaru u kojem se prikazuju slobodni i popunjeni termini
-		\item rezervirati termin za pranje i sušenje veša
+		\item rezervirati termin za pranje i sušenje rublja
 		\item prilikom rezervacije odabrati način plaćanja (putem aplikacije ili na blagajni doma)
 		\item postaviti bilješku na rezervaciju
 		\item urediti ili otkazati rezervirani termin (do 24 sata prije termina)
@@ -108,6 +108,9 @@
 
 
 \subsection{Obrasci uporabe}
+\begin{comment}
+content...
+
 
 \textbf{\textit{dio 1. revizije}}
 
@@ -149,7 +152,7 @@
 		
 	\end{packed_item}
 \end{packed_item}
-
+\end{comment}
 \noindent \underbar{\textbf{UC1 - Registracija}}
 \begin{packed_item}
 	
@@ -230,7 +233,7 @@
 		\item[2.a] Unos krive kombinacije e-mail-a i lozinke
 		\item[] \begin{packed_enum}
 			
-			\item Sustav korisnika vraća na početnu stranicu i dojavljuje da je prijava neuspjela
+			\item Sustav korisnika vraća na početnu stranicu i dojavljuje da prijava nije uspjela
 			\item Korisnik ponovno upisuje podatke ili odustaje od prijave
 			
 		\end{packed_enum}
@@ -324,10 +327,10 @@
 	
 	\item[] \begin{packed_item}
 		
-		\item[2.a] Korisnik nema sredstava
+		\item[2.a] Korisnik nema sredstava na računu
 		\item[] \begin{packed_enum}
 			
-			\item Korisniku se ispisuje upozorenje da nema sredstava
+			\item Korisniku se ispisuje upozorenje da nema sredstava na računu
 			\item Korisniku se nudi plaćanje na blagajni
 			
 		\end{packed_enum}
@@ -336,7 +339,7 @@
 \end{packed_item}
 
 
-\noindent \underbar{\textbf{UC5 - Pristup kalendaru sa terminima}}
+\noindent \underbar{\textbf{UC5 - Pristup kalendaru s terminima}}
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: }Registrirani korisnik
@@ -422,7 +425,7 @@
 \noindent \underbar{\textbf{UC9 - Pregled podataka o praonici}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik: } Registrirani korisnik, neregistrirani korisnik
+	\item \textbf{Glavni sudionik: } Registrirani korisnik, Neregistrirani korisnik
 	\item  \textbf{Cilj:} Prikaz podataka o praonici
 	\item  \textbf{Sudionici:} Baza podataka
 	\item  \textbf{Preduvjet:} -
@@ -440,7 +443,7 @@
 \noindent \underbar{\textbf{UC10 - Pregled oglasa za posao}}
 \begin{packed_item}
 	
-	\item \textbf{Glavni sudionik:} Registrirani korisnik, neregistrirani korisnik
+	\item \textbf{Glavni sudionik:} Registrirani korisnik, Neregistrirani korisnik
 	\item  \textbf{Cilj:} Prikaz oglasa za posao
 	\item  \textbf{Sudionici:} Baza podataka
 	\item  \textbf{Preduvjet:} -
@@ -478,7 +481,7 @@
 		\item[2.a] Pogrešno uneseni podaci o natječaju
 		\item[] \begin{packed_enum}
 			
-			\item Omogućiti editiranje oglasa nakon objave
+			\item Omogućiti uređivanje oglasa nakon objave
 			
 		\end{packed_enum}				
 	\end{packed_item}
@@ -542,7 +545,7 @@
 \begin{packed_item}
 	
 	\item \textbf{Glavni sudionik: } Administrator
-	\item  \textbf{Cilj:} Zabraniti pristup uslugama praonice korisniku
+	\item  \textbf{Cilj:} Zabraniti pristup korisniku uslugama praonice 
 	\item  \textbf{Sudionici:} Baza podataka
 	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora
 	\item  \textbf{Opis osnovnog tijeka:}
@@ -581,7 +584,7 @@
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Obrisati oglas za posao
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje objavljeni oglasi
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora te postoje objavljeni oglasi
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -657,7 +660,7 @@
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Pregled recenzije zaposlenika
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje recenzije zaposlenika
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora te postoje recenzije zaposlenika
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -765,7 +768,7 @@
 		\item[2.a] Pokušava se postaviti vrijeme pauze koje nije dozvoljeno (u vrijeme zamjene rublja) 
 		\item[] \begin{packed_enum}
 			
-			\item Sustav obještava zaposlenika da to vrijeme pauze nije dozvoljeno i nudi mu opciju mijenjanja termina pauze
+			\item Sustav obavještava zaposlenika da to vrijeme pauze nije dozvoljeno i nudi mu opciju mijenjanja termina pauze
 			
 		\end{packed_enum}
 		
@@ -864,7 +867,7 @@
 	
 	\item[] \begin{packed_item}
 		
-		\item[1.a] Korisnik ima nevažeću potvrdu da živi u studentskom   domu 
+		\item[1.a] Korisnik ima nevažeću potvrdu o životu u studentskom   domu 
 		\item[] \begin{packed_enum}
 			
 			\item Zaposlenik mu ne potvrđuje registraciju
@@ -876,10 +879,10 @@
 \end{packed_item}
 
 \subsubsection{Dijagrami obrazaca uporabe}
-
+\begin{comment}
 \textit{Prikazati odnos aktora i obrazaca uporabe odgovarajućim UML dijagramom. Nije nužno nacrtati sve na jednom dijagramu. Modelirati po razinama apstrakcije i skupovima srodnih funkcionalnosti.}
 \eject		
-
+\end{comment}
 \begin{figure}[H]
 	\includegraphics[width=.9\linewidth]{slike/DOU1.PNG}
 	\centering
@@ -902,15 +905,15 @@
 \end{figure}
 
 \subsection{Sekvencijski dijagrami}
-
+\begin{comment}
 \textbf{\textit{dio 1. revizije}}\\
 
 \textit{Nacrtati sekvencijske dijagrame koji modeliraju najvažnije dijelove sustava (max. 4 dijagrama). Ukoliko postoji nedoumica oko odabira, razjasniti s asistentom. Uz svaki dijagram napisati detaljni opis dijagrama.}
 \eject
-
+\end{comment}
 \textbf{Obrazac uporabe UC1 i UC2 - Registracija i Prijava korisnika}\\
 
-Neregistrirani korisnik unosi podatke u formu. Web preglednik vrši provjeru podataka i vraća povratnu informaciju korisniku sve dok ne unese potrebne podatke ili ne odustane. Kada se unesu točni podaci šalje se zahtjev za stvaranje računa prema Web aplikaciji. Web aplikacija šalje upit prema bazi podataka kojim provjerava da li korisnik već postoji. Ako račun već postoji korisnika se obaviještava o pogrešci, inače račun se zapisuje u bazu podataka. Tada korisnik (student) treba otići u praonicu sa potvrdom o boravištu. Zaposlenik nakon provjere potvrde aktivira korisnikov račun. Nakon toga korisnik se može prijaviti u sustav. Prijavu započinje unosom podataka u formu za prijavu. Web aplikacija dohvaća podatke o korisniku iz baze podataka. Provjerom utvrđuje ispravnost unesenih podataka. Ako su ispravni korisniku se prikazuje početna stranica, inače se dojavljuje pogreška.
+Neregistrirani korisnik unosi podatke u formu. Web preglednik vrši provjeru podataka i vraća povratnu informaciju korisniku sve dok ne unese potrebne podatke ili ne odustane. Kada se unesu točni podaci šalje se zahtjev za stvaranje računa prema web aplikaciji. Web aplikacija šalje upit prema bazi podataka kojim provjerava da li korisnik već postoji. Ako račun već postoji korisnika se obaviještava o pogreški, inače račun se zapisuje u bazu podataka. Tada korisnik (student) treba otići u praonicu sa potvrdom o boravištu. Zaposlenik nakon provjere potvrde aktivira korisnikov račun. Nakon toga korisnik se može prijaviti u sustav. Prijavu započinje unosom podataka u formu za prijavu. Web aplikacija dohvaća podatke o korisniku iz baze podataka. Provjerom utvrđuje ispravnost unesenih podataka. Ako su ispravni korisniku se prikazuje početna stranica, inače se dojavljuje pogreška.
 
 
 \begin{figure}[H]
@@ -923,7 +926,7 @@ Neregistrirani korisnik unosi podatke u formu. Web preglednik vrši provjeru pod
 
 \textbf{Obrazac uporabe UC3 - Pregled vlastitog profila i uređivanje podataka}\\
 
-{Registrirani korisnik, zaposlenik ili admin odabire opciju za prikaz vlastitog profila. Web aplikacija dohvaća podatke o korisniku iz baze podataka te ih prikazuje na stranici profila. Korisnik može urediti svoje podatke. Klikom na gumb ya ismjenu podataka otvara se obrazac. Korisnik popunjava obrazac, a web aplikacija provjerava ispravnost popunjenih podataka. Ukoliko su podaci krivo popunjeni, web aplikacija ispisuje upozorenje, a promjena ostaje nezabilježena. Ispravno popunjen obrazac se pohranjuje u bazu podataka. }
+{Registrirani korisnik, zaposlenik ili administrator odabire opciju za prikaz vlastitog profila. Web aplikacija dohvaća podatke o korisniku iz baze podataka te ih prikazuje na stranici profila. Korisnik može urediti svoje podatke. Klikom na gumb za izmjenu podataka otvara se obrazac. Korisnik popunjava obrazac, a web aplikacija provjerava ispravnost popunjenih podataka. Ukoliko su podaci krivo popunjeni, web aplikacija ispisuje upozorenje, a promjena ostaje nezabilježena. Ispravno popunjen obrazac se pohranjuje u bazu podataka. }
 
 
 \begin{figure}[H]
@@ -934,7 +937,7 @@ Neregistrirani korisnik unosi podatke u formu. Web preglednik vrši provjeru pod
 \end{figure}
 \eject
 
-\textbf{Obrazac uporabe UC4 - Rezervacija termina za pranje veša}\\
+\textbf{Obrazac uporabe UC4 - Rezervacija termina za pranje rublja}\\
 
 {Registrirani korisnik odabire opciju za rezervaciju termina. Poslužitelj dohvaća podatke o terminima iz baze podataka i prikazuje kalendar sa slobodnim terminima registriranom korisniku. Korisnik odabire jedan od slobodnih termina, način plaćanja (online ili uživo) te može ostaviti bilješku. Podaci o terminu se pohranjuju u bazu podataka. Korisnik dobiva potvrdu o uspješnoj rezervaciji termina. Ukoliko nema slobodnih termina, korisniku se ispisuje poruka "Nema slobodnih termina".}
 
@@ -961,11 +964,11 @@ Administrator šalje zahtjev za prikaz svih oglasa. Web aplikacija dohvaća ogla
 \eject
 
 \section{Ostali zahtjevi}
-
+\begin{comment}
 \textbf{\textit{dio 1. revizije}}\\
 
 \textit{Nefunkcionalni zahtjevi i zahtjevi domene primjene dopunjuju funkcionalne zahtjeve. Oni opisuju \textbf{kako se sustav treba ponašati} i koja \textbf{ograničenja} treba poštivati (performanse, korisničko iskustvo, pouzdanost, standardi kvalitete, sigurnost...). Primjeri takvih zahtjeva u Vašem projektu mogu biti: podržani jezici korisničkog sučelja, vrijeme odziva, najveći mogući podržani broj korisnika, podržane web/mobilne platforme, razina zaštite (protokoli komunikacije, kriptiranje...)... Svaki takav zahtjev potrebno je navesti u jednoj ili dvije rečenice.}
-
+\end{comment}
 \begin{packed_item}
 	\item Treba biti omogućen rad više korisnika u stvarnom vremenu
 	\item Sustav i korisničko sučelje moraju imati podršku za sve znakove hrvatske abecede
@@ -973,10 +976,10 @@ Administrator šalje zahtjev za prikaz svih oglasa. Web aplikacija dohvaća ogla
 	\item Potrebno je omogućiti korisniku zamjenu ili uređenje odabranog termina 24 sata prije početka
 	\item Sustav će periodički svakih tjedan dana brisati nepotvrđene rezervacije iz baze podataka
 	\item Radno vrijeme moći će se mijenjati za sve dane koji su dva tjedna nakon tekućeg dana
-	\item Morati će postojati ograničenje rezervacije dva termina dnevno za svakog registriranog korisnika
+	\item Morat će postojati ograničenje rezervacije dva termina dnevno za svakog registriranog korisnika
 	\item Neispravno korištenje korisničkog sučelja mora dati povratnu informaciju korisniku u stvarnom vremenu
 	\item Sustav treba omogućiti korištenje kolačića (engl. \textit{cookies}) u svrhu pohrane privremeno korištenih podatka
-	\item Sve novčane transakcije koristi HRK kao valutu
+	\item Za sve novčane transakcije koristi HRK kao valutu
 	\item Sustav treba biti dovoljno jednostavan kako bi ga mogla koristiti osoba bez opširnih uputa
 	\item Lozinke korisnika u bazi podatka trebaju biti zaštićene PBKDF2 \textit{(Password-Based Key Derivation Function 2)}
 kriptografskim algoritmom kako bi se smanjila mogućnost narušavanja sigurnosti sustava
