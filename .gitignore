@@ -1,5 +1,6 @@
+# exclude izvorniKod from devdoc branch
+izvorniKod/
 backend/.idea/
-PROGI_2020_Janezi_v1_0.pdf
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux

@@ -40,10 +40,12 @@
 	\pagebreak
 				
 	\section{Baza podataka}
-			
+		
+		\begin{comment}
 			\textbf{\textit{dio 1. revizije}}\\
 			
 		\textit{Potrebno je opisati koju vrstu i implementaciju baze podataka ste odabrali, glavne komponente od kojih se sastoji i slično.}
+		\end{comment}
 				
 		\noindent Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka PostgreSQL.
 		Baza se sastoji od relacija (tablica) i njihovih atributa. Bazu podataka koristimo za pohranu informacija o korisnicima, njihovim rezervacijama i podacima o praonici.
@@ -61,9 +63,9 @@
 		
 			\subsection{Opis tablica}
 			
-				
-				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
 				\begin{comment}
+				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
+				
 				\begin{longtabu} to \textwidth {|X[6, l]|X[6, l]|X[20, l]|}
 					
 					\hline \multicolumn{3}{|c|}{\textbf{korisnik - ime tablice}}	 \\[3pt] \hline
@@ -233,7 +235,9 @@
 			
 			
 			\subsection{Dijagram baze podataka}
+			\begin{comment}
 				\textit{ U ovom potpoglavlju potrebno je umetnuti dijagram baze podataka. Primarni i strani ključevi moraju biti označeni, a tablice povezane. Bazu podataka je potrebno normalizirati. Podsjetite se kolegija "Baze podataka".}
+			\end{comment}
 				
 				\begin{figure}[H]
 					\includegraphics[scale=0.2]{slike/BAZA.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
@@ -254,7 +258,7 @@
 			
 			
 		\section{Dijagram razreda}
-		
+		\begin{comment}
 			\textit{Potrebno je priložiti dijagram razreda s pripadajućim opisom. Zbog preglednosti je moguće dijagram razlomiti na više njih, ali moraju biti grupirani prema sličnim razinama apstrakcije i srodnim funkcionalnostima.}\\
 			
 			\textbf{\textit{dio 1. revizije}}\\
@@ -264,6 +268,7 @@
 			\textbf{\textit{dio 2. revizije}}\\			
 			
 			\textit{Prilikom druge predaje projekta dijagram razreda i opisi moraju odgovarati stvarnom stanju implementacije} \\
+		\end{comment}
 			
 			Zbog toga što je web poslužitelj napisan u Pythonu, ne možemo reći da u našem web modelu postoje razredi u pravom smislu riječi. Naime, moguće je pisati razred u Pythonu, ali nije moguće koristiti vrste pristupa. Sve metode, razredi i atributi su javne (i tako će biti označene na dijagramima). Moguće je naznačiti da želimo da se komponenta ponaša kao privatna korištenjem donje crtice u njenom imenu. Stoga zaključujemo da razredi u Pythonu postoje i moguće je izraditi dijagram razreda za komponente web aplikacije iako razredi nemaju potpune funkcionalnosti objektno orijentiranog jezika. Django koristi razrede prilikom svoje implementacije. Kao što je već navedeno, Django se temelji na modelu MTV (\emph{Model-Template-View}).\\\
 			
