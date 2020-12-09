@@ -6,8 +6,8 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework import permissions
 
-from .models import User
-from .serializers import UserSerializer
+from .models import User, Post
+from .serializers import UserSerializer, PostSerializer
 from rest_framework.response import Response
 
 
@@ -78,3 +78,9 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                                                    only_fields=['first_name', 'last_name', 'JMBAG', 'id'],
                                                    many=True).data
                          })
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAdminUser]

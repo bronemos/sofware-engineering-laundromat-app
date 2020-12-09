@@ -1,7 +1,7 @@
 from django.contrib.auth import password_validation
 from rest_framework import serializers
 
-from common.models import User
+from common.models import User, Post
 from rest_framework.serializers import ModelSerializer
 
 
@@ -44,3 +44,9 @@ class UserSerializer(DynamicFieldsModelSerializer):
     def save(self):
         obj = User.objects.create_user(**self.validated_data)
         return obj
+
+
+class PostSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
