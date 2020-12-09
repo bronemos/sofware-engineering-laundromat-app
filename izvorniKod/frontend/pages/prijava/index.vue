@@ -28,7 +28,7 @@
         <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div>
 
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="registerForm.password">
-        <div class="error" v-if="!$v.registerForm.password.verifyPw">Lozinka mora sadržavati najmanje 8 znakova te slova
+        <div class="error" v-if="!$v.registerForm.password.verifyPw && registerForm.password.length !== 0">Lozinka mora sadržavati najmanje 8 znakova te slova
           i brojeve.
         </div>
         <input type="password" class="input-field" placeholder="Ponovite lozinku" required
@@ -56,7 +56,6 @@
     numeric
   } = require("vuelidate/lib/validators");
   const verifyPw = (password) => {
-    if (password == '') return true
     const pwRegExp = RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$')
     return pwRegExp.test(password)
   }

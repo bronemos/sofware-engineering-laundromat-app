@@ -10,19 +10,24 @@
               </h5>
               <ul class="nav nav-tabs" id="myTab">
                 <li class="nav-item">
-                  <button class="nav-link" v-bind:class="detailsSelected ? 'active' : ''" id="details" @click.prevent="detailsSelected=true">Detalji</button>
+                  <button class="nav-link" v-bind:class="detailsSelected ? 'active' : ''" id="details"
+                          @click.prevent="detailsSelected=true; editProfile=false">Detalji
+                  </button>
                 </li>
                 <li class="nav-item">
-                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations" @click.prevent="detailsSelected=false">Lista rezervacija</button>
+                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations"
+                          @click.prevent="detailsSelected=false; editProfile=false">Lista rezervacija
+                  </button>
                 </li>
               </ul>
             </div>
           </div>
-          <div class="col-md-2">
-            <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+          <div class="col-md-2" v-if="detailsSelected">
+            <input type="button" class="profile-edit-btn" name="btnAddMore" :value="editProfile ? 'Pohrani' : 'Uredi'"
+                   @click.prevent="submitUpdate"/>
           </div>
         </div>
-        <div class="row">
+        <div class="row" v-if="!editProfile">
           <div class="col-md-8">
             <div class="tab-content profile-tab" id="myTabContent">
               <div class="tab-pane fade show active" id="details-tab" v-if="detailsSelected">
@@ -59,7 +64,68 @@
                   </div>
                 </div>
               </div>
-              <div class="tab-pane fade" id="reservations-tab" v-else>
+              <div class="tab-pane fade" id="reservations-tab" v-if="!detailsSelected">
+                abcdef
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row" v-if="editProfile">
+          <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContentEdit">
+              <div class="tab-pane fade show active" id="details-tab-edit" v-if="detailsSelected">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Username</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input :value="user.username">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Ime i prezime</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.first_name}} {{user.last_name}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Email</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.email}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>JMBAG</label>
+                  </div>
+                  <div class="col-md-6">
+                    <p>{{user.JMBAG}}</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Nova šifra</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="password" v-model="password">
+                    <div class="error" v-if="!verifyPw(password) && password.length !== 0">Format lozinke nije valjan</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Potvrdi novu šifru</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="password" v-model="repeatedPassword">
+                    <div class="error" v-if="!(password === repeatedPassword) && password.length !== 0">Lozinka nije ista</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="reservations-tab-edit" v-if="!detailsSelected">
                 abcdef
               </div>
             </div>
@@ -76,7 +142,11 @@
 
     data() {
       return {
-        detailsSelected: true
+        detailsSelected: true,
+        editProfile: false,
+        username: '',
+        password: '',
+        repeatedPassword: ''
       }
     },
 
@@ -84,12 +154,45 @@
       user() {
         return this.$auth.user
       }
+    },
+
+    methods: {
+      verifyPw(password) {
+        const pwRegExp = RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$')
+        return pwRegExp.test(password)
+      },
+      async submitUpdate() {
+        if (!this.editProfile)
+          this.editProfile = !this.editProfile
+        else {
+          if (this.password.length === 0 && this.repeatedPassword.length === 0){
+            //posalji samo username update
+            //ako se uspješno pohrani izvrši nastavak
+            this.$toast.success('Promjene uspješno pohranjene.', {duration: 5000})
+            this.editProfile = false
+          }
+          else if (this.password === this.repeatedPassword) {
+            if (!this.verifyPw(this.password))
+              this.$toast.error('Šifra nije valjana.', {duration: 5000})
+            else {
+              //posalji username i pw update
+              //ako se uspješno pohrani izvrši nastavak
+              this.$toast.success('Promjene uspješno pohranjene', {duration: 5000})
+              this.editProfile = false
+            }
+          }
+        }
+      }
     }
   }
 </script>
 
 <style scoped>
   button:focus {
+    outline: none !important;
+  }
+
+  input:focus {
     outline: none !important;
   }
 
@@ -211,5 +314,9 @@
   .profile-tab p {
     font-weight: 600;
     color: #0062cc;
+  }
+  .error {
+    color: red;
+    font-size: 12px;
   }
 </style>
