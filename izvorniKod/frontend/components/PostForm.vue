@@ -5,13 +5,13 @@
       <textarea
         class="form-control"
         rows="4"
-        v-model="newPost.content"
-        placeholder="Write a new post"
+        v-model="newPost.text"
+        placeholder="Napišite tekst"
       ></textarea>
       <div v-if="!canUploadImage" class="image-upload">
         <label for="file">
           <h5 class="font-theme lead">
-            <strong>Upload photo</strong>
+            <strong>Priložite fotografiju</strong>
           </h5>
         </label>
         <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">
@@ -30,54 +30,35 @@
     >
       Post
     </button>
-    <div v-if="openPreview">
-        <ImagePreview :post="this.newPost" @post="setImage" />
-    </div>
   </b-form>
 </template>
 
 <script>
-import ImagePreview from './ImagePreview.vue';
 
 export default {
-  components: { ImagePreview },
   name: "PostForm",
   data() {
     return {
-      openPreview: false,
       newPost: {
-        content: "",
-        image: null,
+        text: "",
+        photo: null,
+        posted_by: this.$auth.user.id
       },
       canUploadImage: false
     };
   },
   methods: {
     handleFileUpload(){
-      this.newPost.image = this.$refs.file.files[0];
+      this.newPost.photo = this.$refs.file.files[0];
       this.openPreview = true;
     },
-
-    setImage(canUploadImage) {
-      this.openPreview = false,
-      this.canUploadImage = canUploadImage
-      if(!canUploadImage)
-        this.newPost.image = null
-    },
-
     async postForm() {
-      // console.log(
-      //   this.newPost.posted_by +
-      //     " " +
-      //     this.newPost.content +
-      //     " " +
-      //     this.newPost.likes_num
-      // );
       try {
         let formData = new FormData();
-        formData.append("content", this.newPost.content)
-        if(this.newPost.image)
-          formData.append("image", this.newPost.image)
+        formData.append("text", this.newPost.text)
+        formData.append("posted_by", this.newPost.posted_by)
+        if(this.newPost.photo)
+          formData.append("photo", this.newPost.photo)
         let response = await this.$axios.post(
           `post/`,
           formData,
@@ -94,6 +75,8 @@ export default {
           let createdPost = response.data;
           document.getElementById("form").reset();
           this.canUploadImage = false;
+          this.newPost.text = "";
+          this.newPost.photo = null;
           this.$emit("post", createdPost);
         }
       } catch (e) {
@@ -104,11 +87,11 @@ export default {
   },
   computed: {
     disableSubmit() {
-        return this.newPost.content == ""
+        return this.newPost.text == ""
     },
 
     imgUrl() {
-      return URL.createObjectURL(this.newPost.image);
+      return URL.createObjectURL(this.newPost.photo);
     }
   }
 };

@@ -40,7 +40,7 @@ export default {
   },
   created: async function() {
     let response = await this.$axios.get(`post/`);
-    this.posts = response.data.filter(post => post.type == 'lost'); 
+    this.posts = response.data.filter(post => post.type == 'lost');
   }
 };
 </script>

@@ -59,9 +59,12 @@ class Appointment(models.Model):
 class Post(models.Model):
     photo = models.ImageField(upload_to='images/', null=True)
     text = models.TextField(null=False, blank=False)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     type = models.CharField(max_length=10, choices=[('lost', 'lost'), ('job', 'job')], default='lost')
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='post')
+
+    class Meta:
+        ordering = ['-date']
 
 
 class Review(models.Model):

@@ -2,39 +2,21 @@
   <div class="media p-2 font-theme">
     <div class="media-body post-theme p-5">
       <h5 class="lead">
-        <b-avatar class="mb-2"></b-avatar>
-        <strong
-          ><nuxt-link
-            class="text-theme"
-            :to="{ name: 'users-id', params: { id: post.posted_by.id } }"
-          >
-            {{ post.posted_by.username }}
-          </nuxt-link></strong
-        >
         <span class="three-dots"><strong>...</strong></span>
       </h5>
 
       <hr class="mt-2 post-separator-theme" />
 
       <p class="lead">
-        {{ post.content }}
+        {{ post.text }}
       </p>
 
       <div class="post-image">
-        <img :src="post.image" />
+        <img :src="post.photo" />
       </div>
 
       <div class="container-fluid">
         <span> Posted on: {{ date }} </span>
-        <div class="d-inline float-right">
-          <div :id="post.id" class="like-img" @click="likePost"></div>
-          <!-- <button class="btn-sm btn-warning" @click="likePost">
-            -->
-          <!-- <span v-if="!liked">Like this!</span> -->
-          <!-- <span v-else>Dislike this!</span> -->
-          <!-- </button> -->
-          <!-- <button class="btn-sm btn-warning">Comment!</button> -->
-        </div>
       </div>
     </div>
   </div>
@@ -54,7 +36,7 @@ export default {
   },
   computed: {
     date() {
-      let date = new Date(this.post.time);
+      let date = new Date(this.post.date);
       let string =
         (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
         "/" +
