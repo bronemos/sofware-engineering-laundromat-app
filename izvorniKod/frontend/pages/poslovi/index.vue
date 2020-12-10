@@ -1,4 +1,5 @@
 <template>
+  <div class="hero">
   <div style="display: flex; flex-direction: column;">
    
     <div v-if="user.is_staff || user.is_superuser">
@@ -9,6 +10,7 @@
     </div>
 
   </div>
+    </div>
 </template>
 
 <script>
@@ -45,4 +47,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+ .hero {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-color: #fff;
+    position: absolute;
+  }</style>

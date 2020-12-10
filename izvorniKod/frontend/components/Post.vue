@@ -1,5 +1,6 @@
 <template>
-  <div class="media p-2 font-theme">
+
+  <div >
     <div class="media-body post-theme p-5">
       <h5 class="lead">
         <span class="three-dots"><strong>...</strong></span>
@@ -20,6 +21,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -58,3 +60,19 @@ export default {
   }
 };
 </script>
+<style>
+ 
+    .submit-btn {
+    width: 20%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: block;
+    margin: 20px;
+    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+    color: white;
+  }
+   
+</style>

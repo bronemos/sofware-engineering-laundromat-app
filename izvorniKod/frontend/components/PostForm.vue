@@ -1,7 +1,8 @@
 <template>
+
+ <div class="form-box">
   <b-form id="form">
     <div class="form-group ">
-      <label for=""></label>
       <textarea
         class="form-control"
         rows="4"
@@ -10,27 +11,26 @@
       ></textarea>
       <div v-if="!canUploadImage" class="image-upload">
         <label for="file">
-          <h5 class="font-theme lead">
-            <strong>Priložite fotografiju</strong>
-          </h5>
+          <p><img class="upload_icon" src="~@/static/images/upload.png">
+        Priložite fotografiju
+        <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()" hidden >
+      </p> 
         </label>
-        <input id="file" name="image" type="file" accept="image/*" ref="file" v-on:change="handleFileUpload()">
       </div>
-    </div>
-
+    
     <div v-if="canUploadImage" class="small-img-preview">
        <img :src="imgUrl">
     </div>
-
-    <button
+    <button  class="submit-btn"
       @click.prevent="postForm"
       type="submit"
-      class="btn btn-purple btn-fill mt-2 text-align btn-post"
-      :disabled="disableSubmit"
-    >
+      :disabled="disableSubmit">
       Post
-    </button>
+    </button> 
+    </div> 
   </b-form>
+  </div>
+
 </template>
 
 <script>
@@ -102,4 +102,48 @@ export default {
 </script>
 
 <style>
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+  }
+  .form-box {
+    height: 280px;
+    width: 700px;
+    position: relative;
+    margin: 2% auto;
+    background:white;
+    padding: 5px;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 2px solid #4e43e2;
+  }
+    .submit-btn {
+    width: 20%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: block;
+    margin: 20px;
+    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+    color: white;
+  }
+  label {
+  background-color:white;
+  color: grey;
+  padding-top: 2px;
+  padding-bottom: 0px;
+  font-family: sans-serif;
+  border-radius: 1px;
+  cursor: pointer;
+  margin: 5px 1px 1px 1px;
+}
+.upload_icon {
+  width: 5%;
+  height: auto;
+}
+
+
 </style>
