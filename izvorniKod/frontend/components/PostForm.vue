@@ -17,10 +17,9 @@
       </p> 
         </label>
       </div>
-    
-    <div v-if="canUploadImage" class="small-img-preview">
+    <!---div v-if="canUploadImage" class="small-img-preview">
        <img :src="imgUrl">
-    </div>
+    </div--->
     <button  class="submit-btn"
       @click.prevent="postForm"
       type="submit"

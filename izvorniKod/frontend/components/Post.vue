@@ -1,14 +1,12 @@
 <template>
-
-  <div >
+  <div>
     <div class="media-body post-theme p-5">
-      <h5 class="lead">
-        <span class="three-dots"><strong>...</strong></span>
-      </h5>
+       <label>
+          <span> Posted on: {{ date }} </span>
+        </label>
 
       <hr class="mt-2 post-separator-theme" />
-
-      <p class="lead">
+      <p>
         {{ post.text }}
       </p>
 
@@ -17,19 +15,17 @@
       </div>
 
       <div class="container-fluid">
-        <span> Posted on: {{ date }} </span>
+       
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-
 export default {
   name: "Post",
   props: {
-    post: Object
+    post: Object,
   },
   data() {
     return {
@@ -56,22 +52,13 @@ export default {
   mounted() {
     var classname = this.post.id;
     //document.getElementById(this.post.id).classList.toggle(classname);
-  }
+  },
 };
 </script>
 <style>
- 
-    .submit-btn {
-    width: 20%;
-    padding: 10px 30px;
-    cursor: pointer;
-    display: block;
-    margin: 20px;
-    background: linear-gradient(to right, #4e43e2, #4fdee6);
-    border: 0;
-    outline: none;
-    border-radius: 30px;
-    color: white;
-  }
-   
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
 </style>
