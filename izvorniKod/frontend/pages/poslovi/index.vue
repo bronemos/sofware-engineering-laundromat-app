@@ -2,7 +2,7 @@
   <div style="display: flex; flex-direction: column;">
    
     <div v-if="user.is_staff || user.is_superuser">
-      <PostForm @post="setPost" type="lost"/>
+      <PostForm @post="setPost" type="job"/>
     </div>
     <div style="display: flex; flex-direction: column;" v-for="post in posts" :key="post.id">
       <Post :post="post" />
@@ -40,7 +40,7 @@ export default {
   },
   created: async function() {
     let response = await this.$axios.get(`post/`);
-    this.posts = response.data.filter(post => post.type == 'lost');
+    this.posts = response.data.filter(post => post.type == 'job');
   }
 };
 </script>

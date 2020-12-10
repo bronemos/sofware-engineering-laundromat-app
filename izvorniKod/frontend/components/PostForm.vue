@@ -37,6 +37,9 @@
 
 export default {
   name: "PostForm",
+  props: {
+    type: String
+  },
   data() {
     return {
       newPost: {
@@ -57,6 +60,7 @@ export default {
         let formData = new FormData();
         formData.append("text", this.newPost.text)
         formData.append("posted_by", this.newPost.posted_by)
+        formData.append("type", this.type)
         if(this.newPost.photo)
           formData.append("photo", this.newPost.photo)
         let response = await this.$axios.post(
