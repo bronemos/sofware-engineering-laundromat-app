@@ -6,7 +6,7 @@
       <PostForm @post="setPost" type="job"/>
     </div>
     <div style="display: flex; flex-direction: column;" v-for="post in posts" :key="post.id">
-      <Post :post="post" />
+      <Post :post="post" type="job"/>
     </div>
 
   </div>

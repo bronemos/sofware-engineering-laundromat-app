@@ -26,6 +26,7 @@ export default {
   name: "Post",
   props: {
     post: Object,
+    type: String
   },
   data() {
     return {
