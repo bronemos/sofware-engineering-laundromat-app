@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex; flex-direction: column;">
+  <div class="hero">
    
     <div v-if="user.is_staff || user.is_superuser">
       <PostForm @post="setPost" type="lost"/>
@@ -45,4 +45,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+ .hero {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-color: #fff;
+    position: absolute;
+  }</style>
