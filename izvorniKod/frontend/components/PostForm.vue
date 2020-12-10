@@ -9,7 +9,7 @@
         v-model="newPost.text"
         placeholder="Napišite tekst"
       ></textarea>
-      <div v-if="!canUploadImage" class="image-upload">
+      <div v-if="!imageUploaded" class="image-upload">
         <label for="file">
           <p><img class="upload_icon" src="~@/static/images/upload.png">
         Priložite fotografiju
@@ -18,7 +18,7 @@
         </label>
       </div>
     
-    <div v-if="canUploadImage" class="small-img-preview">
+    <div v-if="imageUploaded" class="small-img-preview">
        <img :src="imgUrl">
     </div>
     <button  class="submit-btn"
@@ -47,13 +47,13 @@ export default {
         photo: null,
         posted_by: this.$auth.user.id
       },
-      canUploadImage: false
+      imageUploaded: false
     };
   },
   methods: {
     handleFileUpload(){
       this.newPost.photo = this.$refs.file.files[0];
-      this.openPreview = true;
+      this.imageUploaded = true;
     },
     async postForm() {
       try {
@@ -78,7 +78,7 @@ export default {
           //Ovaj response ne vraca sliku prvi put!!
           let createdPost = response.data;
           document.getElementById("form").reset();
-          this.canUploadImage = false;
+          this.imageUploaded = false;
           this.newPost.text = "";
           this.newPost.photo = null;
           this.$emit("post", createdPost);
@@ -144,6 +144,17 @@ export default {
   width: 5%;
   height: auto;
 }
+.small-img-preview {
+  margin-left: 15px;
+  margin-bottom: 10px;
+  text-align: left;
+  height: 100px;
+  width: auto;
+}
 
+.small-img-preview > img {
+  height: 100%;
+  width: auto;
+}
 
 </style>
