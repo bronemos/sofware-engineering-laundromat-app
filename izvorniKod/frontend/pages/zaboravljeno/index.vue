@@ -5,7 +5,7 @@
       <PostForm @post="setPost" type="lost"/>
     </div>
     <div style="display: flex; flex-direction: column;" v-for="post in posts" :key="post.id">
-      <Post :post="post" />
+      <Post :post="post" type="lost"/>
     </div>
 
   </div>
