@@ -112,7 +112,8 @@
                   </div>
                   <div class="col-md-6">
                     <input type="password" v-model="password">
-                    <div class="error" v-if="!verifyPw(password) && password.length !== 0">Format lozinke nije valjan</div>
+                    <div class="error" v-if="!verifyPw(password) && password.length !== 0">Format lozinke nije valjan
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -121,7 +122,10 @@
                   </div>
                   <div class="col-md-6">
                     <input type="password" v-model="repeatedPassword">
-                    <div class="error" v-if="!(password === repeatedPassword) && password.length !== 0">Lozinka nije ista</div>
+                    <div class="error"
+                         v-if="!(password === repeatedPassword) && password.length !== 0 && repeatedPassword.length !== 0">
+                      Lozinka nije ista
+                    </div>
                   </div>
                 </div>
               </div>
@@ -163,34 +167,42 @@
       },
       async submitUpdate() {
         let changed = false;
+        let invalid_pw = false;
         let formData = new FormData();
         if (!this.editProfile)
           this.editProfile = !this.editProfile
         else {
-          if(this.username != this.user.username){
+          if (this.username !== this.user.username) {
             formData.append("username", this.username);
             changed = true;
           }
-          if (this.password.length !== 0 && this.password === this.repeatedPassword) {
-            if (!this.verifyPw(this.password))
+          if (this.password.length || this.repeatedPassword.length) {
+            if (!this.verifyPw(this.password) && this.password !== this.repeatedPassword) {
               this.$toast.error('Šifra nije valjana.', {duration: 5000})
-            else {
+              invalid_pw = true;
+            } else {
               formData.append("password", this.password);
               changed = true;
             }
           }
+          if (changed) {
+            try {
+              let response = await this.$axios.patch(`account/${this.user.id}/`, formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              });
+            } catch (e) {
+              this.$toast.error('Username je već u uporabi.', {duration: 5000});
+            }
+          } else if (!invalid_pw) {
+            this.$toast.success('Promjene uspješno pohranjene!', {duration: 5000})
+            this.editProfile = !this.editProfile
+          }
         }
-        if (changed == true){
-          let response = await this.$axios.patch(`account/${this.user.id}/`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
-          this.$store.commit('SET_USER', response.data)
-        }
-     }
-   }
- }
+      }
+    }
+  }
 </script>
 
 <style scoped>
@@ -321,6 +333,7 @@
     font-weight: 600;
     color: #0062cc;
   }
+
   .error {
     color: red;
     font-size: 12px;
