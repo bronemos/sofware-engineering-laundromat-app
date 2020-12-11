@@ -4,7 +4,7 @@
       <div class="form-group">
         <textarea
           class="form-control"
-          rows="4"
+          rows="5"
           v-model="newPost.text"
           placeholder="Napišite tekst"
         ></textarea>
@@ -28,6 +28,7 @@
 
         <div v-if="imageUploaded" class="small-img-preview">
           <img :src="imgUrl" />
+          <button class="button-delete">x</button>
         </div>
         <button
           class="submit-btn"
@@ -109,9 +110,13 @@ export default {
   padding: 0;
   font-family: sans-serif;
 }
+  button:focus {
+    outline: none !important;
+  }
+
 .form-box {
-  height: 280px;
-  width: 700px;
+  height: 300px;
+  width: 1000px;
   position: relative;
   margin: 2% auto;
   background: white;
@@ -158,4 +163,18 @@ label {
   height: 100%;
   width: auto;
 }
+.button-delete {
+  border: 2px solid;
+  border-color: grey;
+  color: gray;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0px 5px;
+  text-align: center;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+}
+
 </style>

@@ -51,6 +51,6 @@ export default {
     width: 100%;
     background-position: center;
     background-size: cover;
-    background-color: #fff;
+    background-color:  #faf7f2;
     position: absolute;
   }</style>
