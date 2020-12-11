@@ -44,7 +44,7 @@ class User(AbstractUser):
 
 
 class Laundry(models.Model):
-    date_changed = models.DateTimeField(auto_now_add=True)
+    date_changed = models.DateTimeField(auto_now_add=True, blank=True)
     open_time = models.TimeField(null=False, blank=False)
     close_time = models.TimeField(null=False, blank=False)
     pause_start = models.TimeField(null=False, blank=False)

@@ -1,0 +1,74 @@
+[
+  {
+    "model": "common.laundry",
+    "fields": {
+      "date_changed": "2020-12-11",
+      "open_time": "8:00:00Z",
+      "close_time": "21:00:00Z",
+      "pause_start": "10:15:00Z",
+      "pause_end": "10:45:00Z",
+      "wash_price": "20.00",
+      "drying_price": "10.00"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "washer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "washer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "washer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "washer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "washer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "dryer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "dryer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "dryer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "dryer"
+    }
+  },
+  {
+    "model": "common.machine",
+    "fields": {
+      "type": "dryer"
+    }
+  }
+]
