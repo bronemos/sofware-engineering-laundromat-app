@@ -17,7 +17,7 @@ class OnlyFieldsSerializerMixin:
         return super().get_serializer(*args, **kwargs)
 
 
-class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
@@ -37,7 +37,7 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
+            user = serializer.create()
             user.is_active = False
             user.save()
             send_mail(

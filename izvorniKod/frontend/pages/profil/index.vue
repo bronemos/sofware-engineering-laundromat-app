@@ -79,7 +79,7 @@
                     <label>Username</label>
                   </div>
                   <div class="col-md-6">
-                    <input :value="user.username">
+                    <input v-model="username">
                   </div>
                 </div>
                 <div class="row">
@@ -112,7 +112,8 @@
                   </div>
                   <div class="col-md-6">
                     <input type="password" v-model="password">
-                    <div class="error" v-if="!verifyPw(password) && password.length !== 0">Format lozinke nije valjan</div>
+                    <div class="error" v-if="!verifyPw(password) && password.length !== 0">Format lozinke nije valjan
+                    </div>
                   </div>
                 </div>
                 <div class="row">
@@ -121,7 +122,10 @@
                   </div>
                   <div class="col-md-6">
                     <input type="password" v-model="repeatedPassword">
-                    <div class="error" v-if="!(password === repeatedPassword) && password.length !== 0">Lozinka nije ista</div>
+                    <div class="error"
+                         v-if="!(password === repeatedPassword) && password.length !== 0 && repeatedPassword.length !== 0">
+                      Lozinka nije ista
+                    </div>
                   </div>
                 </div>
               </div>
@@ -144,16 +148,16 @@
       return {
         detailsSelected: true,
         editProfile: false,
-        username: '',
         password: '',
-        repeatedPassword: ''
+        repeatedPassword: '',
+        username: this.$auth.user.username
       }
     },
 
     computed: {
       user() {
         return this.$auth.user
-      }
+      },
     },
 
     methods: {
@@ -162,24 +166,38 @@
         return pwRegExp.test(password)
       },
       async submitUpdate() {
+        let changed = false;
+        let invalid_pw = false;
+        let formData = new FormData();
         if (!this.editProfile)
           this.editProfile = !this.editProfile
         else {
-          if (this.password.length === 0 && this.repeatedPassword.length === 0){
-            //posalji samo username update
-            //ako se uspješno pohrani izvrši nastavak
-            this.$toast.success('Promjene uspješno pohranjene.', {duration: 5000})
-            this.editProfile = false
+          if (this.username !== this.user.username) {
+            formData.append("username", this.username);
+            changed = true;
           }
-          else if (this.password === this.repeatedPassword) {
-            if (!this.verifyPw(this.password))
+          if (this.password.length || this.repeatedPassword.length) {
+            if (!this.verifyPw(this.password) && this.password !== this.repeatedPassword) {
               this.$toast.error('Šifra nije valjana.', {duration: 5000})
-            else {
-              //posalji username i pw update
-              //ako se uspješno pohrani izvrši nastavak
-              this.$toast.success('Promjene uspješno pohranjene', {duration: 5000})
-              this.editProfile = false
+              invalid_pw = true;
+            } else {
+              formData.append("password", this.password);
+              changed = true;
             }
+          }
+          if (changed) {
+            try {
+              let response = await this.$axios.patch(`account/${this.user.id}/`, formData, {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
+              });
+            } catch (e) {
+              this.$toast.error('Username je već u uporabi.', {duration: 5000});
+            }
+          } else if (!invalid_pw) {
+            this.$toast.success('Promjene uspješno pohranjene!', {duration: 5000})
+            this.editProfile = !this.editProfile
           }
         }
       }
@@ -315,6 +333,7 @@
     font-weight: 600;
     color: #0062cc;
   }
+
   .error {
     color: red;
     font-size: 12px;

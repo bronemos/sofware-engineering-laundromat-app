@@ -17,7 +17,7 @@ import Post from "@/components/Post";
 import PostForm from "@/components/PostForm";
 
 export default {
-  name: "Izgubljeno/nadeno",
+  name: "Izgubljeno_nadeno",
   components: {Post, PostForm },
  
   computed: {
@@ -51,6 +51,6 @@ export default {
     width: 100%;
     background-position: center;
     background-size: cover;
-    background-color: #fff;
+    background-color:  #faf7f2;
     position: absolute;
   }</style>
