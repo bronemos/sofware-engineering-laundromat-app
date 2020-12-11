@@ -17,7 +17,7 @@ class OnlyFieldsSerializerMixin:
         return super().get_serializer(*args, **kwargs)
 
 
-class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
@@ -49,6 +49,16 @@ class AccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             return Response(status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, *args, **kwargs):
+        user = self.get_object()
+        data = request.data
+        user.username = data.get('username')
+        user.save()
+        return Response(
+            UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email', 'is_superuser', 'is_staff', 'JMBAG', 'id']).data,
+            status=status.HTTP_200_OK
+        )
 
     @action(detail=True, methods=['POST'], name='confirm')
     def confirm(self, request, pk=None):

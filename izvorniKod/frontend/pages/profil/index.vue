@@ -79,7 +79,7 @@
                     <label>Username</label>
                   </div>
                   <div class="col-md-6">
-                    <input :value="user.username">
+                    <input v-model="username">
                   </div>
                 </div>
                 <div class="row">
@@ -144,16 +144,16 @@
       return {
         detailsSelected: true,
         editProfile: false,
-        username: '',
         password: '',
-        repeatedPassword: ''
+        repeatedPassword: '',
+        username: this.$auth.user.username
       }
     },
 
     computed: {
       user() {
         return this.$auth.user
-      }
+      },
     },
 
     methods: {
@@ -162,29 +162,35 @@
         return pwRegExp.test(password)
       },
       async submitUpdate() {
+        let changed = false;
+        let formData = new FormData();
         if (!this.editProfile)
           this.editProfile = !this.editProfile
         else {
-          if (this.password.length === 0 && this.repeatedPassword.length === 0){
-            //posalji samo username update
-            //ako se uspješno pohrani izvrši nastavak
-            this.$toast.success('Promjene uspješno pohranjene.', {duration: 5000})
-            this.editProfile = false
+          if(this.username != this.user.username){
+            formData.append("username", this.username);
+            changed = true;
           }
-          else if (this.password === this.repeatedPassword) {
+          if (this.password.length !== 0 && this.password === this.repeatedPassword) {
             if (!this.verifyPw(this.password))
               this.$toast.error('Šifra nije valjana.', {duration: 5000})
             else {
-              //posalji username i pw update
-              //ako se uspješno pohrani izvrši nastavak
-              this.$toast.success('Promjene uspješno pohranjene', {duration: 5000})
-              this.editProfile = false
+              formData.append("password", this.password);
+              changed = true;
             }
           }
         }
-      }
-    }
-  }
+        if (changed == true){
+          let response = await this.$axios.patch(`account/${this.user.id}/`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          this.$store.commit('SET_USER', response.data)
+        }
+     }
+   }
+ }
 </script>
 
 <style scoped>
