@@ -5,12 +5,24 @@
         <button class="button-delete">x</button>
         <div class="card-body">
           <!--span class="card-number card-circle subtle"></span-->
-          <label>
-            <span> Posted on: {{ date }} </span>
+          <label
+            ><img
+              v-if="type == 'job'"
+              class="upload-icon"
+              src="~@/static/images/job.png"
+            />
+            <img
+              v-if="type == 'lost'"
+              class="upload-icon"
+              src="~@/static/images/lost.png"
+            />
+            <span v-if="type == 'job'" class="card-title">Oglas za posao</span>
+            <span v-if="type == 'lost'" class="card-title">
+              Zaboravljen odjevni predmet
+            </span>
           </label>
+
           <!---span class="card-author subtle">John Smith</span--->
-          <h2 v-if="type == 'job'" class="card-title">Oglas za posao</h2>
-          <h2 v-if="type == 'lost'" class="card-title">Zaboravljen odjevni predmet</h2>
           <span class="card-description">
             <p>
               {{ post.text }}
@@ -18,6 +30,9 @@
           >
 
           <div class="card-read"></div>
+          <label>
+            <span> Posted on: {{ date }} </span>
+          </label>
         </div>
         <div class="post-image">
           <img :src="post.photo" class="card-media" />
@@ -161,10 +176,11 @@ html {
 
 .card-title {
   font-family: sans-serif;
-  font-size: 40px;
+  font-size: 20px;
   font-weight: 300;
-  line-height: 60px;
+  line-height: 30px;
   margin: 10px 0;
+  color:rgb(93, 88, 88);
 }
 
 .card-description {
@@ -172,6 +188,8 @@ html {
   font-weight: 300;
   line-height: 22px;
   margin: 10px 0;
+  font-size: 16px;
+  color:rgb(93, 88, 88);
 }
 
 .card-read {
@@ -220,10 +238,10 @@ section {
   width: 100%;
   float: left;
 }
-  .button-delete {
+.button-delete {
   border: 2px solid;
   border-color: grey;
-  color: gray;
+  color: grey;
   background-color: white;
   border-radius: 5px;
   padding: 0px 5px;
@@ -231,7 +249,13 @@ section {
   font-size: 12px;
   margin: 4px 2px;
   cursor: pointer;
-position:absolute; top:0; right:0;
-  }
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.upload-icon {
+  width: 20%;
+  height: auto;
+}
 
 </style>
