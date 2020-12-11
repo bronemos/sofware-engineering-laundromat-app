@@ -28,7 +28,7 @@
 
         <div v-if="imageUploaded" class="small-img-preview">
           <img :src="imgUrl" />
-          <button class="button-delete">x</button>
+          <button class="button-delete-photo">x</button>
         </div>
         <button
           class="submit-btn"
@@ -163,7 +163,7 @@ label {
   height: 100%;
   width: auto;
 }
-.button-delete {
+.button-delete-photo {
   border: 2px solid;
   border-color: grey;
   color: gray;
