@@ -1,4 +1,5 @@
 from django.contrib.auth import password_validation
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
 from common.models import User, Post
@@ -29,10 +30,11 @@ class UserSerializer(DynamicFieldsModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        try:
-            password_validation.validate_password(data.get('password'))
-        except Exception as error:
-            raise serializers.ValidationError(error)
+        if data.get('password') is not None:
+            try:
+                password_validation.validate_password(data.get('password'))
+            except Exception as error:
+                raise serializers.ValidationError(error)
         if data.get('JMBAG') is not None and len(data.get('JMBAG')) != 10:
             raise serializers.ValidationError(' JMBAG length must be exactly 10!')
         return data
@@ -41,8 +43,13 @@ class UserSerializer(DynamicFieldsModelSerializer):
         obj = User.objects.create_user(**self.validated_data)
         return obj
 
-    def save(self):
-        obj = User.objects.create_user(**self.validated_data)
+    def update(self, obj, validated_data):
+        if 'password' in validated_data:
+            obj.password = make_password(validated_data.get('password'))
+        if 'username' in validated_data:
+            obj.username = validated_data.get('username')
+        obj.save()
+        print(obj.first_name)
         return obj
 
 
