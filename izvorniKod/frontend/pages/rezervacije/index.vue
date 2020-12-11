@@ -6,6 +6,7 @@
           <vue-cal
             :time-from="8 * 60"
             :time-step="60"
+            locale="hr"
             :disable-views="['years', 'year', 'month']"
             class="vuecal--blue-theme"
             editable-events
