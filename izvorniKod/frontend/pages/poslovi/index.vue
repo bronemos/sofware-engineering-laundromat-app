@@ -19,7 +19,7 @@ import Post from "@/components/Post";
 import PostForm from "@/components/PostForm";
 
 export default {
-  name: "Izgubljeno/nadeno",
+  name: "Poslovi",
   components: {Post, PostForm },
  
   computed: {

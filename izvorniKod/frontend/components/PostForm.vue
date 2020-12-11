@@ -28,7 +28,7 @@
 
         <div v-if="imageUploaded" class="small-img-preview">
           <img :src="imgUrl" />
-          <button class="button-delete-photo">x</button>
+          <button class="button-delete-photo" @click.prevent="refreshImage()">x</button>
         </div>
         <button
           class="submit-btn"
@@ -64,6 +64,10 @@ export default {
       this.newPost.photo = this.$refs.file.files[0];
       this.imageUploaded = true;
     },
+    refreshImage(){
+      // window.location.reload();
+      this.imageUploaded = false;
+    },
     async postForm() {
       try {
         let formData = new FormData();
@@ -79,7 +83,6 @@ export default {
 
         if (response.status == 201) {
           this.$toast.show("Post uspješno objavljen!", { duration: 8000 });
-          //Ovaj response ne vraca sliku prvi put!!
           let createdPost = response.data;
           document.getElementById("form").reset();
           this.imageUploaded = false;
@@ -104,7 +107,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 * {
   margin: 0;
   padding: 0;

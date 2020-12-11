@@ -2,7 +2,7 @@
   <div class="card-container">
     <div class="card u-clearfix">
       <section>
-        <button class="button-delete">x</button>
+        <button v-if="type == 'lost' && (user.is_staff || user.is_superuser) || type == 'job' && user.is_superuser" class="button-delete" @click="deletePost">Obriši</button>
         <div class="card-body">
           <!--span class="card-number card-circle subtle"></span-->
           <label
@@ -92,11 +92,28 @@ export default {
       // debugger;
       return string;
     },
+    user(){
+      if (this.$auth.loggedIn) {
+        return this.$auth.user;
+      }
+      return null;
+    }
   },
   mounted() {
     var classname = this.post.id;
     //document.getElementById(this.post.id).classList.toggle(classname);
   },
+  methods: {
+    async deletePost(){
+      try {
+        let response = await this.$axios.delete(`post/${this.post.id}/`);
+        this.$toast.success('Uspješno obrisano!', {duration: 5000});
+        window.location.reload();
+      } catch (e) {
+        this.$toast.error(e, {duration: 5000});
+      }
+    }
+  }
 };
 </script>
 <style>
