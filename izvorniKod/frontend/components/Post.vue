@@ -2,13 +2,15 @@
   <div class="card-container">
     <div class="card u-clearfix">
       <section>
+        <button class="button-delete">x</button>
         <div class="card-body">
           <!--span class="card-number card-circle subtle"></span-->
           <label>
             <span> Posted on: {{ date }} </span>
           </label>
           <!---span class="card-author subtle">John Smith</span--->
-          <h2 class="card-title">Oglas za posao</h2>
+          <h2 v-if="type == 'job'" class="card-title">Oglas za posao</h2>
+          <h2 v-if="type == 'lost'" class="card-title">Zaboravljen odjevni predmet</h2>
           <span class="card-description">
             <p>
               {{ post.text }}
@@ -218,4 +220,18 @@ section {
   width: 100%;
   float: left;
 }
+  .button-delete {
+  border: 2px solid;
+  border-color: grey;
+  color: gray;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0px 5px;
+  text-align: center;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+position:absolute; top:0; right:0;
+  }
+
 </style>
