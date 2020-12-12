@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import auth
 from django.contrib.auth import password_validation
 from django.core.mail import send_mail
@@ -6,8 +8,8 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework import permissions
 
-from .models import User, Post
-from .serializers import UserSerializer, PostSerializer
+from .models import User, Post, Laundry
+from .serializers import UserSerializer, PostSerializer, LaundrySerializer
 from rest_framework.response import Response
 
 
@@ -84,3 +86,15 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = Laundry.objects.all()
+    serializer_class = LaundrySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        return Response(
+            LaundrySerializer(Laundry.objects.filter(date_changed__lte=datetime.now()).first()).data,
+            status=status.HTTP_200_OK
+        )

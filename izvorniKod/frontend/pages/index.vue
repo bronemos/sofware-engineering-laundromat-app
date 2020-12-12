@@ -10,15 +10,15 @@
         </h2>
         <div class="work-hours fade-in delay">
           <h3>Radno vrijeme:</h3>
-          <h5>Pon-Pet: 8-22h</h5>
-          <h5>Sub: 8-20h</h5>
+          <h5>Pon-Sub: od {{laundry.open_time}} do {{laundry.close_time}}</h5>
+          <h5>Pauza: od {{laundry.pause_start}} do {{laundry.pause_end}}</h5>
           <h5>Ned: Ne radimo!</h5>
         </div>
-        <!-- <nuxt-link to="profil/">Profil</nuxt-link>
-        <button @click="logout">
-          Logout
-        </button> -->
-
+        <div class="work-hours fade-in delay">
+          <h3>Cijene:</h3>
+          <h5>Pranje: {{laundry.wash_price}} kn</h5>
+          <h5>Sušenje: {{laundry.drying_price}} kn</h5>
+        </div>
       </div>
     </div>
   </div>
@@ -27,11 +27,24 @@
 <script>
 
 export default {
+  data(){
+    return {
+      laundry: {},
+    }
+  },
   methods: {
     async logout() {
       this.$auth.logout()
     }
   },
+  created: async function() {
+    let response = await this.$axios.get(`laundry/`);
+    this.laundry = response.data;
+    this.laundry.open_time = this.laundry.open_time.substring(0, this.laundry.open_time.length - 3);
+    this.laundry.close_time = this.laundry.close_time.substring(0, this.laundry.close_time.length - 3);
+    this.laundry.pause_start = this.laundry.pause_start.substring(0, this.laundry.pause_start.length - 3);
+    this.laundry.pause_end = this.laundry.pause_end.substring(0, this.laundry.pause_end.length - 3);
+  }
 }
 </script>
 

@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from common.models import User, Post
+from common.models import User, Post, Laundry
 from rest_framework.serializers import ModelSerializer
 
 
@@ -57,3 +59,14 @@ class PostSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
+        
+
+class LaundrySerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Laundry
+        exclude = ['date_changed']
+
+    def validate(self, data):
+        if data.get('pause_start') is not None and data.get('pause_start').minute >= 30:
+            raise serializers.ValidationError('Pauza mora završiti prije novog termina!!!')
+        return data

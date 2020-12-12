@@ -2,7 +2,7 @@
   <div class="hero">
   <div style="display: flex; flex-direction: column;">
    
-    <div v-if="user.is_staff || user.is_superuser">
+    <div v-if="user && (user.is_staff || user.is_superuser)">
       <PostForm @post="setPost" type="job"/>
     </div>
     <div style="display: flex; flex-direction: column;" v-for="post in posts" :key="post.id">

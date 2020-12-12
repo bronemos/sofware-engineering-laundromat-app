@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.core.mail import send_mail
 from django.db import models
@@ -48,7 +48,7 @@ class Laundry(models.Model):
     open_time = models.TimeField(null=False, blank=False)
     close_time = models.TimeField(null=False, blank=False)
     pause_start = models.TimeField(null=False, blank=False)
-    pause_end = models.TimeField(null=False, blank=False)
+    pause_end = models.TimeField(null=True, blank=True)
     wash_price = models.FloatField(null=False, blank=False)
     drying_price = models.FloatField(null=False, blank=False)
 
@@ -73,9 +73,9 @@ class Appointment(models.Model):
 
     def save(self, *args, **kwargs):
         if self.machine.type == 'washer':
-            self.price = Laundry.objects.all().first().wash_price
+            self.price = Laundry.objects.filter(date_changed__lte=datetime.now()).first().wash_price
         else:
-            self.price = Laundry.objects.all().first().drying_price
+            self.price = Laundry.objects.filter(date_changed__lte=datetime.now()).first().drying_price
         super(Appointment, self).save(*args, **kwargs)
 
 

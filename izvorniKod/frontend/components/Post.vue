@@ -2,7 +2,7 @@
   <div class="card-container">
     <div class="card u-clearfix">
       <section>
-        <button v-if="type == 'lost' && (user.is_staff || user.is_superuser) || type == 'job' && user.is_superuser" class="button-delete" @click="deletePost">Obriši</button>
+        <button v-if="type == 'lost' && (user.is_staff || user.is_superuser) || type == 'job' && user && user.is_superuser" class="button-delete" @click="deletePost">Obriši</button>
         <div class="card-body">
           <!--span class="card-number card-circle subtle"></span-->
           <label
