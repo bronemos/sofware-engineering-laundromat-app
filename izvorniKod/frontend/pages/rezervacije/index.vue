@@ -1,70 +1,241 @@
+
 <template class="background">
-  <div class="background">
-    <div class="hero">
-      <div class="container emp-profile">
-        <no-ssr>
-          <vue-cal
-            :time-from="8 * 60"
-            :time-step="60"
-            locale="hr"
-            :disable-views="['years', 'year', 'month']"
-            class="vuecal--blue-theme"
-            editable-events
-            :events="events"
-            :split-days="splitDays"
-            :sticky-split-labels="stickySplitLabels"
-            :min-cell-width="minCellWidth"
-            :min-split-width="minSplitWidth"
-          />
-        </no-ssr>
+  <!-- App.vue -->
+  <!-- <div id="app" data-app app-data="true" > -->
+    <div class="background">
+      <div class="hero">
+        <div class="container emp-profile">
+          <no-ssr>
+            <vue-cal
+              ref="vuecal"
+              :time-from="6 * 60"
+              :time-step="60"
+              locale="hr"
+              :disable-views="['years', 'year', 'month']"
+              class="vuecal--blue-theme"
+              today-button
+              :selected-date="selectedDate"
+              :min-date="minDate"
+              :max-date="maxDate"
+              :hide-weekdays="[7]"
+              editable-events
+              :events="events"
+              :split-days="splitDays"
+              :sticky-split-labels="stickySplitLabels"
+              :min-cell-width="minCellWidth"
+              :min-split-width="minSplitWidth"
+              :on-event-click="onEventClick"
+            >
+              <template v-slot:today-button>
+                <!-- Using Vuetify -->
+                <v-tooltip>
+                  <template v-slot:activator="{ on }">
+                    <v-btn v-on="on">
+                      <span>Danas</span>
+                    </v-btn>
+                  </template>
+                </v-tooltip>
+              </template>
+            </vue-cal>
+          </no-ssr>
+        </div>
       </div>
+      <!-- Using Vuetify -->
+      <v-dialog v-model="showDialog">
+        <v-card>
+          <v-card-title>
+            <v-icon>{{ selectedEvent.icon }}</v-icon>
+            <span>{{ selectedEvent.title }}</span>
+            <v-spacer/>
+            <strong>{{ selectedEvent.start && selectedEvent.start.format('DD/MM/YYYY') }}</strong>
+          </v-card-title>
+          <v-card-text>
+            <p v-html="selectedEvent.contentFull"/>
+            <strong>Event details:</strong>
+            <ul>
+              <li>Event starts at: {{ selectedEvent.start && selectedEvent.start.formatTime() }}</li>
+              <li>Event ends at: {{ selectedEvent.end && selectedEvent.end.formatTime() }}</li>
+            </ul>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
-  </div>
+  <!--</div>-->
 </template>
 
+
 <script>
+// var events = [];
+// var d = new Date();
+// var month = d.addDays(30);
+// for (var d; d <= month; d.setDate(d.getDate() + 1)) {
+//   var event = {};
+//   event.start = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay();
+//   event.end = event.start;
+//   var date = event.start
+//   for (var i = 8; i < 22; i++) {
+//     event.start = date + " " + i + ":00";
+//     event.end = date + " " + (i + 1) + ":00";
+//     event.split = 1;
+//     event.class = "free",
+//     events.push(event);
+//   }
+// }
+// console.log(events);
+
 export default {
   data: () => ({
+    selectedDate: new Date(new Date().getFullYear(), 11, 31),
     stickySplitLabels: false,
     minCellWidth: 400,
     minSplitWidth: 0,
+    selectedEvent: {},
+    showDialog: false,
     splitDays: [
       // The id property is added automatically if none (starting from 1), but you can set a custom one.
       // If you need to toggle the splits, you must set the id explicitly.
-      { id: 1, class: "mom", label: "Mom" },
-      { id: 2, class: "dad", label: "Dad", hide: false },
-      { id: 3, class: "kid1", label: "Kid 1" },
-      { id: 4, class: "kid2", label: "Kid 2" },
-      { id: 5, class: "kid3", label: "Kid 3" },
+      { id: 1, class: "washer", label: "washer" },
+      { id: 2, class: "dryer", label: "dryer", hide: false }
     ],
-    events: [
-      {
-        start: "2020-12-7 10:35",
-        end: "2020-12-7 15:30",
-        title: "Doctor appointment",
-        class: "health",
-        split: 1, // Has to match the id of the split you have set (or integers if none).
-      },
-    ],
+    // events: [
+    //   {
+    //     start: "2020-12-15 14:00",
+    //     end: "2020-12-15 18:00",
+    //     title: "Need to go shopping",
+    //     content: "Click to see my shopping list",
+    //     contentFull:
+    //       "My shopping list is rather long:<br><ul><li>Avocados</li><li>Tomatoes</li><li>Potatoes</li><li>Mangoes</li></ul>", // Custom attribute.
+    //     class: "free",
+    //     split: 2
+    //   },
+    //   {
+    //     start: "2020-01-01 12:00",
+    //     end: "2020-01-01 13:00",
+    //     title: "Pauza",
+    //     class: "break",
+    //     background: true,
+    //     split: 2
+    //   }
+    // ]
   }),
+  methods: {
+    onEventClick(event, e) {
+      this.selectedEvent = event;
+      if (event.class != "break") {
+        this.showDialog = true;
+      }
+      // Prevent navigating to narrower view (default vue-cal behavior).
+      e.stopPropagation();
+    }
+  },
+  computed: {
+    minDate() {
+      return new Date();
+    },
+    maxDate() {
+      return new Date().addDays(30);
+    },
+    events(){
+      var events = [];
+      var d = new Date();
+      var month = d.addDays(30);
+      for (var d; d <= month; d.setDate(d.getDate() + 1)) {
+        var event = {};
+        event.start = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay();
+        event.end = event.start;
+        var date = event.start
+        for (var i = 8; i < 22; i++) {
+          event.start = date + " " + i + ":00";
+          event.end = date + " " + (i + 1) + ":00";
+          event.split = 1;
+          event.class = "free";
+          event.title = "radi wu";
+          events.push(event);
+        }
+      }      
+      return events;
+    }
+  }
 };
 </script>
 
 <style lan="scss">
-.vuecal__cell-split.dad {background-color: rgba(221, 238, 255, 0.5);}
-.vuecal__cell-split.mom {background-color: rgba(255, 232, 251, 0.5);}
-.vuecal__cell-split.kid1 {background-color: rgba(221, 255, 239, 0.5);}
-.vuecal__cell-split.kid2 {background-color: rgba(255, 250, 196, 0.5);}
-.vuecal__cell-split.kid3 {background-color: rgba(255, 206, 178, 0.5);}
-.vuecal__cell-split .split-label {color: rgba(0, 0, 0, 0.1);font-size: 26px;}
+.vuecal__cell-split.washer {
+  background-color: rgba(227, 239, 252, 0.5);
+}
+.vuecal__cell-split.dryer {
+  background-color: rgba(238, 252, 241, 0.5);
+}
+.vuecal__cell-split .split-label {
+  color: rgba(0, 0, 0, 0.1);
+  font-size: 26px;
+}
 
-.vuecal__event.leisure {background-color: rgba(253, 156, 66, 0.9);border: 1px solid rgb(233, 136, 46);color: #fff;}
-.vuecal__event.health {background-color: rgba(164, 230, 210, 0.9);border: 1px solid rgb(144, 210, 190);}
-.vuecal__event.sport {background-color: rgba(255, 102, 102, 0.9);border: 1px solid rgb(235, 82, 82);color: #fff;}
+.vuecal__event.free {
+  background-color: rgba(253, 156, 66, 0.9);
+  border: 1px solid rgb(233, 136, 46);
+  color: #fff;
+}
+.vuecal__event.reserved {
+  background-color: rgba(164, 230, 210, 0.9);
+  border: 1px solid rgb(144, 210, 190);
+}
+
+.vuecal__cell--disabled {
+  text-decoration: line-through;
+}
+.vuecal__cell--before-min {
+  color: #b6d6c7;
+}
+.vuecal__cell--after-max {
+  color: #008b8b;
+}
+
+.vuecal__now-line {
+  color: #06c;
+}
+
+.vuecal__event {
+  cursor: pointer;
+}
+
+.vuecal__event-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 4px 0 8px;
+}
+
+.vuecal__event-time {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.vuecal__event-content {
+  font-style: italic;
+}
+
+.vuecal__event.break {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    #f2f2f2 10px,
+    #f2f2f2 20px
+  ); /* IE 10+ */
+  color: #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vuecal__event.break .vuecal__event-time {
+  display: none;
+  align-items: center;
+}
 </style>
 
 <style scoped>
-
 button:focus {
   outline: none !important;
 }
@@ -91,49 +262,12 @@ input:focus {
   background: #fff;
 }
 
-.profile-img {
-  text-align: center;
-}
-
-.profile-img img {
-  width: 70%;
-  height: 100%;
-}
-
-.profile-img .file {
-  position: relative;
-  overflow: hidden;
-  margin-top: -20%;
-  width: 70%;
-  border: none;
-  border-radius: 0;
-  font-size: 15px;
-  background: #212529b8;
-}
-
-.profile-img .file input {
-  position: absolute;
-  opacity: 0;
-  right: 0;
-  top: 0;
-}
-
 .profile-head h5 {
   color: #333;
 }
 
 .profile-head h6 {
   color: #0062cc;
-}
-
-.profile-edit-btn {
-  border: none;
-  border-radius: 1.5rem;
-  width: 70%;
-  padding: 2%;
-  cursor: pointer;
-  background: linear-gradient(to right, #4e43e2, #4fdee6);
-  transition: 0.5s;
 }
 
 .proile-rating {
