@@ -27,8 +27,8 @@
             </p></span
           >
 
-          <div class="card-read"></div>
-          <label>
+          <div class="card-read "></div>
+          <label class="subtle">
             <span> Posted on: {{ date }} </span>
           </label>
         </div>
@@ -126,7 +126,7 @@ export default {
 }
 
 .subtle {
-  color: #aaa;
+  color: rgb(140, 138, 138);
 }
 
 .card-container {
