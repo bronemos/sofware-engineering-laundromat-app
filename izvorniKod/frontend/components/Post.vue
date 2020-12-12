@@ -1,10 +1,10 @@
 <template>
+<div class="background">
   <div class="card-container">
     <div class="card u-clearfix">
       <section>
         <button v-if="type == 'lost' && (user.is_staff || user.is_superuser) || type == 'job' && user && user.is_superuser" class="button-delete" @click="deletePost">Obriši</button>
         <div class="card-body">
-          <!--span class="card-number card-circle subtle"></span-->
           <label
             ><img
               v-if="type == 'job'"
@@ -21,8 +21,6 @@
               Zaboravljen odjevni predmet
             </span>
           </label>
-
-          <!---span class="card-author subtle">John Smith</span--->
           <span class="card-description">
             <p>
               {{ post.text }}
@@ -41,27 +39,7 @@
     </div>
     <div class="card-shadow"></div>
   </div>
-
-  <!---div>
-    <div class="media-body post-theme p-5">
-       <label>
-          <span> Posted on: {{ date }} </span>
-        </label>
-
-      <hr class="mt-2 post-separator-theme" />
-      <p>
-        {{ post.text }}
-      </p>
-
-      <div class="post-image">
-        <img :src="post.photo" />
-      </div>
-
-      <div class="container-fluid">
-       
-      </div>
-    </div>
-  </div--->
+ </div>
 </template>
 
 <script>
@@ -117,14 +95,16 @@ export default {
 };
 </script>
 <style>
-html {
+/*html {
   background: #faf7f2;
   box-sizing: border-box;
   font-family: sans-serif;
   font-size: 14px;
   font-weight: 400;
+}*/
+.background{
+   background: #f8f5f2;
 }
-
 *,
 *:before,
 *:after {
@@ -202,7 +182,7 @@ html {
 
 .card-description {
   display: inline-block;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 22px;
   margin: 10px 0;
   font-size: 16px;
