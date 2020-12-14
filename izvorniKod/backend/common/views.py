@@ -8,8 +8,8 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework import permissions
 
-from .models import User, Post, Laundry
-from .serializers import UserSerializer, PostSerializer, LaundrySerializer
+from .models import User, Post, Laundry, Appointment
+from .serializers import UserSerializer, PostSerializer, LaundrySerializer, AppointmentSerializer
 from rest_framework.response import Response
 
 
@@ -27,7 +27,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'JMBAG']
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'JMBAG', 'card_number']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm' or self.action == 'logout':
             return None
@@ -82,6 +82,12 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.
                          })
 
 
+class AdminViewSet(viewsets.GenericViewSet):
+    queryset = User.objects.filter(is_superuser=False).all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -98,3 +104,17 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
             LaundrySerializer(Laundry.objects.filter(date_changed__lte=datetime.now()).first()).data,
             status=status.HTTP_200_OK
         )
+
+
+class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Appointment.objects.all()
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_serializer_class(self):
+        return AppointmentSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action == 'create':
+            kwargs['only_fields'] = ['note', 'paid', 'machine', 'start']
+            return super().get_serializer(*args, **kwargs)
+        return super().get_serializer(*args, **kwargs)

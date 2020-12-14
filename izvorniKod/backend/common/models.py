@@ -61,7 +61,7 @@ class Machine(models.Model):
 
 
 class Appointment(models.Model):
-    start_time = models.DateField(null=False, editable=False, blank=True, default=datetime.now)
+    start = models.DateTimeField(null=False, blank=False)
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
     price = models.FloatField(null=True, blank=True)
     note = models.TextField(null=True, blank=True)

@@ -1,10 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from common.models import User, Post, Laundry
+from common.models import User, Post, Laundry, Machine, Appointment
 from rest_framework.serializers import ModelSerializer
 
 
@@ -70,3 +70,32 @@ class LaundrySerializer(DynamicFieldsModelSerializer):
         if data.get('pause_start') is not None and data.get('pause_start').minute >= 30:
             raise serializers.ValidationError('Pauza mora završiti prije novog termina!!!')
         return data
+
+
+class MachineSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Machine
+        fields = '__all__'
+
+
+class AppointmentSerializer(DynamicFieldsModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    machine = MachineSerializer()
+    user_id= serializers.SerializerMethodField()
+    end = serializers.SerializerMethodField()
+    title = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Appointment
+        fields = '__all__'
+
+    def get_user_id(self, obj):
+        return obj.user.id
+
+    def get_end(self, obj):
+        return obj.start + timedelta(minutes=60)
+
+    def get_title(self, obj):
+        if obj.machine.type == 'dryer':
+            return 'Sušilica ' + str(int(obj.machine.id - Machine.objects.all().count() / 2))
+        return 'Perilica ' + str(obj.machine.id)
