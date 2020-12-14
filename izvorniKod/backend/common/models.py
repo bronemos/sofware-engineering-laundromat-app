@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime, timedelta
 
+from creditcards.models import CardNumberField, CardExpiryField, SecurityCodeField
 from django.core.mail import send_mail
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -36,10 +37,16 @@ class IntegerRangeField(models.IntegerField):
         return super(IntegerRangeField, self).formfield(**defaults)
 
 
+class Card(models.Model):
+    cc_number = CardNumberField()
+    cc_expiry = CardExpiryField()
+    cc_code = SecurityCodeField()
+
+
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     JMBAG = models.CharField(null=False, unique=True, blank=False, max_length=10, default='xxx')
-    iban = models.CharField("IBAN", max_length=34, blank=True, null=True)
+    card = models.OneToOneField(Card, null=True, blank=True, on_delete=models.SET_NULL)
     negative_points = models.IntegerField(null=False, blank=False, default=0)
 
 

@@ -4,7 +4,7 @@ from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from common.models import User, Post, Laundry, Machine, Appointment
+from common.models import User, Post, Laundry, Machine, Appointment, Card
 from rest_framework.serializers import ModelSerializer
 
 
@@ -26,7 +26,14 @@ class DynamicFieldsModelSerializer(ModelSerializer):
                 self.fields.pop(field_name)
 
 
+class CardSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Card
+        fields = '__all__'
+
+
 class UserSerializer(DynamicFieldsModelSerializer):
+    card = CardSerializer()
     class Meta:
         model = User
         fields = '__all__'
@@ -81,7 +88,7 @@ class MachineSerializer(DynamicFieldsModelSerializer):
 class AppointmentSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     machine = MachineSerializer()
-    user_id= serializers.SerializerMethodField()
+    user_id = serializers.SerializerMethodField()
     end = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
 
