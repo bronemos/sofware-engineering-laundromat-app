@@ -23,8 +23,8 @@
         <div class="error" v-if="!$v.registerForm.JMBAG.numeric">JMBAG mora biti broj</div>
         <div class="error" v-if="!$v.registerForm.JMBAG.minLength">JMBAG mora imati točno 10 znamenaka</div>
         <div class="error" v-if="!$v.registerForm.JMBAG.maxLength">JMBAG mora imati točno 10 znamenaka</div>
-        <input type="text" class="input-field" placeholder="IBAN (unos nije obavezan)" v-model="registerForm.iban">
-        <div class="error" v-if="registerForm.iban.length != 0 && !isValidIBANNumber(registerForm.iban)">Pogrešan IBAN</div>
+        <!---input type="text" class="input-field" placeholder="IBAN (unos nije obavezan)" v-model="registerForm.iban"--->
+        <!---div class="error" v-if="registerForm.iban.length != 0 && !isValidIBANNumber(registerForm.iban)">Pogrešan IBAN</div--->
         
         <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email">
         <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div>

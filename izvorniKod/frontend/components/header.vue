@@ -21,7 +21,6 @@
           >
           <b-nav-item
             href="/admin/"
-            disabled
             v-if="user !== null && user.is_superuser"
             >Admin</b-nav-item
           >
