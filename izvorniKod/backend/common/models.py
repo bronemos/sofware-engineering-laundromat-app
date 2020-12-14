@@ -39,7 +39,7 @@ class IntegerRangeField(models.IntegerField):
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     JMBAG = models.CharField(null=False, unique=True, blank=False, max_length=10, default='xxx')
-    cart_number = models.IntegerField(null=False, blank=False, default=0)
+    card_number = models.IntegerField(null=False, blank=False, default=0)
     negative_points = models.IntegerField(null=False, blank=False, default=0)
 
 
