@@ -7,9 +7,10 @@ from django.core.mail import send_mail
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
 from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated
 
-from .models import User, Post, Laundry, Appointment
-from .serializers import UserSerializer, PostSerializer, LaundrySerializer, AppointmentSerializer
+from .models import User, Post, Laundry, Appointment, Card
+from .serializers import UserSerializer, PostSerializer, LaundrySerializer, AppointmentSerializer, CardSerializer
 from rest_framework.response import Response
 
 
@@ -19,7 +20,7 @@ class OnlyFieldsSerializerMixin:
         return super().get_serializer(*args, **kwargs)
 
 
-class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
@@ -27,14 +28,29 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
-            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'JMBAG', 'iban']
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'JMBAG']
             return super().get_serializer(*args, **kwargs)
         elif self.action == 'confirm' or self.action == 'logout':
             return None
         elif self.action == 'login':
-            kwargs['only_fields'] = ['password', 'username', 'iban']
+            kwargs['only_fields'] = ['password', 'username']
             return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
+
+    permission_classes_by_action = {
+        'confirm': [IsAuthenticated],
+        'logged_user_data': [IsAuthenticated],
+        'update': [IsAuthenticated],
+        'partial_update': [IsAuthenticated],
+        'delete': [permissions.IsAdminUser],
+        'pending_users': [IsAuthenticated],
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -68,7 +84,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.
         if user.is_authenticated:
             return Response(
                 {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email',
-                                                           'is_superuser', 'is_staff', 'JMBAG', 'id']).data},
+                                                           'is_superuser', 'is_staff', 'JMBAG', 'id', 'card']).data},
                 status=status.HTTP_200_OK
             )
 
@@ -82,10 +98,26 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.
                          })
 
 
+class CardViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    queryset = Card.objects.all()
+    serializer_class = CardSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        card = serializer.save()
+        user = request.user
+        user.card = card
+        user.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
 class AdminViewSet(viewsets.GenericViewSet):
     queryset = User.objects.filter(is_superuser=False).all()
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class PostViewSet(viewsets.ModelViewSet):
