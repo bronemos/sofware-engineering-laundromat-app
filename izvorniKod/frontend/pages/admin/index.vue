@@ -10,37 +10,37 @@
               </h5>
               <ul class="nav nav-tabs" id="myTab">
                 <li class="nav-item">
-                  <button class="nav-link" v-bind:class="detailsSelected ? 'active' : ''" id="details"
-                          @click.prevent="detailsSelected=true; editProfile=false">Radno vrijeme
+                  <button class="nav-link" v-bind:class="tabSelected === 'hours' ? 'active' : ''" id="details"
+                          @click.prevent="tabSelected='hours'; editProfile=false">Radno vrijeme
                   </button>
                 </li>
                 <li class="nav-item">
-                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations"
-                          @click.prevent="detailsSelected=false; editProfile=false">Cijene
+                  <button class="nav-link" v-bind:class="tabSelected === 'prices' ? 'active' : ''" id="prices"
+                          @click.prevent="tabSelected='prices'; editProfile=false">Cijene
                   </button>
                 </li>
                  <li class="nav-item">
-                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations"
-                          @click.prevent="detailsSelected=false; editProfile=false">Korisnici
+                  <button class="nav-link" v-bind:class="tabSelected === 'users' ? 'active' : ''" id="users"
+                          @click.prevent="tabSelected='users'; editProfile=false">Korisnici
                   </button>
                 </li>
                  <li class="nav-item">
-                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations"
-                          @click.prevent="detailsSelected=false; editProfile=false">Zaposlenici
+                  <button class="nav-link" v-bind:class="tabSelected === 'employees' ? 'active' : ''" id="employees"
+                          @click.prevent="tabSelected='employees'; editProfile=false">Zaposlenici
                   </button>
                 </li>
               </ul>
             </div>
           </div>
-          <div class="col-md-2" v-if="detailsSelected">
-            <input type="button" class="profile-edit-btn" name="btnAddMore" :value="editProfile ? 'Pohrani' : 'Uredi'"
+          <div class="col-md-2">
+            <input type="button" class="profile-edit-btn" name="btnAddMore" :value="edit ? 'Pohrani' : 'Uredi'"
                    @click.prevent="submitUpdate"/>
           </div>
         </div>
         <div class="row" v-if="!editProfile">
           <div class="col-md-8">
             <div class="tab-content profile-tab" id="myTabContent">
-              <div class="tab-pane fade show active" id="details-tab" v-if="detailsSelected">
+              <div class="tab-pane fade show active" id="details-tab">
                 <div class="row">
                   <div class="col-md-6">
                     <label>Username</label>
@@ -157,8 +157,8 @@ export default {
 
     data() {
       return {
-        detailsSelected: true,
-        editProfile: false,
+        tabSelected: 'hours',
+        edit: false,
         password: '',
         repeatedPassword: '',
         username: this.$auth.user.username
