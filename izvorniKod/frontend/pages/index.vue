@@ -1,25 +1,28 @@
 <template class="background">
   <div class="background">
     <div class="container">
-      <div>
+      <div class="title-container">
         <h1 class="title fadeInDown animated">
           Terminko
         </h1>
         <h2 class="subtitle fade-in">
           Aplikacija za praonicu rublja
         </h2>
-        <div class="work-hours fade-in delay">
+      </div>
+      <div class="info-container">
+        <div class="work-hours fade-in delay" >
           <h3>Radno vrijeme:</h3>
           <h5>Pon-Sub: od {{laundry.open_time}} do {{laundry.close_time}}</h5>
           <h5>Pauza: od {{laundry.pause_start}} do {{laundry.pause_end}}</h5>
           <h5>Ned: Ne radimo!</h5>
         </div>
-        <div class="work-hours fade-in delay">
+        <div class=" fade-in delay" >
           <h3>Cijene:</h3>
           <h5>Pranje: {{laundry.wash_price}} kn</h5>
           <h5>Sušenje: {{laundry.drying_price}} kn</h5>
         </div>
       </div>
+      
     </div>
   </div>
 </template>
@@ -62,10 +65,16 @@ export default {
   width: 100%;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
 
+}
+
+.title-container {
+  position: absolute;
+  top: 27.5%;
 }
 
 .title {
@@ -74,17 +83,14 @@ export default {
   display: block;
   font-weight: 300;
   font-size: 100px;
-  /* padding: 0 0 48px 0; */  /* padding je samo dodano radi štrika */
-/*   color: white;
- */  color: #35495e;
+  color: #35495e;
   letter-spacing: 1px;
 }
 
 .subtitle {
   font-weight: 300;
   font-size: 42px;
-/*   color: white;
- */  color: #526488;
+  color: #526488;
   word-spacing: 5px;
   padding-bottom: 15px;
 }
@@ -94,17 +100,22 @@ export default {
 }
 
 .animated {
-  padding-top:95px;
-  margin-bottom:60px;
+/*   padding-top:95px;
+ */  /* margin-bottom:60px; */
   -webkit-animation-duration: 5s;
   animation-duration: 5s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
 
-.work-hours {
+.info-container {
   color: #aeb6be;
-  padding: 50px;
+  position: absolute;
+  top: 50%;
+}
+
+.work-hours {
+  padding: 50px 50px 20px 50px;
 }
 
 .fade-in {
