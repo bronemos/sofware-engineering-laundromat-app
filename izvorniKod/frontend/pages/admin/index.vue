@@ -1,22 +1,32 @@
 <template>
-  <div class="hero">
+ <div class="hero">
     <div class="container emp-profile">
       <form>
         <div class="row">
           <div class="col-md-6">
             <div class="profile-head">
               <h5>
-                {{user.first_name}} {{user.last_name}}
+                Admin {{user.first_name}} {{user.last_name}}
               </h5>
               <ul class="nav nav-tabs" id="myTab">
                 <li class="nav-item">
                   <button class="nav-link" v-bind:class="detailsSelected ? 'active' : ''" id="details"
-                          @click.prevent="detailsSelected=true; editProfile=false">Detalji
+                          @click.prevent="detailsSelected=true; editProfile=false">Radno vrijeme
                   </button>
                 </li>
                 <li class="nav-item">
                   <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations"
-                          @click.prevent="detailsSelected=false; editProfile=false">Lista rezervacija
+                          @click.prevent="detailsSelected=false; editProfile=false">Cijene
+                  </button>
+                </li>
+                 <li class="nav-item">
+                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations"
+                          @click.prevent="detailsSelected=false; editProfile=false">Korisnici
+                  </button>
+                </li>
+                 <li class="nav-item">
+                  <button class="nav-link" v-bind:class="!detailsSelected ? 'active' : ''" id="reservations"
+                          @click.prevent="detailsSelected=false; editProfile=false">Zaposlenici
                   </button>
                 </li>
               </ul>
@@ -141,7 +151,8 @@
 </template>
 
 <script>
-  export default {
+
+export default {
     middleware: 'auth',
 
     data() {
@@ -340,3 +351,4 @@
     font-size: 12px;
   }
 </style>
+
