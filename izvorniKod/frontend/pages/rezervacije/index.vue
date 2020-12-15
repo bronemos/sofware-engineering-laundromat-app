@@ -11,7 +11,7 @@
               :time-from="6 * 60"
               :time-step="60"
               locale="hr"
-              :disable-views="['years', 'year', 'month']"
+              :disable-views="['years', 'year']"
               class="vuecal--blue-theme"
               today-button
               :selected-date="selectedDate"
@@ -65,24 +65,6 @@
 
 
 <script>
-// var events = [];
-// var d = new Date();
-// var month = d.addDays(30);
-// for (var d; d <= month; d.setDate(d.getDate() + 1)) {
-//   var event = {};
-//   event.start = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay();
-//   event.end = event.start;
-//   var date = event.start
-//   for (var i = 8; i < 22; i++) {
-//     event.start = date + " " + i + ":00";
-//     event.end = date + " " + (i + 1) + ":00";
-//     event.split = 1;
-//     event.class = "free",
-//     events.push(event);
-//   }
-// }
-// console.log(events);
-
 export default {
   data: () => ({
     selectedDate: new Date(new Date().getFullYear(), 11, 31),
@@ -138,21 +120,24 @@ export default {
     events(){
       var events = [];
       var d = new Date();
-      var month = d.addDays(30);
-      for (var d; d <= month; d.setDate(d.getDate() + 1)) {
-        var event = {};
-        event.start = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay();
-        event.end = event.start;
-        var date = event.start
+      // console.log(d)
+      var month = d.addDays(14);
+      for (var d; d <= month; d=d.addDays(1)) {
+        var date = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
         for (var i = 8; i < 22; i++) {
+          var event = {};
           event.start = date + " " + i + ":00";
           event.end = date + " " + (i + 1) + ":00";
           event.split = 1;
           event.class = "free";
           event.title = "radi wu";
           events.push(event);
+          var dryer = Object.create(event);
+          dryer.split = 2
+          events.push(dryer)
         }
-      }      
+      }
+      console.log(events);  
       return events;
     }
   }
@@ -172,8 +157,8 @@ export default {
 }
 
 .vuecal__event.free {
-  background-color: rgba(253, 156, 66, 0.9);
-  border: 1px solid rgb(233, 136, 46);
+  background-color: rgba(179, 228, 213, 0.9);
+  border: 1px solid rgba(162, 202, 190, 0.9);
   color: #fff;
 }
 .vuecal__event.reserved {
