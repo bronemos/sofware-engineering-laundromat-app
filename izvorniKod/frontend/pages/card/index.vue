@@ -22,37 +22,38 @@
             fill="rgba(0,0,0,.4)"
           />
         </svg>
-        
+
       </div>
       <form class="form-card" action="#">
-        <label for="number"
+        <label class="label-card" for="number"
           >Broj kartice
           <input
+            class="input-card"
             type="text"
             id="number"
             placeholder="0000 - 0000 - 0000 - 0000"
           />
         </label>
-        <label class="label-name" for="name"
+        <label class="label-name label-card" for="name"
           >Ime i prezime
-          <input type="text" id="name" placeholder="Marija" />
+          <input class="input-card" type="text" id="name" placeholder="Marija" />
         </label>
-        <label class="label-date" for="date"
+        <label class="label-date label-card" for="date"
           >Vrijedi do
-          <input type="text" id="date" placeholder="00/00" />
+          <input class="input-card" type="text" id="date" placeholder="00/00" />
         </label>
-        <label class="label-cvc" for="cvc"
+        <label class="label-cvc label-card" for="cvc"
           >CVV
-          <input type="text" id="cvc" placeholder="000" />
+          <input class="input-card" type="text" id="cvc" placeholder="000" />
         </label>
-        <button>
+        <button class="button-card">
           BUY NOW
           <i class="fa fa-angle-right"></i>
-        </button> 
-           <label class="label-remember"
-      for="remember">Spremi informacije za kasnije <input class="input-remember" type="checkbox" checked="checked" id="remember" /> </label>
+        </button>
+           <label class="label-remember label-card"
+      for="remember">Spremi informacije za kasnije <input class="input-remember input-card" type="checkbox" checked="checked" id="remember" /> </label>
       </form>
-  
+
     </div>
   </div>
 </template>
@@ -118,7 +119,7 @@ export default {};
   flex-wrap: wrap;
   position: relative;
 }
-label {
+.label-card {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -160,9 +161,9 @@ label {
       width: 1rem;
     }
 
-input {
+.input-card {
   border: none;
-  border-bottom: 1px solid var(--grey);
+  border-bottom: 1px solid black;
   outline: none;
   background-color: transparent;
   font-size: 1.1rem;
@@ -172,7 +173,7 @@ cvc {
   color: white;
 }
 
-button {
+.button-card {
   height: 2.8rem;
   width: 11.8rem;
   font-size: 0.8rem;
