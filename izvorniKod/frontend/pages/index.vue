@@ -40,10 +40,10 @@ export default {
   created: async function() {
     let response = await this.$axios.get(`laundry/`);
     this.laundry = response.data;
-    // this.laundry.open_time = this.laundry.open_time.substring(0, this.laundry.open_time.length - 3);
-    // this.laundry.close_time = this.laundry.close_time.substring(0, this.laundry.close_time.length - 3);
-    // this.laundry.pause_start = this.laundry.pause_start.substring(0, this.laundry.pause_start.length - 3);
-    // this.laundry.pause_end = this.laundry.pause_end.substring(0, this.laundry.pause_end.length - 3);
+    this.laundry.open_time = this.laundry.open_time.substring(0, this.laundry.open_time.length - 3);
+    this.laundry.close_time = this.laundry.close_time.substring(0, this.laundry.close_time.length - 3);
+    this.laundry.pause_start = this.laundry.pause_start.substring(0, this.laundry.pause_start.length - 3);
+    this.laundry.pause_end = this.laundry.pause_end.substring(0, this.laundry.pause_end.length - 3);
   }
 }
 </script>
