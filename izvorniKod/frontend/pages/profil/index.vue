@@ -65,7 +65,7 @@
                 </div>
               </div>
               <div class="tab-pane fade" id="reservations-tab" v-if="!detailsSelected">
-                abcdef
+                <p>hahaaaa</p>
               </div>
             </div>
           </div>

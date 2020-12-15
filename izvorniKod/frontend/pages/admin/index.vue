@@ -14,11 +14,11 @@
                           @click.prevent="tabSelected='hours'; editProfile=false">Radno vrijeme
                   </button>
                 </li>
-                <li class="nav-item">
+                <!---li class="nav-item">
                   <button class="nav-link" v-bind:class="tabSelected === 'prices' ? 'active' : ''" id="prices"
                           @click.prevent="tabSelected='prices'; editProfile=false">Cijene
                   </button>
-                </li>
+                </li--->
                  <li class="nav-item">
                   <button class="nav-link" v-bind:class="tabSelected === 'users' ? 'active' : ''" id="users"
                           @click.prevent="tabSelected='users'; editProfile=false">Korisnici
@@ -32,119 +32,39 @@
               </ul>
             </div>
           </div>
-          <div class="col-md-2">
-            <input type="button" class="profile-edit-btn" name="btnAddMore" :value="edit ? 'Pohrani' : 'Uredi'"
-                   @click.prevent="submitUpdate"/>
-          </div>
+         
         </div>
         <div class="row" v-if="!editProfile">
           <div class="col-md-8">
             <div class="tab-content profile-tab" id="myTabContent">
-              <div class="tab-pane fade show active" id="details-tab">
+              <div class="tab-pane fade show active" id="details-tab"  v-if="tabSelected == 'hours'">
                 <div class="row">
-                  <div class="col-md-6">
-                    <label>Username</label>
+                  <div class="col-md-4">
+                    <label>Početak radnog vremena</label>
                   </div>
-                  <div class="col-md-6">
-                    <p>{{user.username}}</p>
+                  <div class="col-md-3">
+                   <input type="time" class="input-field" v-model="start">
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
-                    <label>Ime i prezime</label>
+                  <div class="col-md-4">
+                    <label>Kraj radnog vremena</label>
                   </div>
-                  <div class="col-md-6">
-                    <p>{{user.first_name}} {{user.last_name}}</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Email</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>{{user.email}}</p>
+                  <div class="col-md-3">
+                   <input type ="time" class="input-field" v-model="end">
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>JMBAG</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>{{user.JMBAG}}</p>
-                  </div>
-                </div>
+               </div>
+              <div class="tab-pane fade" id="reservations-tab" v-if="tabSelected == 'users'">
+                <p>lista korisnika</p>
               </div>
-              <div class="tab-pane fade" id="reservations-tab" v-if="!detailsSelected">
-                abcdef
+              <div class="tab-pane fade" id="reservations-tab" v-if="tabSelected == 'employees'">
+                   <p>lista zaposlenika</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="row" v-if="editProfile">
-          <div class="col-md-8">
-            <div class="tab-content profile-tab" id="myTabContentEdit">
-              <div class="tab-pane fade show active" id="details-tab-edit" v-if="detailsSelected">
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Username</label>
-                  </div>
-                  <div class="col-md-6">
-                    <input v-model="username">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Ime i prezime</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>{{user.first_name}} {{user.last_name}}</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Email</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>{{user.email}}</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>JMBAG</label>
-                  </div>
-                  <div class="col-md-6">
-                    <p>{{user.JMBAG}}</p>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Nova šifra</label>
-                  </div>
-                  <div class="col-md-6">
-                    <input type="password" v-model="password">
-                    <div class="error" v-if="!verifyPw(password) && password.length !== 0">Format lozinke nije valjan
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label>Potvrdi novu šifru</label>
-                  </div>
-                  <div class="col-md-6">
-                    <input type="password" v-model="repeatedPassword">
-                    <div class="error"
-                         v-if="!(password === repeatedPassword) && password.length !== 0 && repeatedPassword.length !== 0">
-                      Lozinka nije ista
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="reservations-tab-edit" v-if="!detailsSelected">
-                abcdef
-              </div>
-            </div>
-          </div>
-        </div>
+ 
       </form>
     </div>
   </div>
@@ -159,8 +79,8 @@ export default {
       return {
         tabSelected: 'hours',
         edit: false,
-        password: '',
-        repeatedPassword: '',
+        start: '',
+        end: '',
         username: this.$auth.user.username
       }
     },
@@ -223,6 +143,13 @@ export default {
 
   input:focus {
     outline: none !important;
+  }
+   .input-field {
+    width: 100%;
+    border: 1px solid #999;
+    outline: none;
+    background: transparent;
+    
   }
 
   .hero {
