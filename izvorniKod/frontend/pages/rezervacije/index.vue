@@ -1,65 +1,72 @@
-
 <template class="background">
   <!-- App.vue -->
   <!-- <div id="app" data-app app-data="true" > -->
-    <div class="background">
-      <div class="hero">
-        <div class="container emp-profile">
-          <no-ssr>
-            <vue-cal
-              ref="vuecal"
-              :time-from="6 * 60"
-              :time-step="60"
-              locale="hr"
-              :disable-views="['years', 'year']"
-              class="vuecal--blue-theme"
-              today-button
-              :selected-date="selectedDate"
-              :min-date="minDate"
-              :max-date="maxDate"
-              :hide-weekdays="[7]"
-              editable-events
-              :events="events"
-              :split-days="splitDays"
-              :sticky-split-labels="stickySplitLabels"
-              :min-cell-width="minCellWidth"
-              :min-split-width="minSplitWidth"
-              :on-event-click="onEventClick"
-            >
-              <template v-slot:today-button>
-                <!-- Using Vuetify -->
-                <v-tooltip>
-                  <template v-slot:activator="{ on }">
-                    <v-btn v-on="on">
-                      <span>Danas</span>
-                    </v-btn>
-                  </template>
-                </v-tooltip>
-              </template>
-            </vue-cal>
-          </no-ssr>
-        </div>
+  <div class="background">
+    <div class="hero">
+      <div class="container emp-profile">
+        <no-ssr>
+          <vue-cal
+            ref="vuecal"
+            :time-from="6 * 60"
+            :time-step="60"
+            locale="hr"
+            :disable-views="['years', 'year']"
+            class="vuecal--blue-theme"
+            today-button
+            :selected-date="selectedDate"
+            :min-date="minDate"
+            :max-date="maxDate"
+            :hide-weekdays="[7]"
+            editable-events
+            :events="events"
+            :split-days="splitDays"
+            :sticky-split-labels="stickySplitLabels"
+            :min-cell-width="minCellWidth"
+            :min-split-width="minSplitWidth"
+            :on-event-click="onEventClick"
+          >
+            <template v-slot:today-button>
+              <!-- Using Vuetify -->
+              <v-tooltip>
+                <template v-slot:activator="{ on }">
+                  <v-btn v-on="on">
+                    <span>Danas</span>
+                  </v-btn>
+                </template>
+              </v-tooltip>
+            </template>
+          </vue-cal>
+        </no-ssr>
       </div>
-      <!-- Using Vuetify -->
-      <v-dialog v-model="showDialog">
-        <v-card>
-          <v-card-title>
-            <v-icon>{{ selectedEvent.icon }}</v-icon>
-            <span>{{ selectedEvent.title }}</span>
-            <v-spacer/>
-            <strong>{{ selectedEvent.start && selectedEvent.start.format('DD/MM/YYYY') }}</strong>
-          </v-card-title>
-          <v-card-text>
-            <p v-html="selectedEvent.contentFull"/>
-            <strong>Event details:</strong>
-            <ul>
-              <li>Event starts at: {{ selectedEvent.start && selectedEvent.start.formatTime() }}</li>
-              <li>Event ends at: {{ selectedEvent.end && selectedEvent.end.formatTime() }}</li>
-            </ul>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
     </div>
+    <!-- Using Vuetify -->
+    <v-dialog v-model="showDialog">
+      <v-card>
+        <v-card-title>
+          <v-icon>{{ selectedEvent.icon }}</v-icon>
+          <span>{{ selectedEvent.title }}</span>
+          <v-spacer />
+          <strong>{{
+            selectedEvent.start && selectedEvent.start.format("DD/MM/YYYY")
+          }}</strong>
+        </v-card-title>
+        <v-card-text>
+          <p v-html="selectedEvent.contentFull" />
+          <strong>Event details:</strong>
+          <ul>
+            <li>
+              Event starts at:
+              {{ selectedEvent.start && selectedEvent.start.formatTime() }}
+            </li>
+            <li>
+              Event ends at:
+              {{ selectedEvent.end && selectedEvent.end.formatTime() }}
+            </li>
+          </ul>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </div>
   <!--</div>-->
 </template>
 
@@ -67,7 +74,7 @@
 <script>
 export default {
   data: () => ({
-    selectedDate: new Date(new Date().getFullYear(), 11, 31),
+    selectedDate: new Date(),
     stickySplitLabels: false,
     minCellWidth: 400,
     minSplitWidth: 0,
@@ -76,9 +83,18 @@ export default {
     splitDays: [
       // The id property is added automatically if none (starting from 1), but you can set a custom one.
       // If you need to toggle the splits, you must set the id explicitly.
-      { id: 1, class: "washer", label: "washer" },
-      { id: 2, class: "dryer", label: "dryer", hide: false }
+      { id: 1, class: "washer", label: "Perilica 1" },
+      { id: 2, class: "dryer", label: "Sušilica 1" },
+      { id: 3, class: "washer", label: "Perilica 2" },
+      { id: 4, class: "dryer", label: "Sušilica 2" },
+      { id: 5, class: "washer", label: "Perilica 3" },
+      { id: 6, class: "dryer", label: "Sušilica 3" },
+      { id: 7, class: "washer", label: "Perilica 4" },
+      { id: 8, class: "dryer", label: "Sušilica 4" },
+      { id: 9, class: "washer", label: "Perilica 5" },
+      { id: 10, class: "dryer", label: "Sušilica 5" },
     ],
+    events: [],
     // events: [
     //   {
     //     start: "2020-12-15 14:00",
@@ -100,6 +116,39 @@ export default {
     //   }
     // ]
   }),
+
+  async fetch() {
+    this.events = [];
+    
+    let res = await this.$axios.get(`laundry`);
+    var data = res.data;
+    let open_time = parseInt(
+      data.open_time.substring(0, data.open_time.length - 6)
+    );
+    let close_time = parseInt(
+      data.close_time.substring(0, data.close_time.length - 6)
+    );
+
+    var d = new Date();
+    for (var i = 1; i <= 14; i++) {
+      var date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();  
+      for (var j = open_time; j < close_time; j++) {
+        var event = {};
+        event.start = date + " " + j + ":00";
+        event.end = date + " " + (j + 1) + ":00";
+        event.class = "free";
+        event.title = `${j} - ${j + 1}`;
+        event.label = `${j} - ${j + 1}`;
+        for (var k = 1; k <= 10; k++) {
+          let tmp = Object.assign({}, event);
+          tmp.split = k;
+          this.events.push(tmp);
+        }
+      }
+      d = d.addDays(1);
+    }
+  },
+
   methods: {
     onEventClick(event, e) {
       this.selectedEvent = event;
@@ -108,39 +157,16 @@ export default {
       }
       // Prevent navigating to narrower view (default vue-cal behavior).
       e.stopPropagation();
-    }
+    },
   },
   computed: {
     minDate() {
       return new Date();
     },
     maxDate() {
-      return new Date().addDays(30);
+      return new Date().addDays(15);
     },
-    events(){
-      var events = [];
-      var d = new Date();
-      // console.log(d)
-      var month = d.addDays(14);
-      for (var d; d <= month; d=d.addDays(1)) {
-        var date = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
-        for (var i = 8; i < 22; i++) {
-          var event = {};
-          event.start = date + " " + i + ":00";
-          event.end = date + " " + (i + 1) + ":00";
-          event.split = 1;
-          event.class = "free";
-          event.title = "radi wu";
-          events.push(event);
-          var dryer = Object.create(event);
-          dryer.split = 2
-          events.push(dryer)
-        }
-      }
-      console.log(events);  
-      return events;
-    }
-  }
+  },
 };
 </script>
 
