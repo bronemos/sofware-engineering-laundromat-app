@@ -126,7 +126,7 @@ export default {
   padding: 5px;
   overflow: hidden;
   border-radius: 0.5rem;
-  border: 2px solid #4e43e2;
+  border: 2px solid white;
 }
 .submit-btn {
   width: 20%;
