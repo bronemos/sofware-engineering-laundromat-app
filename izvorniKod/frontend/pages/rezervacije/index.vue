@@ -1,6 +1,6 @@
 <template class="background">
   <!-- App.vue -->
-  <!-- <div id="app" data-app app-data="true" > -->
+  <div id="app" data-app app-data="true" >
   <div class="background">
     <div class="hero">
       <div class="container emp-profile">
@@ -67,17 +67,18 @@
       </v-card>
     </v-dialog>
   </div>
-  <!--</div>-->
+  </div>
 </template>
 
 
 <script>
+
 export default {
   data: () => ({
     selectedDate: new Date(),
     stickySplitLabels: false,
     minCellWidth: 400,
-    minSplitWidth: 0,
+    minSplitWidth: 200,
     selectedEvent: {},
     showDialog: false,
     splitDays: [
@@ -121,6 +122,8 @@ export default {
     this.events = [];
     
     let res = await this.$axios.get(`laundry`);
+    let appointments = await this.$axios.get(`appointment`);
+    
     var data = res.data;
     let open_time = parseInt(
       data.open_time.substring(0, data.open_time.length - 6)
@@ -128,6 +131,38 @@ export default {
     let close_time = parseInt(
       data.close_time.substring(0, data.close_time.length - 6)
     );
+    var that = this;
+    appointments.data.forEach(function (app) {
+    // var x = arrayItem.prop1 + 2;
+      var event = {};
+      let date = app.start.substring(0,10);
+      let time = parseInt(app.start.substring(11,13))
+      
+      event.start = date + " " + time + ":00";
+      event.end = date + " " + (time + 1) + ":00";
+      event.class = "reserved";
+      event.title = `${time} - ${time + 1}`;
+      event.label = `${time} - ${time + 1}`;
+      if(app.machine.type=="washer"){
+        event.split = app.machine.id*2-1
+      }
+      else{
+        if(app.machine.id%2==0){
+          event.split = app.machine.id/2-1;
+        }
+        else{
+          event.split = app.machine.id/2+1;
+        }
+      }
+      event.user_id = app.user_id;
+      event.price = app.price;
+      event.paid = app.paid;
+      event.basket_taken = app.basket_taken;
+      event.employee = app.employee;
+      event.contentFull = `Košarica posuđena: ${event.basket_taken}, Plaćeno: ${event.paid}, Cijena: ${event.price}`
+      // console.log(event);
+      that.events.push(event);
+    });
 
     var d = new Date();
     for (var i = 1; i <= 14; i++) {
@@ -138,15 +173,27 @@ export default {
         event.end = date + " " + (j + 1) + ":00";
         event.class = "free";
         event.title = `${j} - ${j + 1}`;
+        var c = 0;
         event.label = `${j} - ${j + 1}`;
         for (var k = 1; k <= 10; k++) {
           let tmp = Object.assign({}, event);
+          this.events.forEach(function (e) {
+            if(e.start== event.start && e.split==k){
+              c=1;
+            }
+          });
+          if(c==1){
+            c=0;
+            continue;
+          }
           tmp.split = k;
           this.events.push(tmp);
         }
       }
       d = d.addDays(1);
     }
+
+
   },
 
   methods: {
@@ -164,7 +211,7 @@ export default {
       return new Date();
     },
     maxDate() {
-      return new Date().addDays(15);
+      return new Date().addDays(14);
     },
   },
 };
@@ -188,7 +235,7 @@ export default {
   color: #fff;
 }
 .vuecal__event.reserved {
-  background-color: rgba(164, 230, 210, 0.9);
+  background-color: rgba(216, 226, 223, 0.9);
   border: 1px solid rgb(144, 210, 190);
 }
 
