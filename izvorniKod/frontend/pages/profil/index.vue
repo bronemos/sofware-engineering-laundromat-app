@@ -367,7 +367,7 @@
             }
             if (!invalid) {
               formData.append('cc_number', cardNumber)
-              formData.append('cc_expiry', new Date(parseInt('20' + this.expiryDate.split('/')[1], 10), parseInt(this.expiryDate.split('/')[0], 10) - 1))
+              formData.append('cc_expiry', '20' + this.expiryDate.split('/')[1] + '-' + this.expiryDate.split('/')[0] + '-' + '01')
               formData.append('cc_code', this.cvv)
               try {
                 let response = await this.$axios.post(`card/`, formData)
