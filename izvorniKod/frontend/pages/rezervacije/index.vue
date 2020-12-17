@@ -46,7 +46,7 @@
             <span
               >{{
                 selectedEvent.start && selectedEvent.start.format("DD.MM.YYYY")
-              }}    
+              }}
               {{ selectedEvent.label }}</span
             >
           </v-card-title>
@@ -66,10 +66,16 @@
             <br />
             <button v-if="user.is_staff" class="btn btn-danger">Obriši</button>
           </v-card-text>
-
           <v-card-text v-if="selectedEvent.class == 'free'">
+            <div class="checkbox">
+              <label><input type="checkbox" value=""> Košara</label>
+            </div>
+            <div class="form-group">
+              <label for="comment">Comment:</label>
+              <textarea class="form-control" rows="5" id="comment"></textarea>
+            </div>
             <button class="btn btn-success">Rezerviraj</button>
-            <button class="btn btn-danger">Obriši</button>
+            <!-- <button class="btn btn-danger">Obriši</button> -->
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -100,7 +106,7 @@ export default {
     todayDate: new Date(),
     stickySplitLabels: false,
     minCellWidth: 30,
-    minSplitWidth: 30,
+    minSplitWidth: 200,
     selectedEvent: {},
     showDialog: false,
     splitDays: [
@@ -157,7 +163,12 @@ export default {
 
       event.start = date + " " + time + ":00";
       event.end = date + " " + (time + 1) + ":00";
-      event.class = "reserved";
+      if(that.$auth.user.id == event.user_id){
+        event.class = "mine";
+      }
+      else{
+        event.class = "reserved"
+      }
       event.title = `${time}:00 - ${time + 1}:00`;
       event.label = `${time}:00 - ${time + 1}:00`;
       if (app.machine.type == "washer") {
@@ -262,6 +273,18 @@ export default {
   color: rgb(0, 0, 0, 0.3);
 }
 
+.vuecal__event.mine {
+  background-color: rgba(173, 192, 235, 0.9);
+  border: 1px solid rgb(144, 210, 190);
+  color: rgb(0, 0, 0, 0.3);
+}
+
+.vuecal__event.excange {
+  background-color: rgba(252, 248, 197, 0.9);
+  border: 1px solid rgb(144, 210, 190);
+  color: rgb(0, 0, 0, 0.3);
+}
+
 .vuecal__cell--disabled {
   text-decoration: line-through;
 }
@@ -274,6 +297,8 @@ export default {
 
 .vuecal__now-line {
   color: #06c;
+  border-bottom:5px;
+
 }
 
 .vuecal__event {
