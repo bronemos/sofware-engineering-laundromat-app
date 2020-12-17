@@ -372,6 +372,9 @@
               try {
                 let response = await this.$axios.post(`card/`, formData)
                 this.editProfile = false
+                let user = this.$auth.user
+                user.card = response.data
+                this.$store.commit('SET_USER', user)
               } catch (e) {
                 this.$toast.error('Greška pri pohrani podataka!', {duration: 5000})
               }
