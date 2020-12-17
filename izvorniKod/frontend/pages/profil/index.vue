@@ -169,7 +169,7 @@
                     class="input-card"
                     type="text"
                     id="number"
-                    :value="'•••• •••• •••• ' + user.card"
+                    :value="'•••• •••• •••• ' + user.card.cc_number.slice(-4)"
                     disabled
                   />
                 </label>
@@ -180,7 +180,9 @@
                 </label>
                 <label class="label-date label-card" for="date"
                 >Vrijedi do
-                  <input class="input-card" type="text" id="date" placeholder="00/00" disabled/>
+                  <input class="input-card" type="text" id="date"
+                         :value="user.card.cc_expiry.split('-')[1] + '/' + user.card.cc_expiry.split('-')[0].slice(-2)"
+                         disabled/>
                 </label>
                 <label class="label-cvc label-card" for="cvc"
                 >CVV
@@ -350,6 +352,9 @@
           if (!this.editProfile && this.user.card !== null)
             this.editProfile = !this.editProfile
           else {
+            this.cardNumber = ''
+            this.cvv = ''
+            this.expiryDate = ''
             let formData = new FormData();
             let invalid = false
             let cardNumber = this.cardNumber.replace(/\s|-/gi, '')
@@ -375,6 +380,7 @@
                 let user = this.$auth.user
                 user.card = response.data
                 this.$store.commit('SET_USER', user)
+                this.$toast.success('Podaci uspješno pohranjeni!', {duration: 5000})
               } catch (e) {
                 this.$toast.error('Greška pri pohrani podataka!', {duration: 5000})
               }
