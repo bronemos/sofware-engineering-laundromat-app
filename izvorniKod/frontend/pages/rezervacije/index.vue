@@ -4,25 +4,7 @@
       <div class="hero">
         <div class="container emp-profile">
           <client-only>
-            <vue-cal
-              ref="vuecal"
-              :time-from="6 * 60"
-              :time-step="60"
-              locale="hr"
-              :disable-views="['years', 'year']"
-              class="vuecal--blue-theme"
-              today-button
-              :selected-date="todayDate"
-              :min-date="minDate"
-              :max-date="maxDate"
-              :hide-weekdays="[7]"
-              :events="events"
-              :split-days="splitDays"
-              :sticky-split-labels="stickySplitLabels"
-              :min-cell-width="minCellWidth"
-              :min-split-width="minSplitWidth"
-              :on-event-click="onEventClick"
-            >
+            <vue-cal ref="vuecal" :time-from="6 * 60" :time-step="60" active-view="day" locale="hr" :disable-views="['years', 'year']" class="vuecal--blue-theme" today-button :selected-date="todayDate" :min-date="minDate" :max-date="maxDate" :hide-weekdays="[7]" :events="events" :split-days="splitDays" :sticky-split-labels="stickySplitLabels" :min-cell-width="minCellWidth" :min-split-width="minSplitWidth" :on-event-click="onEventClick">
               <template v-slot:today-button>
                 <!-- Using Vuetify -->
                 <v-tooltip>
@@ -43,39 +25,41 @@
         <v-card>
           <v-card-title>
             <v-icon>{{ selectedEvent.icon }}</v-icon>
-            <span
-              >{{
+            <span>{{
                 selectedEvent.start && selectedEvent.start.format("DD.MM.YYYY")
               }}
-              {{ selectedEvent.label }}</span
-            >
+              {{ selectedEvent.label }}</span>
           </v-card-title>
+
+          <!-- reserved appointement -->
           <v-card-text v-if="selectedEvent.class == 'reserved'">
-            <span><strong>Plaćeno:</strong> {{ selectedEvent.paid }}</span
-            ><br />
-            <span
-              ><strong>Košara posuđena:</strong>
-              {{ selectedEvent.basket_taken }}</span
-            ><br />
-            <span><strong>Cijena:</strong> {{ selectedEvent.price }} kn</span
-            ><br />
-            <span><strong>Uređaj:</strong> {{ selectedEvent.machine }}</span
-            ><br />
-            <span><strong>Bilješka:</strong></span
-            ><br /><span>{{ selectedEvent.note }}</span>
+            <span><strong>Plaćeno:</strong> {{ selectedEvent.paid }}</span><br />
+            <span><strong>Košara posuđena:</strong>
+              {{ selectedEvent.basket_taken }}</span><br />
+            <span><strong>Cijena:</strong> {{ selectedEvent.price }} kn</span><br />
+            <span><strong>Uređaj:</strong> {{ selectedEvent.machine }}</span><br />
+            <span><strong>Bilješka:</strong></span><br /><span>{{ selectedEvent.note }}</span>
             <br />
             <button v-if="user.is_staff" class="btn btn-danger">Obriši</button>
           </v-card-text>
+
+          <!-- free appointement -->
           <v-card-text v-if="selectedEvent.class == 'free'">
-            <div class="checkbox">
-              <label><input type="checkbox" value=""> Košara</label>
-            </div>
-            <div class="form-group">
-              <label for="comment">Comment:</label>
-              <textarea class="form-control" rows="5" id="comment"></textarea>
-            </div>
-            <button class="btn btn-success">Rezerviraj</button>
-            <!-- <button class="btn btn-danger">Obriši</button> -->
+            <form id="addAppointment" @submit.prevent="addApointment">
+              <div class="checkbox">
+                <label><input type="checkbox" v-model="appointmentForm.basket_taken" />
+                  Košara</label>
+              </div>
+              <div class="checkbox">
+                <label><input type="checkbox" v-model="appointmentForm.paid" />
+                  Kartično plačanje</label>
+              </div>
+              <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" rows="5" id="comment" v-model="appointmentForm.comment"></textarea>
+              </div>
+              <button type="submit" class="btn btn-success">Rezerviraj</button>
+            </form>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -87,9 +71,7 @@
             <strong>Učitavanje rezervacija....</strong>
           </v-card-title>
           <v-card-text class="d-flex justify-content-center">
-            <img
-              src="https://media2.giphy.com/media/10etb2jVqCZYWc/giphy.gif"
-            />
+            <img src="https://media2.giphy.com/media/10etb2jVqCZYWc/giphy.gif" />
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -100,8 +82,20 @@
 <script>
 export default {
   middleware: "auth",
-
   data: () => ({
+    prices: {
+      washing: 0,
+      drying: 0,
+    },
+    appointmentForm: {
+      machine: "",
+      start: "",
+      price: "",
+      note: "",
+      paid: false,
+      basket_taken: false,
+      employee: "",
+    },
     loadingDialog: true,
     todayDate: new Date(),
     stickySplitLabels: false,
@@ -135,6 +129,8 @@ export default {
     );
     let pause_start = data.pause_start.substring(0, data.close_time.length - 3);
     let pause_end = data.pause_end.substring(0, data.close_time.length - 3);
+    this.prices.drying = data.drying_price;
+    this.prices.washing = data.washing_price;
 
     var pause = {
       start: pause_start + ":00",
@@ -147,8 +143,8 @@ export default {
 
     let appointments = await this.$axios.get(`appointment`);
     var that = this;
+    var reserved = [];
     appointments.data.forEach(function (app) {
-      // var x = arrayItem.prop1 + 2;
       var event = {
         user_id: app.user_id,
         note: app.note,
@@ -158,48 +154,40 @@ export default {
         basket_taken: app.basket_taken ? "DA" : "NE",
         employee: app.employee,
       };
-      let date = app.start.substring(0, 10);
-      let time = parseInt(app.start.substring(11, 13));
 
-      event.start = date + " " + time + ":00";
-      event.end = date + " " + (time + 1) + ":00";
-      if(that.$auth.user.id == event.user_id){
+      event.start = new Date(app.start);
+      event.end = new Date(app.end);
+      if (that.$auth.user.id == event.user_id) {
         event.class = "mine";
-      }
-      else{
-        event.class = "reserved"
-      }
-      event.title = `${time}:00 - ${time + 1}:00`;
-      event.label = `${time}:00 - ${time + 1}:00`;
-      if (app.machine.type == "washer") {
-        event.split = app.machine.id * 2 - 1;
       } else {
-        if (app.machine.id % 2 == 0) {
-          event.split = app.machine.id / 2 - 1;
-        } else {
-          event.split = app.machine.id / 2 + 1;
-        }
+        event.class = "reserved";
       }
+      event.title = `${event.start.getHours()}:00 - ${event.end.getHours()}:00`;
+      event.label = `${event.start.getHours()}:00 - ${event.end.getHours()}:00`;
+      event.split =
+        app.machine.id < 5 ? 2 * app.machine.id - 1 : 2 * app.machine.id - 10;
       that.events.push(event);
+      reserved.push(event.split + "" + event.start.toString());
     });
 
     var last = this.todayDate.addDays(14);
     var d = this.todayDate;
+
     while (d < last) {
       var date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
       for (var j = open_time; j < close_time; j++) {
         if (d == this.todayDate && j <= d.getHours()) continue;
-
         var event = {};
-        event.start = date + " " + j + ":00";
-        event.end = date + " " + (j + 1) + ":00";
+        event.start = new Date(date + " " + j + ":00");
+        event.end = new Date(date + " " + (j + 1) + ":00");  
         event.class = "free";
         event.title = `${j}:00 - ${j + 1}:00`;
         var c = 0;
         event.label = `${j}:00 - ${j + 1}:00`;
         for (var k = 1; k <= 10; k++) {
+          if(reserved.includes(k + "" + event.start.toString()))
+            continue;
           let tmp = Object.assign({}, event);
-
           if (j == parseInt(pause.start.substring(0, pause.start.length - 3))) {
             let pauseEvent = Object.assign({}, pause);
             pauseEvent.start = date + " " + pause.start;
@@ -207,17 +195,9 @@ export default {
             pauseEvent.end = date + " " + pause.end;
             this.events.push(pauseEvent);
           }
-
-          this.events.forEach(function (e) {
-            if (e.start == event.start && e.split == k) {
-              c = 1;
-            }
-          });
-          if (c == 1) {
-            c = 0;
-            continue;
-          }
           tmp.split = k;
+          tmp.price = k % 2 ? this.prices.washing : this.prices.drying;
+          tmp.machine_id = k % 2 ? k / 2 + 0.5 : k / 2 + 5;
           this.events.push(tmp);
         }
       }
@@ -225,12 +205,48 @@ export default {
     }
     this.loadingDialog = false;
   },
-
-  methods: {
+    methods: {
     onEventClick(event, e) {
       this.selectedEvent = event;
       this.showDialog = true;
+      this.appointmentForm.start = event.start.toISOString();
+      this.appointmentForm.end = event.end.toISOString();
+      this.appointmentForm.machine = event.machine_id;
+      this.appointmentForm.price = event.price;
       e.stopPropagation();
+    },
+    async addApointment() {
+      console.log(this.appointmentForm);
+      this.showDialog = false;
+      try {
+        let response = await this.$axios.post(
+          "appointment/",
+          this.appointmentForm
+        );
+        this.$toast.show("Zahtjev uspješno poslan, molim pričekajte!", {
+          duration: 5000,
+        });
+        location.reload();
+      } catch (e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+          duration: 5000,
+        });
+        if (e.response.data) {
+          for (let key in e.response.data) {
+            if (key == "non_field_errors") {
+              let nonFieldErrors = e.response.data[key][0];
+              nonFieldErrors = nonFieldErrors.substring(
+                1,
+                nonFieldErrors.length - 1
+              );
+              this.$toast.error(`${nonFieldErrors}`, { duration: 5000 });
+            } else
+              this.$toast.error(`${key}: ${e.response.data[key]}`, {
+                duration: 5000,
+              });
+          }
+        }
+      }
     },
   },
   computed: {
@@ -297,8 +313,7 @@ export default {
 
 .vuecal__now-line {
   color: #06c;
-  border-bottom:5px;
-
+  border-bottom: 5px;
 }
 
 .vuecal__event {
