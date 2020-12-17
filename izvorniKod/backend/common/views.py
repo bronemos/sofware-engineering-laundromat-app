@@ -20,7 +20,8 @@ class OnlyFieldsSerializerMixin:
         return super().get_serializer(*args, **kwargs)
 
 
-class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
     queryset = User.objects.all()
 
     def get_serializer_class(self):
@@ -98,7 +99,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
                          })
 
 
-class CardViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class CardViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -115,9 +116,39 @@ class CardViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.Ge
 
 
 class AdminViewSet(viewsets.GenericViewSet):
-    queryset = User.objects.filter(is_superuser=False).all()
+    queryset = User.objects.filter(is_active=True, is_superuser=False)
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    @action(detail=False, methods=['GET'], name='list_users')
+    def list_users(self, request):
+        return Response(
+            UserSerializer(
+                self.get_queryset().filter(is_staff=False),
+                only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined',
+                             'negative_points'],
+                many=True
+            ).data,
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=False, methods=['GET'], name='list_workers')
+    def list_workers(self, request):
+        return Response(
+            UserSerializer(
+                self.get_queryset().filter(is_staff=True),
+                only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined',
+                             'negative_points'],
+                many=True
+            ).data,
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=['DELETE'], name='delete_user')
+    def delete_user(self, request, pk=None):
+        user = self.get_object()
+        user.delete()
+        return Response(status=status.HTTP_200_OK)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -138,15 +169,10 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
         )
 
 
-class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin,
+                         viewsets.GenericViewSet):
     queryset = Appointment.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
         return AppointmentSerializer
-
-    # def get_serializer(self, *args, **kwargs):
-    #     if self.action == 'create':
-    #         kwargs['only_fields'] = ['note', 'paid', 'machine', 'start']
-    #         return super().get_serializer(*args, **kwargs)
-    #     return super().get_serializer(*args, **kwargs)
