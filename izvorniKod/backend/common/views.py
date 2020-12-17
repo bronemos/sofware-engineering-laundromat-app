@@ -145,8 +145,8 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewset
     def get_serializer_class(self):
         return AppointmentSerializer
 
-    def get_serializer(self, *args, **kwargs):
-        if self.action == 'create':
-            kwargs['only_fields'] = ['note', 'paid', 'machine', 'start']
-            return super().get_serializer(*args, **kwargs)
-        return super().get_serializer(*args, **kwargs)
+    # def get_serializer(self, *args, **kwargs):
+    #     if self.action == 'create':
+    #         kwargs['only_fields'] = ['note', 'paid', 'machine', 'start']
+    #         return super().get_serializer(*args, **kwargs)
+    #     return super().get_serializer(*args, **kwargs)

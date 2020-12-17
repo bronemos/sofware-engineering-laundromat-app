@@ -13,6 +13,7 @@ class DynamicFieldsModelSerializer(ModelSerializer):
     A ModelSerializer that takes an additional `only_fields` argument that
     controls which fields should be displayed.
     """
+
     def __init__(self, *args, **kwargs):
         # Don't pass the 'fields' arg up to the superclass
         fields = kwargs.pop('only_fields', None)
@@ -26,6 +27,23 @@ class DynamicFieldsModelSerializer(ModelSerializer):
                 self.fields.pop(field_name)
 
 
+class RelatedFieldAlternative(serializers.PrimaryKeyRelatedField):
+    def __init__(self, **kwargs):
+        self.serializer = kwargs.pop('serializer', None)
+        if self.serializer is not None and not issubclass(self.serializer, serializers.Serializer):
+            raise TypeError('"serializer" is not a valid serializer class')
+
+        super().__init__(**kwargs)
+
+    def use_pk_only_optimization(self):
+        return False if self.serializer else True
+
+    def to_representation(self, instance):
+        if self.serializer:
+            return self.serializer(instance, context=self.context).data
+        return super().to_representation(instance)
+
+
 class CardSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Card
@@ -34,6 +52,7 @@ class CardSerializer(DynamicFieldsModelSerializer):
 
 class UserSerializer(DynamicFieldsModelSerializer):
     card = CardSerializer()
+
     class Meta:
         model = User
         fields = '__all__'
@@ -66,7 +85,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
-        
+
 
 class LaundrySerializer(DynamicFieldsModelSerializer):
     class Meta:
@@ -87,17 +106,19 @@ class MachineSerializer(DynamicFieldsModelSerializer):
 
 class AppointmentSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    machine = MachineSerializer()
-    user_id = serializers.SerializerMethodField()
+    user_obj = serializers.SerializerMethodField()
+    machine = RelatedFieldAlternative(queryset=Machine.objects.all(), serializer=MachineSerializer)
     end = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
 
     class Meta:
         model = Appointment
         fields = '__all__'
+        extra_fields = ['user_obj', 'machine_obj']
 
-    def get_user_id(self, obj):
-        return obj.user.id
+    def get_user_obj(self, obj):
+        return UserSerializer(obj.user,
+                              only_fields=['id', 'username', 'email', 'first_name', 'last_name']).data
 
     def get_end(self, obj):
         return obj.start + timedelta(minutes=60)
