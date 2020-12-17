@@ -169,8 +169,7 @@
                     class="input-card"
                     type="text"
                     id="number"
-                    :placeholder="'•••• •••• •••• ' + user.card"
-                    v-model="cardNumber"
+                    :value="'•••• •••• •••• ' + user.card"
                     disabled
                   />
                 </label>
@@ -181,11 +180,11 @@
                 </label>
                 <label class="label-date label-card" for="date"
                 >Vrijedi do
-                  <input class="input-card" type="text" id="date" placeholder="00/00" v-model="expiryDate" disabled/>
+                  <input class="input-card" type="text" id="date" placeholder="00/00" disabled/>
                 </label>
                 <label class="label-cvc label-card" for="cvc"
                 >CVV
-                  <input class="input-card" type="text" id="cvc" placeholder="•••" v-model="cvv" disabled/>
+                  <input class="input-card" type="text" id="cvc" value="•••" disabled/>
                 </label>
               </form>
 
@@ -234,7 +233,7 @@
                 <label class="label-name label-card" for="name"
                 >Ime i prezime
                   <input class="input-card" type="text" id="name-edit"
-                         :placeholder="user.first_name + ' ' + user.last_name" disabled/>
+                         :value="user.first_name + ' ' + user.last_name" disabled/>
                 </label>
                 <label class="label-date label-card" for="date"
                 >Vrijedi do
@@ -301,6 +300,8 @@
         if (!expDateRegExp.test(expiryDate))
           return false
         let month = parseInt(expiryDate.split('/')[0], 10) - 1
+        if (month < 0 || month > 11)
+          return false
         let year = parseInt('20' + expiryDate.split('/')[1], 10)
         let current = new Date()
         if (year < current.getFullYear())
