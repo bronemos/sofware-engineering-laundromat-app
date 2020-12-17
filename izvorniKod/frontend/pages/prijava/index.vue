@@ -119,7 +119,7 @@
         }
         try {
           let response = await this.$axios.post('account/', this.registerForm)
-          this.$toast.show('Zahtjev uspješno poslan, molim pričekajte potvrdu računa!', {duration: 5000})
+          this.$toast.success('Zahtjev uspješno poslan, molim pričekajte potvrdu računa!', {duration: 5000})
         } catch (e) {
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 5000});
           if (e.response.data) {
