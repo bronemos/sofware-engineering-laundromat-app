@@ -28,13 +28,14 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~plugins/vue-cal.js', srr: false },
-    { src: '~plugins/vuetify.js', srr: false }
+    { src: '~plugins/vue-cal.js', srr: false }
+    // { src: '~plugins/vuetify.js', srr: false }
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Nuxt.js modules
@@ -74,7 +75,7 @@ export default {
   ** Build configuration
   */
   build: {  
-    transpile: ['vue-cal','vuetify'],
+    transpile: ['vue-cal'],
     /*
     ** You can extend webpack config here
     */
