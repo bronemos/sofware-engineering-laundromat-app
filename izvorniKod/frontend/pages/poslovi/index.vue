@@ -1,7 +1,7 @@
 <template>
   <div class="hero">
   <div style="display: flex; flex-direction: column;">
-   
+
     <div v-if="user && (user.is_staff || user.is_superuser)">
       <PostForm @post="setPost" type="job"/>
     </div>
@@ -21,7 +21,7 @@ import PostForm from "@/components/PostForm";
 export default {
   name: "Poslovi",
   components: {Post, PostForm },
- 
+
   computed: {
     user() {
       if (this.$auth.loggedIn) {
@@ -54,5 +54,6 @@ export default {
     background-position: center;
     background-size: cover;
     background-color:#f8f5f2;
-    position: absolute;
+   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('~@/static/images/terminko1.jpg');
+   position: absolute;
   }</style>

@@ -169,19 +169,20 @@
                     type="text"
                     id="number"
                     placeholder="0000 0000 0000 0000"
+                    v-model="cardNumber"
                   />
                 </label>
                 <label class="label-name label-card" for="name"
                 >Ime i prezime
-                  <input class="input-card" type="text" id="name" placeholder="Ime i prezime"/>
+                  <input class="input-card" type="text" id="name" placeholder="Ime Prezime"/>
                 </label>
                 <label class="label-date label-card" for="date"
                 >Vrijedi do
-                  <input class="input-card" type="text" id="date" placeholder="00/00"/>
+                  <input class="input-card" type="date" id="date" placeholder="00/00" v-model="expiryDate"/>
                 </label>
                 <label class="label-cvc label-card" for="cvc"
                 >CVV
-                  <input class="input-card" type="text" id="cvc" placeholder="000"/>
+                  <input class="input-card" type="text" id="cvc" placeholder="000" v-model="cvv"/>
                 </label>
               </form>
 
@@ -203,7 +204,10 @@
         editProfile: false,
         password: '',
         repeatedPassword: '',
-        username: this.$auth.user.username
+        username: this.$auth.user.username,
+        cardNumber: '',
+        cvv: '',
+        expiryDate: new Date(),
       }
     },
 
@@ -218,16 +222,20 @@
         const pwRegExp = RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$')
         return pwRegExp.test(password)
       },
+      verifyCC(cardNumber) {
+        const ccRegExp = RegExp('^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\\d{11})$')
+        return ccRegExp.test(cardNumber)
+      },
       async submitUpdate() {
-        if (this.tabSelected === 'details'){
-          let changed = false;
-          let invalid_pw = false;
-          let formData = new FormData();
+        if (this.tabSelected === 'details') {
           if (!this.editProfile)
             this.editProfile = !this.editProfile
           else {
+            let changed = false
+            let invalid_pw = false
+            let formData = new FormData()
             if (this.username !== this.user.username) {
-              formData.append("username", this.username);
+              formData.append("username", this.username)
               changed = true;
             }
             if (this.password.length || this.repeatedPassword.length) {
@@ -245,19 +253,36 @@
                   headers: {
                     "Content-Type": "multipart/form-data",
                   },
-                });
+                })
               } catch (e) {
-                this.$toast.error('Username je već u uporabi.', {duration: 5000});
+                this.$toast.error('Username je već u uporabi.', {duration: 5000})
               }
             } else if (!invalid_pw) {
               this.$toast.success('Promjene uspješno pohranjene!', {duration: 5000})
               this.editProfile = !this.editProfile
             }
           }
-        }
-        else if (this.tabSelected === 'payment'){
+        } else if (this.tabSelected === 'payment') {
           if (!this.editProfile)
             this.editProfile = !this.editProfile
+          else {
+            let formData = new FormData();
+            let invalid = false
+            let cardNumber = this.cardNumber.replace(/\s|-/gi, '')
+            if (!this.verifyCC(cardNumber)) {
+              this.$toast.error('Neispravan broj kartice!', {duration: 5000})
+              invalid = true
+            }
+            if (this.cvv.length !== 3 || isNaN(this.cvv)) {
+              this.$toast.error('Neispravan CVV!', {duration: 5000})
+              invalid = true
+            }
+            if (!invalid){
+              formData.append('cc_number', cardNumber)
+              formData.append('cc_expiry', this.expiryDate)
+              formData.append('cc_code', this.cvv)
+            }
+          }
         }
       }
     }
@@ -434,7 +459,7 @@
   }
 
   .card {
-    width: 27.5rem;
+    width: 30.5rem;
     height: 17rem;
     background-color: #f7fbfc;
     border-radius: 0.7rem;
