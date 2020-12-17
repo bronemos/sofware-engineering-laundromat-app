@@ -32,7 +32,8 @@
           </v-card-title>
 
           <!-- reserved appointement -->
-          <v-card-text v-if="selectedEvent.class == 'reserved'">
+          <v-card-text v-if="selectedEvent.class == 'reserved' || selectedEvent.class == 'mine'">
+            <span><strong>Email:</strong> {{ selectedEvent.user.email }}</span><br />
             <span><strong>Plaćeno:</strong> {{ selectedEvent.paid }}</span><br />
             <span><strong>Košara posuđena:</strong>
               {{ selectedEvent.basket_taken }}</span><br />
@@ -40,12 +41,21 @@
             <span><strong>Uređaj:</strong> {{ selectedEvent.machine }}</span><br />
             <span><strong>Bilješka:</strong></span><br /><span>{{ selectedEvent.note }}</span>
             <br />
-            <button v-if="user.is_staff" class="btn btn-danger">Obriši</button>
+            <button @click.prevent="deleteAppointment()" v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" class="btn btn-danger">Obriši</button>
+            <div v-if="selectedEvent.past == true" class="container d-flex justify-content-center mt-200">
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="stars">
+                          <form action=""> <input class="star star-5" id="star-5" type="radio" name="star" /> <label class="star star-5" for="star-5"></label> <input class="star star-4" id="star-4" type="radio" name="star" /> <label class="star star-4" for="star-4"></label> <input class="star star-3" id="star-3" type="radio" name="star" /> <label class="star star-3" for="star-3"></label> <input class="star star-2" id="star-2" type="radio" name="star" /> <label class="star star-2" for="star-2"></label> <input class="star star-1" id="star-1" type="radio" name="star" /> <label class="star star-1" for="star-1"></label> </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
           </v-card-text>
 
           <!-- free appointement -->
           <v-card-text v-if="selectedEvent.class == 'free'">
-            <form id="addAppointment" @submit.prevent="addApointment">
+            <form id="addAppointment" @submit.prevent="addAppointment">
               <div class="checkbox">
                 <label><input type="checkbox" v-model="appointmentForm.basket_taken" />
                   Košara</label>
@@ -56,7 +66,7 @@
               </div>
               <div class="form-group">
                 <label for="comment">Comment:</label>
-                <textarea class="form-control" rows="5" id="comment" v-model="appointmentForm.comment"></textarea>
+                <textarea class="form-control" rows="5" id="comment" v-model="appointmentForm.note"></textarea>
               </div>
               <button type="submit" class="btn btn-success">Rezerviraj</button>
             </form>
@@ -82,6 +92,14 @@
 <script>
 export default {
   middleware: "auth",
+  head: {
+    link: [
+      {
+        rel: 'stylesheet',
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/fontawesome.min.css'
+      }
+    ]
+  }, 
   data: () => ({
     prices: {
       washing: 0,
@@ -146,7 +164,8 @@ export default {
     var reserved = [];
     appointments.data.forEach(function (app) {
       var event = {
-        user_id: app.user_id,
+        id: app.id,
+        user: app.user_obj,
         note: app.note,
         machine: app.title,
         price: app.price,
@@ -154,18 +173,23 @@ export default {
         basket_taken: app.basket_taken ? "DA" : "NE",
         employee: app.employee,
       };
-
       event.start = new Date(app.start);
       event.end = new Date(app.end);
-      if (that.$auth.user.id == event.user_id) {
+      if (that.$auth.user.id == event.user.id) {
         event.class = "mine";
       } else {
         event.class = "reserved";
       }
-      event.title = `${event.start.getHours()}:00 - ${event.end.getHours()}:00`;
+      event.title = `${event.user.first_name} ${event.user.last_name}`;
       event.label = `${event.start.getHours()}:00 - ${event.end.getHours()}:00`;
       event.split =
         app.machine.id < 5 ? 2 * app.machine.id - 1 : 2 * app.machine.id - 10;
+      if(event.end < that.todayDate){
+        event.past = true;
+      }
+      else{
+        event.past = false;
+      }
       that.events.push(event);
       reserved.push(event.split + "" + event.start.toString());
     });
@@ -213,9 +237,11 @@ export default {
       this.appointmentForm.end = event.end.toISOString();
       this.appointmentForm.machine = event.machine_id;
       this.appointmentForm.price = event.price;
+      this.appointmentForm.user = event.user;
+      this.appointmentForm.id = event.id;
       e.stopPropagation();
     },
-    async addApointment() {
+    async addAppointment() {
       console.log(this.appointmentForm);
       this.showDialog = false;
       try {
@@ -224,6 +250,38 @@ export default {
           this.appointmentForm
         );
         this.$toast.show("Zahtjev uspješno poslan, molim pričekajte!", {
+          duration: 5000,
+        });
+        location.reload();
+      } catch (e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+          duration: 5000,
+        });
+        if (e.response.data) {
+          for (let key in e.response.data) {
+            if (key == "non_field_errors") {
+              let nonFieldErrors = e.response.data[key][0];
+              nonFieldErrors = nonFieldErrors.substring(
+                1,
+                nonFieldErrors.length - 1
+              );
+              this.$toast.error(`${nonFieldErrors}`, { duration: 5000 });
+            } else
+              this.$toast.error(`${key}: ${e.response.data[key]}`, {
+                duration: 5000,
+              });
+          }
+        }
+      }
+    },
+    async deleteAppointment() {
+      console.log(this.selectedEvent);
+
+      this.showDialog = false;
+      try {
+        let response = await this.$axios.delete(
+          "appointment/"+this.selectedEvent.id);
+        this.$toast.show("Termin otkazan!", {
           duration: 5000,
         });
         location.reload();
@@ -452,4 +510,49 @@ input:focus {
   color: red;
   font-size: 12px;
 }
+/* 
+body {
+    background-color: #eee
+}
+
+div.stars {
+    width: 100%;
+    display: inline-block
+}
+
+input.star {
+    display: none
+}
+
+label.star {
+    float: right;
+    padding: 10px;
+    font-size: 36px;
+    color: #4A148C;
+    transition: all .2s
+}
+
+input.star:checked~label.star:before {
+    content: '\f005';
+    color: #FD4;
+    transition: all .25s
+}
+
+input.star-5:checked~label.star:before {
+    color: #FE7;
+    text-shadow: 0 0 20px #952
+}
+
+input.star-1:checked~label.star:before {
+    color: #F62
+}
+
+label.star:hover {
+    transform: rotate(-15deg) scale(1.3)
+}
+
+label.star:before {
+    content: '\f006';
+    font-family: FontAwesome
+} */
 </style>
