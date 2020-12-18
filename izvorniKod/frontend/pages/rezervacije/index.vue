@@ -44,8 +44,15 @@
             <button @click.prevent="deleteAppointment()" v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" class="btn btn-danger">Obriši</button>
 
             <div v-if="selectedEvent.past === true">
+              <strong>Odaberi i pritisni ocjenu za zaposlenika:</strong>
+              <select class="custom-select" v-model="selectedEvent.selectedEmployee">
+                <option required v-for="employee in selectedEvent.employee" v-bind:key="employee.id" v-bind:value="employee.id">
+                  {{ employee.first_name }} {{ employee.last_name }}
+                </option>  
+              </select>
+              
               <client-only>
-                <star-rating @rating-selected="setCurrentSelectedRating"></star-rating>
+                <star-rating v-model="selectedEvent.rating" @rating-selected="setCurrentSelectedRating"></star-rating>
               </client-only>
             </div>
           </v-card-text>
@@ -150,7 +157,6 @@ export default {
 
     let appointments = await this.$axios.get(`appointment`);;
     let workers = await this.$axios.get("admin/list_workers");
-    
     var that = this;
     var reserved = [];
     appointments.data.forEach(function (app) {
@@ -294,8 +300,37 @@ export default {
         }
       }
     },
-    setCurrentSelectedRating(rating) {
-      console.log(rating);
+    async setCurrentSelectedRating(rating) {
+       this.showDialog = false;
+      try {
+        let response = await this.$axios.post(
+          "review/",
+          { grade: rating, user: this.user.id, employee : this.selectedEvent.selectedEmployee}
+        );
+        this.$toast.show("Poslana ocjena za zaposlenika!", {
+          duration: 5000,
+        });
+        location.reload();
+      } catch (e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+          duration: 5000,
+        });
+        if (e.response.data) {
+          for (let key in e.response.data) {
+            if (key == "non_field_errors") {
+              let nonFieldErrors = e.response.data[key][0];
+              nonFieldErrors = nonFieldErrors.substring(
+                1,
+                nonFieldErrors.length - 1
+              );
+              this.$toast.error(`${nonFieldErrors}`, { duration: 5000 });
+            } else
+              this.$toast.error(`${key}: ${e.response.data[key]}`, {
+                duration: 5000,
+              });
+          }
+        }
+      }
     }
   },
   
