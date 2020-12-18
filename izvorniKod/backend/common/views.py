@@ -173,6 +173,13 @@ class AdminViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create()
+        send_mail(
+            'Čestitamo na zaposlenju!!',
+            f'Admin Vas je upravo dodao u aplikaciju terminko na funkciju zaposlenika. Vaši korisnički podaci za login '
+            f'su: username: {user.username}, password: {request.data.get("password")}',
+            "noreply@somehost.local",
+            [user.email]
+        )
         return Response(
             UserSerializer(
                 user,
@@ -221,7 +228,17 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
     @action(detail=True, methods=['GET'], name='send_email')
     def send_email(self, request, pk=None):
         appointmet = self.get_object()
-        return Response(status=status.HTTP_200_OK)
+        email = appointmet.user.email
+        message = request.data.get['message']
+        if message is not None:
+            send_mail(
+                    'Poruka iz praonice!',
+                    message,
+                    "noreply@somehost.local",
+                    [email]
+                )
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReviewViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
