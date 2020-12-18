@@ -6,11 +6,11 @@ from django.core.mail import send_mail
 
 from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import action
-from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly, AllowAny
 
-from .models import User, Post, Laundry, Appointment, Card
-from .serializers import UserSerializer, PostSerializer, LaundrySerializer, AppointmentSerializer, CardSerializer
+from .models import User, Post, Laundry, Appointment, Card, Review
+from .serializers import UserSerializer, PostSerializer, LaundrySerializer, AppointmentSerializer, CardSerializer, \
+    ReviewSerializer
 from rest_framework.response import Response
 
 
@@ -39,12 +39,12 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
         return super().get_serializer(*args, **kwargs)
 
     permission_classes_by_action = {
-        'confirm': [IsAuthenticated],
+        'confirm': [IsAdminUser],
         'logged_user_data': [IsAuthenticated],
         'update': [IsAuthenticated],
         'partial_update': [IsAuthenticated],
-        'delete': [permissions.IsAdminUser],
-        'pending_users': [IsAuthenticated],
+        'delete': [IsAdminUser],
+        'pending_users': [IsAdminUser],
     }
 
     def get_permissions(self):
@@ -102,7 +102,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
 class CardViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -117,8 +117,16 @@ class CardViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.Upda
 
 class AdminViewSet(viewsets.GenericViewSet):
     queryset = User.objects.filter(is_active=True, is_superuser=False)
-    serializer_class = PostSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminUser]
+
+    def get_serializer_class(self):
+        return UserSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action == 'create_worker_account':
+            kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'JMBAG', 'is_staff']
+            return super().get_serializer(*args, **kwargs)
+        return super().get_serializer(*args, **kwargs)
 
     @action(detail=False, methods=['GET'], name='list_users')
     def list_users(self, request):
@@ -150,17 +158,42 @@ class AdminViewSet(viewsets.GenericViewSet):
         user.delete()
         return Response(status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['POST'], name='create_worker_account')
+    def create_worker_account(self, request, pk=None):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.create()
+        return Response(
+            UserSerializer(
+                user,
+                only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined']
+            ).data,
+            status=status.HTTP_201_CREATED
+        )
+
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = Laundry.objects.all()
     serializer_class = LaundrySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    permission_classes_by_action = {
+        'create': [IsAdminUser],
+        'update': [IsAdminUser],
+        'partial_update': [IsAdminUser],
+        'list': [AllowAny],
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     def list(self, request, *args, **kwargs):
         return Response(
@@ -172,7 +205,21 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
 class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
     queryset = Appointment.objects.all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    serializer_class = AppointmentSerializer
+    permission_classes = [IsAuthenticated]
 
-    def get_serializer_class(self):
-        return AppointmentSerializer
+
+class ReviewViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    permission_classes_by_action = {
+        'create': [IsAuthenticated],
+        'list': [IsAdminUser],
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]

@@ -4,7 +4,7 @@ from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 
-from common.models import User, Post, Laundry, Machine, Appointment, Card
+from common.models import User, Post, Laundry, Machine, Appointment, Card, Review
 from rest_framework.serializers import ModelSerializer
 
 
@@ -96,6 +96,12 @@ class LaundrySerializer(DynamicFieldsModelSerializer):
         if data.get('pause_start') is not None and data.get('pause_start').minute >= 30:
             raise serializers.ValidationError('Pauza mora završiti prije novog termina!!!')
         return data
+
+
+class ReviewSerializer(DynamicFieldsModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
 
 
 class MachineSerializer(DynamicFieldsModelSerializer):
