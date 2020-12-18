@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django_crontab',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -143,3 +144,7 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CRONJOBS = [
+    ('0 0 * * *', 'common.cron.my_cron_job')
+]
