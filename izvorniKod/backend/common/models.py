@@ -1,5 +1,7 @@
 import uuid
-from datetime import datetime, timedelta
+import datetime
+import pytz
+from datetime import datetime, timedelta, timezone
 
 from creditcards.models import CardNumberField, CardExpiryField, SecurityCodeField
 from django.core.mail import send_mail
@@ -50,8 +52,13 @@ class User(AbstractUser):
     negative_points = models.IntegerField(null=False, blank=False, default=0)
 
 
+def return_date_changed():
+    now = datetime.now()
+    return now + timedelta(days=15)
+
+
 class Laundry(models.Model):
-    date_changed = models.DateTimeField(auto_now_add=True, blank=True)
+    date_changed = models.DateTimeField(default=return_date_changed, blank=True)
     open_time = models.TimeField(null=False, blank=False)
     close_time = models.TimeField(null=False, blank=False)
     pause_start = models.TimeField(null=False, blank=False)
@@ -84,6 +91,15 @@ class Appointment(models.Model):
         else:
             self.price = Laundry.objects.filter(date_changed__lte=datetime.now()).first().drying_price
         super(Appointment, self).save(*args, **kwargs)
+
+    def delete(self):
+        utc = pytz.UTC
+        if utc.localize(datetime.now() + timedelta(hours=3)) >= self.start:
+            user = self.user
+            print(user)
+            user.negative_points -= 1
+            user.save()
+        super(Appointment, self).delete()
 
 
 class Post(models.Model):

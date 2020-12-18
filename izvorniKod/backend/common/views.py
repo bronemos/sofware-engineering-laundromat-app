@@ -84,7 +84,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
         user = request.user
         if user.is_authenticated:
             return Response(
-                {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email',
+                {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email', 'negative_points'
                                                            'is_superuser', 'is_staff', 'JMBAG', 'id', 'card']).data},
                 status=status.HTTP_200_OK
             )
@@ -173,6 +173,13 @@ class AdminViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create()
+        send_mail(
+            'Čestitamo na zaposlenju!!',
+            f'Admin Vas je upravo dodao u aplikaciju terminko na funkciju zaposlenika. Vaši korisnički podaci za login '
+            f'su: username: {user.username}, password: {request.data.get("password")}',
+            "noreply@somehost.local",
+            [user.email]
+        )
         return Response(
             UserSerializer(
                 user,
@@ -217,6 +224,25 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
+
+    @action(detail=True, methods=['GET'], name='send_email')
+    def send_email(self, request, pk=None):
+        appointmet = self.get_object()
+        email = appointmet.user.email
+        message = request.data.get['message']
+        if message is not None:
+            send_mail(
+                    'Poruka iz praonice!',
+                    message,
+                    "noreply@somehost.local",
+                    [email]
+                )
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['GET'], name='logged_user_appointments')
+    def logged_user_appointments(self, request, pk=None):
+        return Response(self.get_serializer(Appointment.objects.filter(user__id=request.user.id), many=True).data)
 
 
 class ReviewViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):

@@ -373,14 +373,14 @@
               formData.append('cc_code', this.cvv)
               try {
                 let response;
-                if (this.user.card === null)
-                   response = await this.$axios.post(`card/`, formData)
-                else
+                if (this.user.card === null){
+                  response = await this.$axios.post(`card/`, formData)
+                }
+                else{
                   response = await this.$axios.patch(`card/${this.user.card.id}/`, formData)
+                }
                 this.editProfile = false
-                let user = this.$auth.user
-                user.card = response.data
-                this.$store.commit('SET_USER', user)
+                this.$store.commit('SET_CARD', response.data)
                 this.$toast.success('Podaci uspješno pohranjeni!', {duration: 5000})
               } catch (e) {
                 this.$toast.error('Greška pri pohrani podataka!', {duration: 5000})
