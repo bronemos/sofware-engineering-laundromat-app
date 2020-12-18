@@ -28,8 +28,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~plugins/vue-cal.js', srr: false }
-    // { src: '~plugins/vuetify.js', srr: false }
+    { src: '~plugins/vue-cal.js', srr: false },
+    { src: '~plugins/star-rating.js', srr: false  }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -75,7 +75,7 @@ export default {
   ** Build configuration
   */
   build: {  
-    transpile: ['vue-cal'],
+    transpile: ['vue-cal', 'star-rating'],
     /*
     ** You can extend webpack config here
     */

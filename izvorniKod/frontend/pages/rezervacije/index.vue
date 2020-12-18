@@ -33,7 +33,7 @@
 
           <!-- reserved appointement -->
           <v-card-text v-if="selectedEvent.class == 'reserved' || selectedEvent.class == 'mine'">
-            <span><strong>Email:</strong> {{ selectedEvent.user.email }}</span><br />
+            <span v-if="selectedEvent.user.email != ''"><strong>Email:</strong> {{ selectedEvent.user.email }}<br /></span>
             <span><strong>Plaćeno:</strong> {{ selectedEvent.paid }}</span><br />
             <span><strong>Košara posuđena:</strong>
               {{ selectedEvent.basket_taken }}</span><br />
@@ -42,15 +42,12 @@
             <span><strong>Bilješka:</strong></span><br /><span>{{ selectedEvent.note }}</span>
             <br />
             <button @click.prevent="deleteAppointment()" v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" class="btn btn-danger">Obriši</button>
-            <div v-if="selectedEvent.past == true" class="container d-flex justify-content-center mt-200">
-              <div class="row">
-                  <div class="col-md-12">
-                      <div class="stars">
-                          <form action=""> <input class="star star-5" id="star-5" type="radio" name="star" /> <label class="star star-5" for="star-5"></label> <input class="star star-4" id="star-4" type="radio" name="star" /> <label class="star star-4" for="star-4"></label> <input class="star star-3" id="star-3" type="radio" name="star" /> <label class="star star-3" for="star-3"></label> <input class="star star-2" id="star-2" type="radio" name="star" /> <label class="star star-2" for="star-2"></label> <input class="star star-1" id="star-1" type="radio" name="star" /> <label class="star star-1" for="star-1"></label> </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
+
+            <client-only>
+              <star-rating></star-rating>
+            </client-only>
+            <div v-if="selectedEvent.past === true && selectedEvent.employee !== null" class="container d-flex justify-content-center mt-200">
+            </div>
           </v-card-text>
 
           <!-- free appointement -->
@@ -58,14 +55,14 @@
             <form id="addAppointment" @submit.prevent="addAppointment">
               <div class="checkbox">
                 <label><input type="checkbox" v-model="appointmentForm.basket_taken" />
-                  Košara</label>
+                  Posudi košaru</label>
               </div>
-              <div class="checkbox">
+              <div class="checkbox" v-if="this.user.card != null">
                 <label><input type="checkbox" v-model="appointmentForm.paid" />
-                  Kartično plačanje</label>
+                  Kartično plaćanje</label>
               </div>
               <div class="form-group">
-                <label for="comment">Comment:</label>
+                <label for="comment">Bilješka:</label>
                 <textarea class="form-control" rows="5" id="comment" v-model="appointmentForm.note"></textarea>
               </div>
               <button type="submit" class="btn btn-success">Rezerviraj</button>
@@ -92,14 +89,6 @@
 <script>
 export default {
   middleware: "auth",
-  head: {
-    link: [
-      {
-        rel: 'stylesheet',
-        href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/fontawesome.min.css'
-      }
-    ]
-  }, 
   data: () => ({
     prices: {
       washing: 0,
@@ -153,13 +142,16 @@ export default {
     var pause = {
       start: pause_start + ":00",
       end: pause_end + ":00",
-      class: "break",
+      class: "break", 
       title: "PAUZA",
       label: "PAUZA",
       background: true,
     };
 
     let appointments = await this.$axios.get(`appointment`);
+    //let workers = await this.$axios.get("admin/list_workers");
+    let workers = null;
+    
     var that = this;
     var reserved = [];
     appointments.data.forEach(function (app) {
@@ -171,7 +163,7 @@ export default {
         price: app.price,
         paid: app.paid ? "DA" : "NE",
         basket_taken: app.basket_taken ? "DA" : "NE",
-        employee: app.employee,
+        employee: workers,
       };
       event.start = new Date(app.start);
       event.end = new Date(app.end);
@@ -184,10 +176,9 @@ export default {
       event.label = `${event.start.getHours()}:00 - ${event.end.getHours()}:00`;
       event.split =
         app.machine.id < 5 ? 2 * app.machine.id - 1 : 2 * app.machine.id - 10;
-      if(event.end < that.todayDate){
+      if (event.end < that.todayDate) {
         event.past = true;
-      }
-      else{
+      } else {
         event.past = false;
       }
       that.events.push(event);
@@ -203,14 +194,13 @@ export default {
         if (d == this.todayDate && j <= d.getHours()) continue;
         var event = {};
         event.start = new Date(date + " " + j + ":00");
-        event.end = new Date(date + " " + (j + 1) + ":00");  
+        event.end = new Date(date + " " + (j + 1) + ":00");
         event.class = "free";
         event.title = `${j}:00 - ${j + 1}:00`;
         var c = 0;
         event.label = `${j}:00 - ${j + 1}:00`;
         for (var k = 1; k <= 10; k++) {
-          if(reserved.includes(k + "" + event.start.toString()))
-            continue;
+          if (reserved.includes(k + "" + event.start.toString())) continue;
           let tmp = Object.assign({}, event);
           if (j == parseInt(pause.start.substring(0, pause.start.length - 3))) {
             let pauseEvent = Object.assign({}, pause);
@@ -229,7 +219,7 @@ export default {
     }
     this.loadingDialog = false;
   },
-    methods: {
+  methods: {
     onEventClick(event, e) {
       this.selectedEvent = event;
       this.showDialog = true;
@@ -242,7 +232,6 @@ export default {
       e.stopPropagation();
     },
     async addAppointment() {
-      console.log(this.appointmentForm);
       this.showDialog = false;
       try {
         let response = await this.$axios.post(
@@ -275,12 +264,11 @@ export default {
       }
     },
     async deleteAppointment() {
-      console.log(this.selectedEvent);
-
       this.showDialog = false;
       try {
         let response = await this.$axios.delete(
-          "appointment/"+this.selectedEvent.id);
+          "appointment/" + this.selectedEvent.id
+        );
         this.$toast.show("Termin otkazan!", {
           duration: 5000,
         });
@@ -510,49 +498,4 @@ input:focus {
   color: red;
   font-size: 12px;
 }
-/* 
-body {
-    background-color: #eee
-}
-
-div.stars {
-    width: 100%;
-    display: inline-block
-}
-
-input.star {
-    display: none
-}
-
-label.star {
-    float: right;
-    padding: 10px;
-    font-size: 36px;
-    color: #4A148C;
-    transition: all .2s
-}
-
-input.star:checked~label.star:before {
-    content: '\f005';
-    color: #FD4;
-    transition: all .25s
-}
-
-input.star-5:checked~label.star:before {
-    color: #FE7;
-    text-shadow: 0 0 20px #952
-}
-
-input.star-1:checked~label.star:before {
-    color: #F62
-}
-
-label.star:hover {
-    transform: rotate(-15deg) scale(1.3)
-}
-
-label.star:before {
-    content: '\f006';
-    font-family: FontAwesome
-} */
 </style>
