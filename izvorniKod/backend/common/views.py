@@ -240,6 +240,10 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['GET'], name='logged_user_appointments')
+    def logged_user_appointments(self, request, pk=None):
+        return Response(self.get_serializer(Appointment.objects.filter(user__id=request.user.id), many=True).data)
+
 
 class ReviewViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Review.objects.all()
