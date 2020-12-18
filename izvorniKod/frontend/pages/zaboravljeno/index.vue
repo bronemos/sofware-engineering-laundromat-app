@@ -52,6 +52,6 @@ export default {
     background-position: center;
     background-size: cover;
     background-color: #f8f5f2;
-   background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('~@/static/images/terminko1.jpg');
+   /*background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('~@/static/images/terminko1.jpg');*/
    position: absolute;
   }</style>

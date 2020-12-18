@@ -373,8 +373,8 @@
               formData.append('cc_code', this.cvv)
               try {
                 let response;
-                if (user.card === null)
-                  response = await this.$axios.post(`card/`, formData)
+                if (this.user.card === null)
+                   response = await this.$axios.post(`card/`, formData)
                 else
                   response = await this.$axios.patch(`card/${this.user.card.id}/`, formData)
                 this.editProfile = false

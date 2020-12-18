@@ -61,7 +61,7 @@
               <div
                 class="tab-pane fade show active"
                 id="details-tab"
-                v-if="tabSelected == 'hours'"
+                v-if="tabSelected === 'hours'"
               >
                 <div class="row">
                   <div class="col-md-4">
@@ -80,22 +80,50 @@
                   </div>
                 </div>
               </div>
-              <div
-                class="tab-pane fade"
-                id="reservations-tab"
-                v-if="tabSelected == 'users'"
-              >
-                <p>lista korisnika</p>
-              </div>
-              <div
-                class="tab-pane fade"
-                id="reservations-tab"
-                v-if="tabSelected == 'employees'"
-              >
-                <p>lista zaposlenika</p>
-              </div>
             </div>
           </div>
+        </div>
+        <div class="row" v-if="tabSelected === 'users'">
+          <table>
+            <thead>
+              <tr>
+                <th>Ime Studenta </th>
+                <th>Prezime Studenta </th>
+                <th>JMBAG</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- za našu bazu promijeniti isActive u aktivan -->
+              <tr v-for="user in listUsers" :key="user"  class="show_bt'">
+                <td>{{user.first_name}}</td>
+                <td>{{user.last_name}}</td>
+                <td>{{user.JMBAG}}</td>
+                <td><button id="myBtn"  @click-prevent="deleteUser(user.id)">Blokiraj</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+          <div class="row" v-if="tabSelected === 'employees' ">
+          <table>
+            <thead>
+              <tr>
+                <th>Ime Zaposlenika </th>
+                <th>Prezime Zaposlenika </th>
+                <th>JMBAG</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- za našu bazu promijeniti isActive u aktivan -->
+              <tr v-for="user in listWorkers" :key="user"  class="show_bt'">
+                <td>{{user.first_name}}</td>
+                <td>{{user.last_name}}</td>
+                <td>{{user.JMBAG}}</td>
+                <td><button id="myBtn"  @click-prevent="deleteUser(user.id)">Blokiraj</button></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </form>
     </div>
@@ -121,8 +149,24 @@ export default {
       return this.$auth.user;
     },
   },
+ mounted() {
+    this.$axios.get('admin/list_users/')
+    .then(response => {this.listUsers = response.data})
+
+    this.$axios.get('admin/list_workers/')
+    .then(response => {this.listWorkers = response.data})},
 
   methods: {
+     async deleteUser(userId) {
+      try {
+        let response = await this.$axios.post(`admin/${userId}/delete_user/`)
+        this.$toast.show('Korisnik je blokiran!', {duration: 4000});
+        window.location.reload(true)
+      } catch (error) {
+        this.$toast.error(error, {duration: 8000});
+      }
+    },
+   
     verifyPw(password) {
       const pwRegExp = RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
       return pwRegExp.test(password);
@@ -316,5 +360,63 @@ input:focus {
   color: red;
   font-size: 12px;
 }
+ #myBtn {
+    width: 120px;
+    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    border-radius: 30px;
+    transition: .5s;
+    border: 0;
+    outline: none;
+    color: #fff ;
+  }
+    .show_btn {
+    display: contents;
+  }
+ 
+table {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(150px,1.2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    grid-template-rows: 50px;
+    background: #fff;
+    /* height: 480px; */
+    max-height: 450px;
+    border-radius: 0.5rem;
+    /* padding: 15px; */
+    overflow: auto;
+    border-collapse: collapse;
+    /* min-width: 100%; */
+  }
+
+  thead, tbody, tr {
+    display: contents;
+  }
+
+  th, td {
+    padding: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: #17a2b8;
+    /* text-align: left; */
+    font-weight: normal;
+    font-size: 1.1rem;
+    color: white;
+  }
+
+  td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #262626;
+    max-height: 44px;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8f6ff;
+  }
 </style>
 
