@@ -352,9 +352,6 @@
           if (!this.editProfile && this.user.card !== null)
             this.editProfile = !this.editProfile
           else {
-            this.cardNumber = ''
-            this.cvv = ''
-            this.expiryDate = ''
             let formData = new FormData();
             let invalid = false
             let cardNumber = this.cardNumber.replace(/\s|-/gi, '')
@@ -375,7 +372,11 @@
               formData.append('cc_expiry', '20' + this.expiryDate.split('/')[1] + '-' + this.expiryDate.split('/')[0] + '-' + '01')
               formData.append('cc_code', this.cvv)
               try {
-                let response = await this.$axios.post(`card/`, formData)
+                let response;
+                if (user.card === null)
+                  response = await this.$axios.post(`card/`, formData)
+                else
+                  response = await this.$axios.patch(`card/${this.user.card.id}/`, formData)
                 this.editProfile = false
                 let user = this.$auth.user
                 user.card = response.data
