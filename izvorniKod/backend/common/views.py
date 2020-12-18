@@ -119,6 +119,16 @@ class AdminViewSet(viewsets.GenericViewSet):
     queryset = User.objects.filter(is_active=True, is_superuser=False)
     permission_classes = [IsAdminUser]
 
+    permission_classes_by_action = {
+        'list_workers': [IsAuthenticated],
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
+
     def get_serializer_class(self):
         return UserSerializer
 
