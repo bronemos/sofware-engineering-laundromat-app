@@ -7,6 +7,9 @@ export const mutations = {
   SET_USER(state, user){
     state.auth.user = user;
   },
+  SET_CARD(state, card){
+    state.auth.user.card = card;
+  },
 }
 
 export const actions = {

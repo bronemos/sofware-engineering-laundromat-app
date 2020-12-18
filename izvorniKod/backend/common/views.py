@@ -218,6 +218,11 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
+    @action(detail=True, methods=['GET'], name='send_email')
+    def send_email(self, request, pk=None):
+        appointmet = self.get_object()
+        return Response(status=status.HTTP_200_OK)
+
 
 class ReviewViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Review.objects.all()
