@@ -43,10 +43,10 @@
             <br />
             <button @click.prevent="deleteAppointment()" v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" class="btn btn-danger">Obriši</button>
 
-            <client-only>
-              <star-rating></star-rating>
-            </client-only>
-            <div v-if="selectedEvent.past === true && selectedEvent.employee !== null" class="container d-flex justify-content-center mt-200">
+            <div v-if="selectedEvent.past === true">
+              <client-only>
+                <star-rating @rating-selected="setCurrentSelectedRating"></star-rating>
+              </client-only>
             </div>
           </v-card-text>
 
@@ -148,9 +148,8 @@ export default {
       background: true,
     };
 
-    let appointments = await this.$axios.get(`appointment`);
-    //let workers = await this.$axios.get("admin/list_workers");
-    let workers = null;
+    let appointments = await this.$axios.get(`appointment`);;
+    let workers = await this.$axios.get("admin/list_workers");
     
     var that = this;
     var reserved = [];
@@ -163,7 +162,7 @@ export default {
         price: app.price,
         paid: app.paid ? "DA" : "NE",
         basket_taken: app.basket_taken ? "DA" : "NE",
-        employee: workers,
+        employee: workers.data,
       };
       event.start = new Date(app.start);
       event.end = new Date(app.end);
@@ -181,6 +180,7 @@ export default {
       } else {
         event.past = false;
       }
+      console.log(event);
       that.events.push(event);
       reserved.push(event.split + "" + event.start.toString());
     });
@@ -294,7 +294,11 @@ export default {
         }
       }
     },
+    setCurrentSelectedRating(rating) {
+      console.log(rating);
+    }
   },
+  
   computed: {
     user() {
       if (this.$auth.loggedIn) {
