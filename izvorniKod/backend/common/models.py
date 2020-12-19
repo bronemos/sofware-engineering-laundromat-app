@@ -69,6 +69,15 @@ class Laundry(models.Model):
     class Meta:
         ordering = ['-date_changed']
 
+    def add_mins(self, tm, min):
+        fulldate = datetime(100, 1, 1, tm.hour, tm.minute, tm.second)
+        fulldate = fulldate + timedelta(minutes=min)
+        return fulldate.time()
+
+    def save(self, *args, **kwargs):
+        self.pause_end = self.add_mins(self.pause_start, 30)
+        super(Laundry, self).save(*args, **kwargs)
+
 
 class Machine(models.Model):
     type = models.CharField(max_length=10, choices=[('washer', 'washer'), ('dryer', 'dryer')])
