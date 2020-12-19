@@ -139,3 +139,8 @@ class AppointmentSerializer(DynamicFieldsModelSerializer):
         if obj.review.first() is not None:
             return ReviewSerializer(obj.review.first()).data
         return None
+
+
+class EmailSerializer(serializers.Serializer):
+    text = serializers.CharField()
+
