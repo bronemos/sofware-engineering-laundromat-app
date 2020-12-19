@@ -14,7 +14,6 @@
                     id="details"
                     @click.prevent="
                       tabSelected = 'hours';
-                      editProfile = false;
                     "
                   >
                     Radno vrijeme
@@ -32,7 +31,6 @@
                     id="users"
                     @click.prevent="
                       tabSelected = 'users';
-                      editProfile = false;
                     "
                   >
                     Korisnici
@@ -45,7 +43,6 @@
                     id="employees"
                     @click.prevent="
                       tabSelected = 'employees';
-                      editProfile = false;
                     "
                   >
                     Zaposlenici
@@ -54,21 +51,25 @@
               </ul>
             </div>
           </div>
+          <div class="col-md-2" v-if="tabSelected === 'hours'">
+            <input type="button" class="profile-edit-btn" name="btnAddMore"
+                   :value="(tabSelected === 'payment') && user.card === null ? 'Pohrani' : 'Uredi'"
+                   @click.prevent="submitUpdate"/>
+          </div>
         </div>
-        <div class="row" v-if="!editProfile">
+        <div class="row" v-if="tabSelected === 'hours'">
           <div class="col-md-8">
             <div class="tab-content profile-tab" id="myTabContent">
               <div
                 class="tab-pane fade show active"
                 id="details-tab"
-                v-if="tabSelected === 'hours'"
               >
                 <div class="row">
                   <div class="col-md-4">
                     <label>Početak radnog vremena</label>
                   </div>
                   <div class="col-md-3">
-                    <input type="time" class="input-field" v-model="start" />
+                    <input type="time" class="input-field" v-model="start"/>
                   </div>
                 </div>
                 <div class="row">
@@ -76,7 +77,7 @@
                     <label>Kraj radnog vremena</label>
                   </div>
                   <div class="col-md-3">
-                    <input type="time" class="input-field" v-model="end" />
+                    <input type="time" class="input-field" v-model="end"/>
                   </div>
                 </div>
               </div>
@@ -86,42 +87,46 @@
         <div class="row" v-if="tabSelected === 'users'">
           <table>
             <thead>
-              <tr>
-                <th>Ime Studenta </th>
-                <th>Prezime Studenta </th>
-                <th>JMBAG</th>
-                <th></th>
-              </tr>
+            <tr>
+              <th>Ime Studenta</th>
+              <th>Prezime Studenta</th>
+              <th>JMBAG</th>
+              <th></th>
+            </tr>
             </thead>
             <tbody>
-              <!-- za našu bazu promijeniti isActive u aktivan -->
-              <tr v-for="user in listUsers" :key="user"  class="show_bt'">
-                <td>{{user.first_name}}</td>
-                <td>{{user.last_name}}</td>
-                <td>{{user.JMBAG}}</td>
-                <td><button id="myBtn"  @click-prevent="deleteUser(user.id)">Blokiraj</button></td>
-              </tr>
+            <!-- za našu bazu promijeniti isActive u aktivan -->
+            <tr v-for="user in listUsers" :key="user" class="show_bt'">
+              <td>{{user.first_name}}</td>
+              <td>{{user.last_name}}</td>
+              <td>{{user.JMBAG}}</td>
+              <td>
+                <button type="button" id="myBtn-user" class="myBtn" @click="deleteUser(user.id)">Blokiraj</button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
-          <div class="row" v-if="tabSelected === 'employees' ">
+        <div class="row" v-if="tabSelected === 'employees' ">
           <table>
             <thead>
-              <tr>
-                <th>Ime Zaposlenika </th>
-                <th>Prezime Zaposlenika </th>
-                <th>JMBAG</th>
-                <th></th>
-              </tr>
+            <tr>
+              <th>Ime Zaposlenika</th>
+              <th>Prezime Zaposlenika</th>
+              <th>JMBAG</th>
+              <th></th>
+            </tr>
             </thead>
             <tbody>
-              <!-- za našu bazu promijeniti isActive u aktivan -->
-              <tr v-for="user in listWorkers" :key="user"  class="show_bt'">
-                <td>{{user.first_name}}</td>
-                <td>{{user.last_name}}</td>
-                <td>{{user.JMBAG}}</td>
-                <td><button id="myBtn"  @click-prevent="deleteUser(user.id)">Blokiraj</button></td>
-              </tr>
+            <!-- za našu bazu promijeniti isActive u aktivan -->
+            <tr v-for="user in listWorkers" :key="user" class="show_bt'">
+              <td>{{user.first_name}}</td>
+              <td>{{user.last_name}}</td>
+              <td>{{user.JMBAG}}</td>
+              <td>
+                <button type="button" id="myBtn-worker" class="myBtn" @click="deleteUser(user.id)">Blokiraj</button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -131,251 +136,215 @@
 </template>
 
 <script>
-export default {
-  middleware: "auth",
+  export default {
+    middleware: "auth",
 
-  data() {
-    return {
-      tabSelected: "hours",
-      edit: false,
-      start: "",
-      end: "",
-      username: this.$auth.user.username,
-    };
-  },
-
-  computed: {
-    user() {
-      return this.$auth.user;
+    data() {
+      return {
+        tabSelected: "hours",
+        edit: false,
+        start: "",
+        end: "",
+        username: this.$auth.user.username,
+      };
     },
-  },
- mounted() {
-    this.$axios.get('admin/list_users/')
-    .then(response => {this.listUsers = response.data})
 
-    this.$axios.get('admin/list_workers/')
-    .then(response => {this.listWorkers = response.data})},
+    computed: {
+      user() {
+        return this.$auth.user;
+      },
+    },
+    mounted() {
+      this.$axios.get('admin/list_users/')
+        .then(response => {
+          this.listUsers = response.data
+        })
 
-  methods: {
-     async deleteUser(userId) {
-      try {
-        let response = await this.$axios.post(`admin/${userId}/delete_user/`)
-        this.$toast.show('Korisnik je blokiran!', {duration: 4000});
-        window.location.reload(true)
-      } catch (error) {
-        this.$toast.error(error, {duration: 8000});
+      this.$axios.get('admin/list_workers/')
+        .then(response => {
+          this.listWorkers = response.data
+        })
+    },
+
+    methods: {
+      async deleteUser(userId) {
+        this.$toast.show(this.user.is_superuser)
+        this.$toast.show(userId)
+        this
+        try {
+          let response = await this.$axios.post(`admin/${userId}/delete_user/`)
+          this.$toast.show('Korisnik je blokiran!', {duration: 4000});
+        } catch (error) {
+          this.$toast.error(error, {duration: 8000});
+        }
+      },
+      async updateHours() {
+
       }
     },
-   
-    verifyPw(password) {
-      const pwRegExp = RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
-      return pwRegExp.test(password);
-    },
-    async submitUpdate() {
-      let changed = false;
-      let invalid_pw = false;
-      let formData = new FormData();
-      if (!this.editProfile) this.editProfile = !this.editProfile;
-      else {
-        if (this.username !== this.user.username) {
-          formData.append("username", this.username);
-          changed = true;
-        }
-        if (this.password.length || this.repeatedPassword.length) {
-          if (
-            !this.verifyPw(this.password) &&
-            this.password !== this.repeatedPassword
-          ) {
-            this.$toast.error("Šifra nije valjana.", { duration: 5000 });
-            invalid_pw = true;
-          } else {
-            formData.append("password", this.password);
-            changed = true;
-          }
-        }
-        if (changed) {
-          try {
-            let response = await this.$axios.patch(
-              `account/${this.user.id}/`,
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
-          } catch (e) {
-            this.$toast.error("Username je već u uporabi.", { duration: 5000 });
-          }
-        } else if (!invalid_pw) {
-          this.$toast.success("Promjene uspješno pohranjene!", {
-            duration: 5000,
-          });
-          this.editProfile = !this.editProfile;
-        }
-      }
-    },
-  },
-};
+  };
 </script>
 
 <style scoped>
-button:focus {
-  outline: none !important;
-}
+  button:focus {
+    outline: none !important;
+  }
 
-input:focus {
-  outline: none !important;
-}
-.input-field {
-  width: 100%;
-  border: 1px solid #999;
-  outline: none;
-  background: transparent;
-}
+  input:focus {
+    outline: none !important;
+  }
 
-.hero {
-  height: 100%;
-  width: 100%;
-  background-position: center;
-  background-size: cover;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+  .input-field {
+    width: 100%;
+    border: 1px solid #999;
+    outline: none;
+    background: transparent;
+  }
+
+  .hero {
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
     url("~@/static/images/terminko1.jpg");
-  position: absolute;
-}
+    position: absolute;
+  }
 
-.emp-profile {
-  padding: 3%;
-  margin-top: 3%;
-  margin-bottom: 3%;
-  border-radius: 0.5rem;
-  background: #fff;
-}
+  .emp-profile {
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #fff;
+  }
 
-.profile-img {
-  text-align: center;
-}
+  .profile-img {
+    text-align: center;
+  }
 
-.profile-img img {
-  width: 70%;
-  height: 100%;
-}
+  .profile-img img {
+    width: 70%;
+    height: 100%;
+  }
 
-.profile-img .file {
-  position: relative;
-  overflow: hidden;
-  margin-top: -20%;
-  width: 70%;
-  border: none;
-  border-radius: 0;
-  font-size: 15px;
-  background: #212529b8;
-}
+  .profile-img .file {
+    position: relative;
+    overflow: hidden;
+    margin-top: -20%;
+    width: 70%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+  }
 
-.profile-img .file input {
-  position: absolute;
-  opacity: 0;
-  right: 0;
-  top: 0;
-}
+  .profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+  }
 
-.profile-head h5 {
-  color: #333;
-}
+  .profile-head h5 {
+    color: #333;
+  }
 
-.profile-head h6 {
-  color: #0062cc;
-}
+  .profile-head h6 {
+    color: #0062cc;
+  }
 
-.profile-edit-btn {
-  border: none;
-  border-radius: 1.5rem;
-  width: 70%;
-  padding: 2%;
-  cursor: pointer;
-  background: linear-gradient(to right, #4e43e2, #4fdee6);
-  transition: 0.5s;
-  color: white;
-}
+  .profile-edit-btn {
+    border: none;
+    border-radius: 1.5rem;
+    width: 70%;
+    padding: 2%;
+    cursor: pointer;
+    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    transition: 0.5s;
+    color: white;
+  }
 
-.proile-rating {
-  font-size: 12px;
-  color: #818182;
-  margin-top: 5%;
-}
+  .proile-rating {
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+  }
 
-.proile-rating span {
-  color: #495057;
-  font-size: 15px;
-  font-weight: 600;
-}
+  .proile-rating span {
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+  }
 
-.profile-head .nav-tabs {
-  margin-bottom: 5%;
-}
+  .profile-head .nav-tabs {
+    margin-bottom: 5%;
+  }
 
-.profile-head .nav-tabs .nav-link {
-  font-weight: 600;
-  border: none;
-}
+  .profile-head .nav-tabs .nav-link {
+    font-weight: 600;
+    border: none;
+  }
 
-.profile-head .nav-tabs .nav-link.active {
-  border: none;
-  border-bottom: 2px solid #0062cc;
-}
+  .profile-head .nav-tabs .nav-link.active {
+    border: none;
+    border-bottom: 2px solid #0062cc;
+  }
 
-.profile-work {
-  padding: 14%;
-  margin-top: -15%;
-}
+  .profile-work {
+    padding: 14%;
+    margin-top: -15%;
+  }
 
-.profile-work p {
-  font-size: 12px;
-  color: #818182;
-  font-weight: 600;
-  margin-top: 10%;
-}
+  .profile-work p {
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+  }
 
-.profile-work a {
-  text-decoration: none;
-  color: #495057;
-  font-weight: 600;
-  font-size: 14px;
-}
+  .profile-work a {
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+  }
 
-.profile-work ul {
-  list-style: none;
-}
+  .profile-work ul {
+    list-style: none;
+  }
 
-.profile-tab label {
-  font-weight: 600;
-}
+  .profile-tab label {
+    font-weight: 600;
+  }
 
-.profile-tab p {
-  font-weight: 600;
-  color: #0062cc;
-}
+  .profile-tab p {
+    font-weight: 600;
+    color: #0062cc;
+  }
 
-.error {
-  color: red;
-  font-size: 12px;
-}
- #myBtn {
+  .error {
+    color: red;
+    font-size: 12px;
+  }
+
+  .myBtn {
     width: 120px;
     background: linear-gradient(to right, #4e43e2, #4fdee6);
     border-radius: 30px;
     transition: .5s;
     border: 0;
     outline: none;
-    color: #fff ;
+    color: #fff;
   }
-    .show_btn {
+
+  .show_btn {
     display: contents;
   }
- 
-table {
+
+  table {
     display: grid;
-    grid-template-columns: minmax(150px, 1fr) minmax(150px,1.2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    grid-template-columns: minmax(150px, 1fr) minmax(150px, 1.2fr) minmax(150px, 1fr) minmax(150px, 1fr);
     grid-template-rows: 50px;
     background: #fff;
     /* height: 480px; */

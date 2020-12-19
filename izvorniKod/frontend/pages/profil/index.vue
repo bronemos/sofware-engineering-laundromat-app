@@ -8,6 +8,9 @@
               <h5>
                 {{user.first_name}} {{user.last_name}}
               </h5>
+              <h8>
+                Negativni bodovi:
+              </h8>
               <ul class="nav nav-tabs" id="myTab">
                 <li class="nav-item">
                   <button class="nav-link" v-bind:class="tabSelected === 'details' ? 'active' : ''" id="details"
