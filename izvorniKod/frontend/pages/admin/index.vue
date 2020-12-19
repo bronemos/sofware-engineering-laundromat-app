@@ -172,10 +172,11 @@
         this.$toast.show(userId)
         this
         try {
-          let response = await this.$axios.post(`admin/${userId}/delete_user/`)
+          let response = await this.$axios.delete(`admin/${userId}/delete_user/`)
+          window.location.reload()
           this.$toast.show('Korisnik je blokiran!', {duration: 4000});
         } catch (error) {
-          this.$toast.error(error, {duration: 8000});
+          this.$toast.error(error, {duration: 4000});
         }
       },
       async updateHours() {
