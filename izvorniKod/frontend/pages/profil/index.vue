@@ -115,7 +115,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-4">
-                    <label>Nova šifra</label>
+                    <label>Nova lozinka</label>
                   </div>
                   <div class="col-md-4">
                     <input class="input-profile" type="password" v-model="password">
@@ -125,7 +125,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-4">
-                    <label>Potvrdi novu šifru</label>
+                    <label>Potvrdi novu lozinku</label>
                   </div>
                   <div class="col-md-4">
                     <input class="input-profile" type="password" v-model="repeatedPassword">
@@ -369,7 +369,7 @@
             }
             if (this.password.length || this.repeatedPassword.length) {
               if (!this.verifyPw(this.password) && this.password !== this.repeatedPassword) {
-                this.$toast.error('Šifra nije valjana.', {duration: 5000})
+                this.$toast.error('Lozinka nije valjana.', {duration: 5000})
                 invalid_pw = true;
               } else {
                 formData.append("password", this.password);

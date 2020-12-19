@@ -43,7 +43,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
         'logged_user_data': [IsAuthenticated],
         'update': [IsAuthenticated],
         'partial_update': [IsAuthenticated],
-        'delete': [IsAdminUser],
+        'destroy': [IsAdminUser],
         'pending_users': [IsAdminUser],
     }
 
@@ -254,7 +254,7 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
     permission_classes_by_action = {
         'create': [IsAuthenticated],
         'list': [IsAuthenticated],
-        'delete': [IsAuthenticated],
+        'destroy': [IsAuthenticated],
         'logged_user_appointments': [IsAuthenticated]
     }
 
