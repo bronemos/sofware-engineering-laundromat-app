@@ -101,7 +101,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="user in listUsers" :key="user" class="show_bt'">
+            <tr v-for="user in listUsers" :key="listUsers" class="show_bt'">
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
               <td>{{user.JMBAG}}</td>
@@ -124,7 +124,7 @@
             </thead>
             <tbody>
             <!-- za našu bazu promijeniti isActive u aktivan -->
-            <tr v-for="user in listWorkers" :key="user" class="show_bt'">
+            <tr v-for="user in listWorkers" :key="listWorkers" class="show_bt'">
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
               <td>{{user.JMBAG}}</td>
@@ -289,11 +289,19 @@
       async deleteUser(userId) {
         try {
           let response = await this.$axios.delete(`admin/${userId}/delete_user/`)
-          if (this.tabSelected === 'users')
-            this.$toast.show('Korisnik je blokiran!', {duration: 4000});
-          else
+          if (this.tabSelected === 'users') {
+            this.$toast.show('Korisnik je blokiran!', {duration: 4000})
+            await this.$axios.get('admin/list_users/')
+              .then(response => {
+                this.listUsers = response.data
+              })
+          } else {
             this.$toast.show('Zaposlenik je otpušten!', {duration: 4000})
-          window.location.reload()
+            await this.$axios.get('admin/list_workers/')
+              .then(response => {
+                this.listWorkers = response.data
+              })
+          }
         } catch (error) {
           this.$toast.error(error, {duration: 4000});
         }
@@ -339,7 +347,10 @@
           try {
             let response = await this.$axios.post('/admin/create_worker_account/', formData)
             this.$toast.success('Zaposlenik uspješno pohranjen!', {duration: 4000})
-            window.location.reload()
+            await this.$axios.get('admin/list_workers/')
+              .then(response => {
+                this.listWorkers = response.data
+              })
             this.addingWorker = false
           } catch (e) {
             this.$toast.error('Neuspjelo dodavanje novog zaposlenika, provjerite podatke!', {duration: 4000})
@@ -529,7 +540,7 @@
 
   table {
     display: grid;
-    grid-template-columns: minmax(150px, 1fr) minmax(150px, 1.2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    grid-template-columns: minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr);
     grid-template-rows: 50px;
     background: #fff;
     /* height: 480px; */
