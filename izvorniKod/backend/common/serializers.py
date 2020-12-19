@@ -90,7 +90,7 @@ class PostSerializer(DynamicFieldsModelSerializer):
 class LaundrySerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = Laundry
-        exclude = ['date_changed']
+        fields = '__all__'
 
     def validate(self, data):
         if data.get('pause_start') is not None and data.get('pause_start').minute >= 30:

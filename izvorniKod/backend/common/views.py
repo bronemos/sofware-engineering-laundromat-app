@@ -169,7 +169,7 @@ class AdminViewSet(viewsets.GenericViewSet):
         return Response(status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['POST'], name='create_worker_account')
-    def create_worker_account(self, request, pk=None):
+    def create_worker_account(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create()
@@ -204,6 +204,7 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
         'update': [IsAdminUser],
         'partial_update': [IsAdminUser],
         'list': [AllowAny],
+        'future_laundry': [AllowAny],
     }
 
     def get_permissions(self):
@@ -217,6 +218,30 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
             LaundrySerializer(Laundry.objects.filter(date_changed__lte=datetime.now()).first()).data,
             status=status.HTTP_200_OK
         )
+
+    @action(detail=False, methods=['GET'], name='future_laundry')
+    def future_laundry(self, request):
+        return Response(
+            LaundrySerializer(Laundry.objects.filter(date_changed__gt=datetime.now()), many=True).data,
+            status=status.HTTP_200_OK
+        )
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        laundry_now = serializer.asve()
+        for laundry in Laundry.objects.filter(date_changed__gte=datetime.now()):
+            laundry.pause_start = laundry_now.pause_start
+            laundry.pause_end = laundry_now.pause_end
+            laundry.wash_price = laundry_now.wash_price
+            laundry.drying_price = laundry_now.drying_price
+        return Response(serializer.data)
 
 
 class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin,
@@ -241,7 +266,7 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['GET'], name='logged_user_appointments')
-    def logged_user_appointments(self, request, pk=None):
+    def logged_user_appointments(self, request):
         return Response(self.get_serializer(Appointment.objects.filter(user__id=request.user.id), many=True).data)
 
 
