@@ -230,6 +230,9 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
         laundry_now = serializer.asve()
         for laundry in Laundry.objects.filter(date_changed__gte=datetime.now()):
             laundry.pause_start = laundry_now.pause_start
+            laundry.pause_end = laundry_now.pause_end
+            laundry.wash_price = laundry_now.wash_price
+            laundry.drying_price = laundry_now.drying_price
         return Response(serializer.data)
 
 

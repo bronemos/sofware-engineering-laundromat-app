@@ -75,7 +75,8 @@ class Laundry(models.Model):
         return fulldate.time()
 
     def save(self, *args, **kwargs):
-        self.pause_end = self.add_mins(self.pause_start, 30)
+        if self.pause_start is not None:
+            self.pause_end = self.add_mins(self.pause_start, 30)
         super(Laundry, self).save(*args, **kwargs)
 
 
