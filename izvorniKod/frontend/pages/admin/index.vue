@@ -14,6 +14,8 @@
                     id="details"
                     @click.prevent="
                       tabSelected = 'hours';
+                      editHours = false;
+                      addingWorker = false;
                     "
                   >
                     Radno vrijeme
@@ -26,6 +28,8 @@
                     id="users"
                     @click.prevent="
                       tabSelected = 'users';
+                      editHours = false;
+                      addingWorker = false;
                     "
                   >
                     Korisnici
@@ -38,6 +42,8 @@
                     id="employees"
                     @click.prevent="
                       tabSelected = 'employees';
+                      editHours = false;
+                      addingWorker = false;
                     "
                   >
                     Zaposlenici
@@ -146,6 +152,7 @@
         end: "",
         username: this.$auth.user.username,
         editHours: false,
+        addingWorker: false,
       };
     },
 
@@ -168,22 +175,19 @@
       this.$axios.get('laundry/')
         .then(response => {
           this.currentTimes = response.data
-          this.forUpdate = response.data
-          this.start = this.currentTimes.open_time
-          this.end = this.currentTimes.close_time
-        })
-
-      this.$axios.get('laundry/future_laundry/')
-        .then(response => {
-          this.futureTimes = response.data
-          if (this.futureTimes.length === 0) {
-            this.start = this.currentTimes.open_time
-            this.end = this.currentTimes.close_time
-          } else {
-            this.forUpdate = response.data
-            this.start = this.futureTimes[0].open_time
-            this.end = this.futureTimes[0].close_time
-          }
+          this.$axios.get('laundry/future_laundry/')
+            .then(response => {
+              this.futureTimes = response.data
+              if (this.futureTimes.length === 0) {
+                this.forUpdate = this.currentTimes
+                this.start = this.currentTimes.open_time
+                this.end = this.currentTimes.close_time
+              } else {
+                this.forUpdate = this.futureTimes[0]
+                this.start = this.futureTimes[0].open_time
+                this.end = this.futureTimes[0].close_time
+              }
+            })
         })
     },
 
@@ -213,6 +217,9 @@
           if (this.end.length === 5)
             this.end += ':00'
           if (this.verifyHours(this.start) && this.verifyHours(this.end)) {
+            delete this.forUpdate.id
+            delete this.forUpdate.date_changed
+            delete this.forUpdate.pause_end
             this.forUpdate.open_time = this.start
             this.forUpdate.close_time = this.end
             try {
@@ -220,7 +227,7 @@
               this.$toast.success('Novo radno vrijeme uspješno pohranjeno!', {duration: 5000})
               this.editHours = false
             } catch (e) {
-              this.$toast.error('Greška pri pohrani!', {duration: 5000})
+              this.$toast.error('Greška pri pohrani!', {duration: 4000})
             }
           } else {
             this.$toast.error('Krivi format radnog vremena!', {duration: 5000})
