@@ -128,7 +128,8 @@ class Post(models.Model):
 
 
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recension_written')
-    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recension')
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='review')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_written')
+    employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review')
     text = models.TextField(null=True, blank=True)
     grade = IntegerRangeField(null=False, blank=False, min_value=1, max_value=5)
