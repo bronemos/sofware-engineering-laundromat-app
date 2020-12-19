@@ -41,6 +41,7 @@
             <span><strong>Uređaj:</strong> {{ selectedEvent.machine }}</span><br />
             <span><strong>Bilješka:</strong></span><br /><span>{{ selectedEvent.note }}</span>
             <br />
+            <span v-if="selectedEvent.warning === true"><strong>Ako otkažete termin dobit ćete negativne bodove</strong><br /></span>
             <button @click.prevent="deleteAppointment()" v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" class="btn btn-danger">Obriši</button>
 
             <div v-if="selectedEvent.past === true">
@@ -48,9 +49,9 @@
               <select class="custom-select" v-model="selectedEvent.selectedEmployee">
                 <option required v-for="employee in selectedEvent.employee" v-bind:key="employee.id" v-bind:value="employee.id">
                   {{ employee.first_name }} {{ employee.last_name }}
-                </option>  
+                </option>
               </select>
-              
+
               <client-only>
                 <star-rating v-model="selectedEvent.rating" @rating-selected="setCurrentSelectedRating"></star-rating>
               </client-only>
@@ -134,28 +135,44 @@ export default {
 
   async fetch() {
     let res = await this.$axios.get(`laundry`);
-    var data = res.data;
-    let open_time = parseInt(
-      data.open_time.substring(0, data.open_time.length - 6)
+    let res2 = await this.$axios.get(`laundry/future_laundry`);
+
+    var laundries = {};
+    laundries[res.data.date_changed] = res.data;
+    laundries[res.data.date_changed].open_time_value = parseInt(
+      res.data.open_time.substring(0, res.data.open_time.length - 6)
     );
-    let close_time = parseInt(
-      data.close_time.substring(0, data.close_time.length - 6)
-    );
-    let pause_start = data.pause_start.substring(0, data.close_time.length - 3);
-    let pause_end = data.pause_end.substring(0, data.close_time.length - 3);
-    this.prices.drying = data.drying_price;
-    this.prices.washing = data.washing_price;
+    laundries[res.data.date_changed].close_time_value = 
+      parseInt(res.data.close_time.substring(0, res.data.close_time.length - 6));
+    laundries[res.data.date_changed].pause_start_value = 
+      res.data.pause_start.substring(0, res.data.pause_start.length - 3);
+    laundries[res.data.date_changed].pause_end_value = 
+      res.data.pause_end.substring(0,res.data.close_time.length - 3);
+
+    for (var entry in res2.data) {
+      let obj = Object.assign({}, res2.data[entry]);
+      if (new Date(obj.date_changed) < new Date().addDays(14)) {
+        obj.open_time_value = 
+          parseInt(obj.open_time.substring(0, obj.open_time.length - 6));
+        obj.close_time_value = 
+          parseInt(obj.close_time.substring(0, obj.close_time.length - 6));
+        obj.pause_start_value = obj.pause_start.substring(0,obj.pause_start.length - 3);
+        obj.pause_end_value = obj.pause_end.substring(0,obj.close_time.length - 3);
+        laundries[obj.date_changed] = obj;
+      }
+    }
 
     var pause = {
-      start: pause_start + ":00",
-      end: pause_end + ":00",
-      class: "break", 
+      start: "",
+      end: "",
+      class: "break",
       title: "PAUZA",
       label: "PAUZA",
       background: true,
     };
 
-    let appointments = await this.$axios.get(`appointment`);;
+    let appointments = await this.$axios.get(`appointment`);
+    console.log(appointments.data);
     let workers = await this.$axios.get("admin/list_workers");
     var that = this;
     var reserved = [];
@@ -186,7 +203,6 @@ export default {
       } else {
         event.past = false;
       }
-      console.log(event);
       that.events.push(event);
       reserved.push(event.split + "" + event.start.toString());
     });
@@ -195,8 +211,18 @@ export default {
     var d = this.todayDate;
 
     while (d < last) {
+      var laundry = null;
+      
+      for (var entry in laundries) {
+        if (d >= new Date(entry)) {
+          laundry = laundries[entry];
+        } else {
+          break;
+        }
+      }
+
       var date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-      for (var j = open_time; j < close_time; j++) {
+      for (var j = laundry.open_time_value; j < laundry.close_time_value; j++) {
         if (d == this.todayDate && j <= d.getHours()) continue;
         var event = {};
         event.start = new Date(date + " " + j + ":00");
@@ -208,15 +234,15 @@ export default {
         for (var k = 1; k <= 10; k++) {
           if (reserved.includes(k + "" + event.start.toString())) continue;
           let tmp = Object.assign({}, event);
-          if (j == parseInt(pause.start.substring(0, pause.start.length - 3))) {
+          if (j == parseInt(laundry.pause_start.substring(0, laundry.pause_start.length - 3))) {
             let pauseEvent = Object.assign({}, pause);
-            pauseEvent.start = date + " " + pause.start;
+            pauseEvent.start = date + " " + laundry.pause_start;  
             pauseEvent.split = k;
-            pauseEvent.end = date + " " + pause.end;
+            pauseEvent.end = date + " " + laundry.pause_end;
             this.events.push(pauseEvent);
           }
           tmp.split = k;
-          tmp.price = k % 2 ? this.prices.washing : this.prices.drying;
+          tmp.price = k % 2 ? laundry.wash_price : laundry.drying_price;
           tmp.machine_id = k % 2 ? k / 2 + 0.5 : k / 2 + 5;
           this.events.push(tmp);
         }
@@ -227,6 +253,13 @@ export default {
   },
   methods: {
     onEventClick(event, e) {
+      if (new Date() > new Date(event.start) && event.class === "free") {
+        location.reload();
+      }
+      if (new Date().addHours(3) >= new Date(event.start) 
+            && event.class === "mine" && event.past == false) {
+        event.warning = true;
+      }
       this.selectedEvent = event;
       this.showDialog = true;
       this.appointmentForm.start = event.start.toISOString();
@@ -301,12 +334,13 @@ export default {
       }
     },
     async setCurrentSelectedRating(rating) {
-       this.showDialog = false;
+      this.showDialog = false;
       try {
-        let response = await this.$axios.post(
-          "review/",
-          { grade: rating, user: this.user.id, employee : this.selectedEvent.selectedEmployee}
-        );
+        let response = await this.$axios.post("review/", {
+          grade: rating,
+          user: this.user.id,
+          employee: this.selectedEvent.selectedEmployee,
+        });
         this.$toast.show("Poslana ocjena za zaposlenika!", {
           duration: 5000,
         });
@@ -331,9 +365,8 @@ export default {
           }
         }
       }
-    }
+    },
   },
-  
   computed: {
     user() {
       if (this.$auth.loggedIn) {
