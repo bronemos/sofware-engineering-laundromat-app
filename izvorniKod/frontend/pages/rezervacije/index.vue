@@ -41,21 +41,37 @@
             <span><strong>Uređaj:</strong> {{ selectedEvent.machine }}</span><br />
             <span><strong>Bilješka:</strong></span><br /><span>{{ selectedEvent.note }}</span>
             <br />
-            <span v-if="selectedEvent.warning === true"><strong>Ako otkažete termin dobit ćete negativne bodove</strong><br /></span>
+            <span v-if="selectedEvent.warning === true"><strong>Ako otkažete termin dobit ćete negativne bodove</strong></span>
             <button @click.prevent="deleteAppointment()" v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" class="btn btn-danger">Obriši</button>
 
-            <div v-if="selectedEvent.past === true && selectedEvent.user.id === this.$auth.user.id">
-            <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">Termin propušten</button><br/>
-              <strong>Odaberi i pritisni ocjenu za zaposlenika:</strong>
-              <select class="custom-select" v-model="selectedEvent.selectedEmployee">
-                <option required v-for="employee in selectedEvent.employee" v-bind:key="employee.id" v-bind:value="employee.id">
-                  {{ employee.first_name }} {{ employee.last_name }}
-                </option>
-              </select>
+            <div v-if="user.is_staff">
+              <textarea class="form-control" rows="5" id="comment" v-model="selectedEvent.mailText"></textarea>
+              <button @click.prevent="sendMail()" class="btn btn-warning">Send mail</button>
+            </div>
 
-              <client-only>
-                <star-rating v-model="selectedEvent.rating" @rating-selected="setCurrentSelectedRating"></star-rating>
-              </client-only>
+            <div v-if="selectedEvent.past === true && selectedEvent.user.id === this.$auth.user.id">
+              <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">Termin propušten</button><br/>
+              <div v-if="selectedEvent.rating == null">
+                <strong>Odaberi i pritisni ocjenu za zaposlenika:</strong>
+                <select class="custom-select" v-model="selectedEvent.selectedEmployee">
+                  <option required v-for="worker in selectedEvent.workers_list" v-bind:key="worker.id" v-bind:value="worker.id">
+                    {{ worker.last_name }} {{ worker.first_name }}
+                  </option>
+                </select>
+                <textarea class="form-control" rows="5" id="comment" v-model="selectedEvent.ratingText"></textarea>
+                <client-only>
+                  <star-rating v-model="selectedEvent.ratingNumber" @rating-selected="setCurrentSelectedRating"></star-rating>
+                </client-only>
+              </div>
+            </div>
+
+            <div v-if="selectedEvent.rating != null">
+                <span>{{ selectedEvent.employee[selectedEvent.rating.employee].first_name }}</span><br/>
+                <span>{{ selectedEvent.employee[selectedEvent.rating.employee].last_name }}</span><br/>
+                <client-only>
+                  <star-rating v-model="selectedEvent.rating.grade" read-only></star-rating>
+                </client-only>
+                <span>{{ selectedEvent.rating.text }}</span><br/>
             </div>
           </v-card-text>
 
@@ -135,7 +151,7 @@ export default {
   }),
 
   async fetch() {
-    let res = await this.$axios.get(`laundry`);
+    let res = await this.$axios.get(`laundry`); 
     let res2 = await this.$axios.get(`laundry/future_laundry`);
 
     var laundries = {};
@@ -173,8 +189,14 @@ export default {
     };
 
     let appointments = await this.$axios.get(`appointment`);
-    console.log(appointments.data)
-    let workers = await this.$axios.get("admin/list_workers");
+    let workers_list = await this.$axios.get("admin/list_workers");
+    let workers = {}
+    for(var work in workers_list.data) {
+      workers[workers_list.data[work].id] = workers_list.data[work];
+    }
+
+    console.log(workers);
+
     var that = this;
     var reserved = [];
     appointments.data.forEach(function (app) {
@@ -186,8 +208,10 @@ export default {
         price: app.price,
         paid: app.paid ? "DA" : "NE",
         basket_taken: app.basket_taken ? "DA" : "NE",
-        employee: workers.data,
-        missed: app.missed
+        employee: workers,
+        workers_list: workers_list.data,
+        missed: app.missed,
+        rating: app.review
       };
       event.start = new Date(app.start);
       event.end = new Date(app.end);
@@ -342,6 +366,8 @@ export default {
           grade: rating,
           user: this.user.id,
           employee: this.selectedEvent.selectedEmployee,
+          appointment: this.selectedEvent.id,
+          text: this.selectedEvent.ratingText
         });
         this.$toast.show("Poslana ocjena za zaposlenika!", {
           duration: 5000,
@@ -372,6 +398,34 @@ export default {
        try {
         let response = await this.$axios.get(`appointment/${this.selectedEvent.id}/missed/`);
         this.$toast.show("Poslan propušteni termin!", {
+          duration: 5000,
+        });
+        location.reload();
+      } catch (e) {
+        this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
+          duration: 5000,
+        });
+        if (e.response.data) {
+          for (let key in e.response.data) {
+            if (key == "non_field_errors") {
+              let nonFieldErrors = e.response.data[key][0];
+              nonFieldErrors = nonFieldErrors.substring(
+                1,
+                nonFieldErrors.length - 1
+              );
+              this.$toast.error(`${nonFieldErrors}`, { duration: 5000 });
+            } else
+              this.$toast.error(`${key}: ${e.response.data[key]}`, {
+                duration: 5000,
+              });
+          }
+        }
+      }
+    },
+    async sendMail() {
+       try {
+        let response = await this.$axios.post(`appointment/${this.selectedEvent.id}/send_email/`, {text: this.selectedEvent.mailText});
+        this.$toast.show("Poslan email korisniku!", {
           duration: 5000,
         });
         location.reload();

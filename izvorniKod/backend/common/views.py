@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthentic
 
 from .models import User, Post, Laundry, Appointment, Card, Review
 from .serializers import UserSerializer, PostSerializer, LaundrySerializer, AppointmentSerializer, CardSerializer, \
-    ReviewSerializer
+    ReviewSerializer, EmailSerializer
 from rest_framework.response import Response
 
 
@@ -249,7 +249,12 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
 class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin,
                          viewsets.GenericViewSet):
     queryset = Appointment.objects.all()
-    serializer_class = AppointmentSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'send_email':
+            return EmailSerializer
+        return AppointmentSerializer
+
     permission_classes = [IsAdminUser]
     permission_classes_by_action = {
         'create': [IsAuthenticated],
@@ -264,11 +269,16 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
         except KeyError:
             return [permission() for permission in self.permission_classes]
 
-    @action(detail=True, methods=['GET'], name='send_email')
+    @action(detail=True, methods=['POST'], name='send_email')
     def send_email(self, request, pk=None):
         appointment = self.get_object()
         email = appointment.user.email
-        message = request.data.get['message']
+        serializer = self.get_serializer(data=request.data)
+        message = None
+        if serializer.is_valid():
+            print(serializer.validated_data)
+            message = serializer.validated_data.get('text')
+        print(request.data)
         if message is not None:
             send_mail(
                     'Poruka iz praonice!',
