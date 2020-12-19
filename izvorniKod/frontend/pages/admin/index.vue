@@ -123,7 +123,7 @@
               <td>{{user.last_name}}</td>
               <td>{{user.JMBAG}}</td>
               <td>
-                <button type="button" id="myBtn-worker" class="myBtn" @click="deleteUser(user.id)">Blokiraj</button>
+                <button type="button" id="myBtn-worker" class="myBtn" @click="deleteUser(user.id)">Otpusti</button>
               </td>
             </tr>
             </tbody>
@@ -195,8 +195,11 @@
       async deleteUser(userId) {
         try {
           let response = await this.$axios.delete(`admin/${userId}/delete_user/`)
+          if (this.tabSelected === 'users')
+            this.$toast.show('Korisnik je blokiran!', {duration: 4000});
+          else
+            this.$toast.show('Zaposlenik je otpušten!', {duration: 4000})
           window.location.reload()
-          this.$toast.show('Korisnik je blokiran!', {duration: 4000});
         } catch (error) {
           this.$toast.error(error, {duration: 4000});
         }
