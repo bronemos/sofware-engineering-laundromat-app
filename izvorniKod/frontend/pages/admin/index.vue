@@ -19,11 +19,6 @@
                     Radno vrijeme
                   </button>
                 </li>
-                <!---li class="nav-item">
-                  <button class="nav-link" v-bind:class="tabSelected === 'prices' ? 'active' : ''" id="prices"
-                          @click.prevent="tabSelected='prices'; editProfile=false">Cijene
-                  </button>
-                </li--->
                 <li class="nav-item">
                   <button
                     class="nav-link"
@@ -53,8 +48,13 @@
           </div>
           <div class="col-md-2" v-if="tabSelected === 'hours'">
             <input type="button" class="profile-edit-btn" name="btnAddMore"
-                   :value="(tabSelected === 'payment') && user.card === null ? 'Pohrani' : 'Uredi'"
-                   @click.prevent="submitUpdate"/>
+                   :value="this.editHours ? 'Pohrani' : 'Uredi'"
+                   @click.prevent="updateHours"/>
+          </div>
+          <div class="col-md-2" v-if="tabSelected === 'employees'">
+            <input type="button" class="profile-edit-btn" name="btnAddMore"
+                   value="Dodaj zaposlenika"
+                   @click.prevent="addWorker"/>
           </div>
         </div>
         <div class="row" v-if="tabSelected === 'hours'">
@@ -69,7 +69,7 @@
                     <label>Početak radnog vremena</label>
                   </div>
                   <div class="col-md-3">
-                    <input type="time" class="input-field" v-model="start"/>
+                    <input type="time" class="input-field" v-model="start" :disabled="!editHours"/>
                   </div>
                 </div>
                 <div class="row">
@@ -77,7 +77,7 @@
                     <label>Kraj radnog vremena</label>
                   </div>
                   <div class="col-md-3">
-                    <input type="time" class="input-field" v-model="end"/>
+                    <input type="time" class="input-field" v-model="end" :disabled="!editHours"/>
                   </div>
                 </div>
               </div>
@@ -145,6 +145,7 @@
         start: "",
         end: "",
         username: this.$auth.user.username,
+        editHours: false,
       };
     },
 
@@ -163,9 +164,34 @@
         .then(response => {
           this.listWorkers = response.data
         })
+
+      this.$axios.get('laundry/')
+        .then(response => {
+          this.currentTimes = response.data
+          this.forUpdate = response.data
+          this.start = this.currentTimes.open_time
+          this.end = this.currentTimes.close_time
+        })
+
+      this.$axios.get('laundry/future_laundry/')
+        .then(response => {
+          this.futureTimes = response.data
+          if (this.futureTimes.length === 0) {
+            this.start = this.currentTimes.open_time
+            this.end = this.currentTimes.close_time
+          } else {
+            this.forUpdate = response.data
+            this.start = this.futureTimes[0].open_time
+            this.end = this.futureTimes[0].close_time
+          }
+        })
     },
 
     methods: {
+      verifyHours(hours) {
+        let hoursRegExp = RegExp('^\\d{2}:\\d{2}:\\d{2}$')
+        return hoursRegExp.test(hours)
+      },
       async deleteUser(userId) {
         try {
           let response = await this.$axios.delete(`admin/${userId}/delete_user/`)
@@ -176,8 +202,31 @@
         }
       },
       async updateHours() {
-
+        if (!this.editHours)
+          this.editHours = !this.editHours
+        else {
+          if (this.start.length === 5)
+            this.start += ':00'
+          if (this.end.length === 5)
+            this.end += ':00'
+          if (this.verifyHours(this.start) && this.verifyHours(this.end)) {
+            this.forUpdate.open_time = this.start
+            this.forUpdate.close_time = this.end
+            try {
+              let response = await this.$axios.create('laundry/', this.forUpdate)
+              this.$toast.success('Novo radno vrijeme uspješno pohranjeno!', {duration: 5000})
+              this.editHours = false
+            } catch (e) {
+              this.$toast.error('Greška pri pohrani!', {duration: 5000})
+            }
+          } else {
+            this.$toast.error('Krivi format radnog vremena!', {duration: 5000})
+          }
+        }
       }
+    },
+    async addWorker() {
+
     },
   };
 </script>
