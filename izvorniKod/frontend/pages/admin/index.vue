@@ -112,7 +112,7 @@
             </tbody>
           </table>
         </div>
-        <div class="row" v-if="tabSelected === 'employees' && listWorkers.length > 0">
+        <div class="row" v-if="tabSelected === 'employees' && listWorkers.length > 0 && !addingWorker">
           <table>
             <thead>
             <tr>
@@ -135,6 +135,84 @@
             </tbody>
           </table>
         </div>
+        <div class="row" v-if="addingWorker">
+          <div class="col-md-8">
+            <div class="tab-content profile-tab" id="myTabContentEdit">
+              <div class="tab-pane fade show active" id="details-tab-edit">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Username</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="input-profile" v-model="workerUsername">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Ime</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="input-profile" v-model="workerName">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Prezime</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="input-profile" v-model="workerSurname">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Email</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="input-profile" type="email" v-model="workerEMail">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>JMBAG</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="input-profile" v-model="workerJMBAG">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Lozinka</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="input-profile" type="password" v-model="workerPassword">
+                    <div class="error" v-if="!verifyPw(workerPassword) && workerPassword.length !== 0">Format lozinke
+                      nije valjan
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <label>Potvrdi lozinku</label>
+                  </div>
+                  <div class="col-md-4">
+                    <input class="input-profile" type="password" v-model="workerRepeatedPassword">
+                    <div class="error"
+                         v-if="!(workerPassword === workerRepeatedPassword) && workerPassword.length !== 0 && workerRepeatedPassword.length !== 0">
+                      Lozinka nije ista
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                  </div>
+                  <div class="col-md-4">
+                    <button type="button" class="cancel" @click.prevent="addingWorker = !addingWorker">Odustani</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -153,6 +231,14 @@
         username: this.$auth.user.username,
         editHours: false,
         addingWorker: false,
+        workerUsername: '',
+        workerName: '',
+        workerSurname: '',
+        workerEMail: '',
+        workerJMBAG: '',
+        workerPassword: '',
+        workerRepeatedPassword: '',
+
       };
     },
 
@@ -192,6 +278,10 @@
     },
 
     methods: {
+      verifyPw(password) {
+        const pwRegExp = RegExp('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$')
+        return pwRegExp.test(password)
+      },
       verifyHours(hours) {
         let hoursRegExp = RegExp('^\\d{2}:\\d{2}:\\d{2}$')
         return hoursRegExp.test(hours)
@@ -233,10 +323,29 @@
             this.$toast.error('Krivi format radnog vremena!', {duration: 5000})
           }
         }
-      }
-    },
-    async addWorker() {
+      },
+      async addWorker() {
+        if (!this.addingWorker)
+          this.addingWorker = !this.addingWorker
+        else {
+          let formData = new FormData()
 
+          formData.append('password', this.workerPassword)
+          formData.append('username', this.workerUsername)
+          formData.append('first_name', this.workerName)
+          formData.append('last_name', this.workerSurname)
+          formData.append('email', this.workerEMail)
+          formData.append('JMBAG', this.workerJMBAG)
+          try {
+            let response = await this.$axios.post('/admin/create_worker_account/', formData)
+            this.$toast.success('Zaposlenik uspješno pohranjen!', {duration: 4000})
+            window.location.reload()
+            this.addingWorker = false
+          } catch (e) {
+            this.$toast.error('Neuspjelo dodavanje novog zaposlenika, provjerite podatke!', {duration: 4000})
+          }
+        }
+      },
     },
   };
 </script>
@@ -253,6 +362,16 @@
   .input-field {
     width: 100%;
     border: 1px solid #999;
+    outline: none;
+    background: transparent;
+  }
+
+  .input-profile {
+    width: 60%;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #999;
     outline: none;
     background: transparent;
   }
@@ -386,6 +505,16 @@
 
   .myBtn {
     width: 120px;
+    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    border-radius: 30px;
+    transition: .5s;
+    border: 0;
+    outline: none;
+    color: #fff;
+  }
+
+  .cancel {
+    width: 60%;
     background: linear-gradient(to right, #4e43e2, #4fdee6);
     border-radius: 30px;
     transition: .5s;
