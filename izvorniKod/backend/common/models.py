@@ -111,6 +111,9 @@ class Appointment(models.Model):
             user.save()
         super(Appointment, self).delete()
 
+    class Meta:
+        ordering = ['-start']
+
 
 class Post(models.Model):
     photo = models.ImageField(upload_to='images/', null=True)
