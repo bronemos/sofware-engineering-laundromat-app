@@ -9,7 +9,7 @@
                 {{user.first_name}} {{user.last_name}}
               </h5>
               <h3>
-                Negativni bodovi: {{this.user.negative_points}}
+                Negativni bodovi: <span :style="this.user.negative_points ? 'color: red' : 'color: #0062cc'">{{this.user.negative_points}}</span>
               </h3>
               <ul class="nav nav-tabs" id="myTab">
                 <li class="nav-item">
@@ -254,6 +254,39 @@
             </div>
           </div>
         </div>
+        <div class="row" v-if="tabSelected === 'reservations' && this.reservations.length > 0">
+          <table>
+            <thead>
+            <tr>
+              <th>Tip</th>
+              <th>Datum</th>
+              <th>Početak</th>
+              <th>Kraj</th>
+              <th>Cijena</th>
+              <th>Bilješka</th>
+              <th>Plaćeno</th>
+              <th>Košara</th>
+              <th>Zaposlenik</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="reservation in reservations" :key="reservation" class="show_bt'">
+              <td>{{reservation.machine.type === 'washer' ? 'Pranje' : 'Sušenje'}}</td>
+              <td>{{(new Date(reservation.start)).getDate() + '/' + ((new Date(reservation.start)).getMonth() +1) + '/'
+                +
+                (new Date(reservation.start)).getFullYear()}}
+              </td>
+              <td>{{(new Date(reservation.start)).getHours() +'h'}}</td>
+              <td>{{(new Date(reservation.end)).getHours()+'h'}}</td>
+              <td>{{reservation.price + 'kn'}}</td>
+              <td>{{reservation.note}}</td>
+              <td>{{reservation.paid ? 'Da' : 'Ne'}}</td>
+              <td>{{reservation.basket_taken ? 'Da' : 'Ne'}}</td>
+              <td>{{reservation.employee}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </form>
     </div>
   </div>
@@ -274,6 +307,14 @@
         cvv: '',
         expiryDate: '',
       }
+    },
+
+    mounted() {
+      this.$axios.get('appointment/logged_user_appointments')
+        .then(response => {
+          this.reservations = response.data
+        })
+      console.log(this.reservations)
     },
 
     computed: {
@@ -376,10 +417,9 @@
               formData.append('cc_code', this.cvv)
               try {
                 let response;
-                if (this.user.card === null){
+                if (this.user.card === null) {
                   response = await this.$axios.post(`card/`, formData)
-                }
-                else{
+                } else {
                   response = await this.$axios.patch(`card/${this.user.card.id}/`, formData)
                 }
                 this.editProfile = false
@@ -693,5 +733,51 @@
   small {
     font-size: 0.6rem;
     color: #c2c2c2;
+  }
+
+  table {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    grid-template-rows: 50px;
+    background: #fff;
+    /* height: 480px; */
+    max-height: 450px;
+    border-radius: 0.5rem;
+    /* padding: 15px; */
+    overflow: auto;
+    border-collapse: collapse;
+    /* min-width: 100%; */
+  }
+
+  thead, tbody, tr {
+    display: contents;
+  }
+
+  th, td {
+    padding: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    background: #17a2b8;
+    /* text-align: left; */
+    font-weight: normal;
+    font-size: 1.1rem;
+    color: white;
+  }
+
+  td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #262626;
+    max-height: 44px;
+  }
+
+  tr:nth-child(even) td {
+    background: #f8f6ff;
   }
 </style>

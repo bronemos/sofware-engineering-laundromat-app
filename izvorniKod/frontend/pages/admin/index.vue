@@ -84,7 +84,7 @@
             </div>
           </div>
         </div>
-        <div class="row" v-if="tabSelected === 'users'">
+        <div class="row" v-if="tabSelected === 'users' && listUsers.length > 0">
           <table>
             <thead>
             <tr>
@@ -95,7 +95,6 @@
             </tr>
             </thead>
             <tbody>
-            <!-- za našu bazu promijeniti isActive u aktivan -->
             <tr v-for="user in listUsers" :key="user" class="show_bt'">
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
@@ -107,7 +106,7 @@
             </tbody>
           </table>
         </div>
-        <div class="row" v-if="tabSelected === 'employees' ">
+        <div class="row" v-if="tabSelected === 'employees' && listWorkers.length > 0">
           <table>
             <thead>
             <tr>
@@ -168,9 +167,6 @@
 
     methods: {
       async deleteUser(userId) {
-        this.$toast.show(this.user.is_superuser)
-        this.$toast.show(userId)
-        this
         try {
           let response = await this.$axios.delete(`admin/${userId}/delete_user/`)
           window.location.reload()

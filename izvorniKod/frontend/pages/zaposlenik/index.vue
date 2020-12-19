@@ -25,7 +25,7 @@
         <div class="column">
           <div class="inner-body">
             <div class="title">
-              <h2>Promjena radnog vremena</h2>
+              <h2>Promjena vremena pauze i cijena</h2>
             </div>
             <div class="form-body">
               <!-- <div class="inline-display" >Početak radnog vremena:</div>
@@ -134,7 +134,7 @@ export default {
       }
       mins = (mins + 30) % 60;
       date.setHours(hrs, mins);
-      
+
       console.log('pause_start: ' + this.newHoursPrice['pause_start']);
       console.log('calc hrs, mins: ' + hrs + ', ' + mins);
       console.log('pause_end: ', date.toLocaleTimeString("hr-HR", options))
@@ -230,7 +230,7 @@ export default {
     outline: none;
     color: #fff ;
   }
-  
+
   .padd-15 {
     padding: 15px;
   }
