@@ -114,7 +114,7 @@ class AppointmentSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     user_obj = serializers.SerializerMethodField()
     machine = RelatedFieldAlternative(queryset=Machine.objects.all(), serializer=MachineSerializer)
-    review = ReviewSerializer(read_only=True)
+    review = serializers.SerializerMethodField(read_only=True)
     end = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
 
@@ -134,3 +134,8 @@ class AppointmentSerializer(DynamicFieldsModelSerializer):
         if obj.machine.type == 'dryer':
             return 'Sušilica ' + str(int(obj.machine.id - Machine.objects.all().count() / 2))
         return 'Perilica ' + str(obj.machine.id)
+
+    def get_review(self, obj):
+        if obj.review.first() is not None:
+            return ReviewSerializer(obj.review.first()).data
+        return None

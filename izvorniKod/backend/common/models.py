@@ -128,7 +128,7 @@ class Post(models.Model):
 
 
 class Review(models.Model):
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='review')
+    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, related_name='review', null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review_written')
     employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='review')
     text = models.TextField(null=True, blank=True)
