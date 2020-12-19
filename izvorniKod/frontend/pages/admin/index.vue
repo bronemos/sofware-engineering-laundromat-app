@@ -224,6 +224,8 @@
 
     data() {
       return {
+        listWorkers: [],
+        listUsers: [],
         tabSelected: "hours",
         edit: false,
         start: "",
