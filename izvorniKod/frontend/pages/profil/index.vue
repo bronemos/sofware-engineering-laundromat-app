@@ -314,7 +314,6 @@
         .then(response => {
           this.reservations = response.data
         })
-      console.log(this.reservations)
     },
 
     computed: {
