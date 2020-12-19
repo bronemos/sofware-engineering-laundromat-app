@@ -94,6 +94,7 @@ class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointment')
     employee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointment_worked', blank=True,
                                  null=True)
+    missed = models.BooleanField(default=False, blank=True)
 
     def save(self, *args, **kwargs):
         if self.machine.type == 'washer':
@@ -107,7 +108,7 @@ class Appointment(models.Model):
         if utc.localize(datetime.now() + timedelta(hours=3)) >= self.start:
             user = self.user
             print(user)
-            user.negative_points -= 1
+            user.negative_points += 1
             user.save()
         super(Appointment, self).delete()
 
