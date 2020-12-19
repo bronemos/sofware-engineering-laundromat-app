@@ -173,6 +173,8 @@ class AdminViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.create()
+        user.is_staff = True
+        user.save()
         send_mail(
             'Čestitamo na zaposlenju!!',
             f'Admin Vas je upravo dodao u aplikaciju terminko na funkciju zaposlenika. Vaši korisnički podaci za login '
