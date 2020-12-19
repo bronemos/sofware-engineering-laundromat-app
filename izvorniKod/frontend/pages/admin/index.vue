@@ -216,7 +216,7 @@
             this.forUpdate.open_time = this.start
             this.forUpdate.close_time = this.end
             try {
-              let response = await this.$axios.create('laundry/', this.forUpdate)
+              let response = await this.$axios.post('laundry/', this.forUpdate)
               this.$toast.success('Novo radno vrijeme uspješno pohranjeno!', {duration: 5000})
               this.editHours = false
             } catch (e) {
