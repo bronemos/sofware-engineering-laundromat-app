@@ -248,12 +248,24 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
                          viewsets.GenericViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminUser]
+    permission_classes_by_action = {
+        'create': [IsAuthenticated],
+        'list': [IsAuthenticated],
+        'delete': [IsAuthenticated],
+        'logged_user_appointments': [IsAuthenticated]
+    }
+
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
 
     @action(detail=True, methods=['GET'], name='send_email')
     def send_email(self, request, pk=None):
-        appointmet = self.get_object()
-        email = appointmet.user.email
+        appointment = self.get_object()
+        email = appointment.user.email
         message = request.data.get['message']
         if message is not None:
             send_mail(
@@ -264,6 +276,23 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
                 )
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['GET'], name='missed')
+    def missed(self, request, pk=None):
+        appointment = self.get_object()
+        appointment.missed = True
+        appointment.save()
+        user = appointment.user
+        user.negative_points = user.negative_points + 1
+        user.save()
+        send_mail(
+            'Preskočen termin',
+            f'Niste došli na rezervirani termin {appointment.start} te ste dobili negativan bod. Trenutno imate '
+            f'{user.negative_points} negativnih bodova!',
+            "noreply@somehost.local",
+            [user.email]
+        )
+        return Response(status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['GET'], name='logged_user_appointments')
     def logged_user_appointments(self, request):
