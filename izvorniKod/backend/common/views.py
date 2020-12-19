@@ -264,7 +264,7 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
         except KeyError:
             return [permission() for permission in self.permission_classes]
 
-    @action(detail=True, methods=['GET'], name='send_email')
+    @action(detail=True, methods=['SET'], name='send_email')
     def send_email(self, request, pk=None):
         appointment = self.get_object()
         email = appointment.user.email
