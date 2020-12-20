@@ -72,7 +72,7 @@
                    @click.prevent="updateHours"/>
           </div>
           <div class="col-md-2" v-if="tabSelected === 'employees'">
-            <input type="button" class="profile-edit-btn" name="btnAddMore"
+            <input type="button" class="profile-worker-btn" name="btnAddMore"
                    value="Dodaj zaposlenika"
                    @click.prevent="addWorker"/>
           </div>
@@ -501,6 +501,17 @@
     transition: 0.5s;
     color: white;
   }
+   .profile-worker-btn {
+    border: none;
+    border-radius: 1.5rem;
+    width: 14rem;
+    padding: 2%;
+    cursor: pointer;
+    background: linear-gradient(to right, #4e43e2, #4fdee6);
+    transition: 0.5s;
+    color: white;
+  }
+
 
   .proile-rating {
     font-size: 12px;
