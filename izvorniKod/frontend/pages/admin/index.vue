@@ -115,7 +115,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="user in listUsers" :key="listUsers" class="show_bt'">
+            <tr v-for="user in listUsers" :key="user" class="show_bt'">
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
               <td>{{user.JMBAG}}</td>
@@ -138,7 +138,7 @@
             </thead>
             <tbody>
             <!-- za našu bazu promijeniti isActive u aktivan -->
-            <tr v-for="user in listWorkers" :key="listWorkers" class="show_bt'">
+            <tr v-for="user in listWorkers" :key="user" class="show_bt'">
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
               <td>{{user.JMBAG}}</td>

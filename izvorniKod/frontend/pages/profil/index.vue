@@ -140,7 +140,7 @@
           </div>
         </div>
         <div class="row" v-if="tabSelected === 'payment' && !editProfile && user.card !== null">
-          <div id="page" class="page">
+          <div>
             <div class="card">
               <div class="chip">
                 <svg
@@ -587,13 +587,14 @@
     --grey: #c2c2c2;
   }
 
-  .page {
+ /* .page {
     width: 40%;
     height: 30vh;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+    position: relative;
+  }*/
 
   #main {
     width: 41.875rem;
@@ -610,25 +611,11 @@
     background-color: #f7fbfc;
     border-radius: 0.7rem;
     padding: 1.3rem 1.6rem;
-    position: relative;
+    position: static;
     top: -2.75rem;
     right: 4.4rem;
   }
 
-  /* .card::after {
-     content: "";
-     display: block;
-     width: 17.5rem;
-     height: 11rem;
-     background-color: #2a2a2a;
-     border-radius: 0.7rem;
-     position: absolute;
-     top: 2.7rem;
-     right: -1.5rem;
-     transform: rotate(8deg);
-     z-index: -1;
-   }
- */
   .chip {
     width: 3rem;
     height: 2.2rem;
