@@ -11,6 +11,11 @@ export default {
   components: {
     'custom-header': header,
   },
+  head() {
+      return {
+        title: "Terminko"
+      };
+    },
 }
 </script>
 

@@ -12,7 +12,6 @@
           </tr>
           </thead>
           <tbody>
-          <!-- za našu bazu promijeniti isActive u aktivan -->
           <tr v-for="user in pendingUsers" :key="pendingUsers" class="show_bt'">
             <td>{{user.first_name}}</td>
             <td>{{user.last_name}}</td>
@@ -54,7 +53,6 @@
   </div>
 </template>
 
-<!-- maknuti hardkodirani json u pendingUsers -->
 <script>
   export default {
     middleware: 'auth-staff',
@@ -70,12 +68,6 @@
         },
         changed: false,
       }
-    },
-
-    head() {
-      return {
-        title: "Registracije u tijeku"
-      };
     },
 
     methods: {
