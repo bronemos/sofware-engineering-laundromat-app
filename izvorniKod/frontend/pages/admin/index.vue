@@ -49,6 +49,20 @@
                     Zaposlenici
                   </button>
                 </li>
+                <li class="nav-item">
+                  <button
+                    class="nav-link"
+                    v-bind:class="tabSelected === 'reviews' ? 'active' : ''"
+                    id="reviews"
+                    @click.prevent="
+                      tabSelected = 'reviews';
+                      editHours = false;
+                      addingWorker = false;
+                    "
+                  >
+                    Recenzije
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -213,6 +227,27 @@
             </div>
           </div>
         </div>
+        <div class="row" v-if="tabSelected === 'reviews' && reviews.length > 0">
+          <table>
+            <thead>
+            <tr>
+              <th>Ime i prezime zaposlenika</th>
+              <th>Ime i prezime korisnika</th>
+              <th>Ocjena</th>
+              <th>Recenzija</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- za našu bazu promijeniti isActive u aktivan -->
+            <tr v-for="review in reviews" :key="reviews" class="show_bt'">
+              <td>{{review.employee}}</td>
+              <td>{{review.user}}</td>
+              <td>{{review.grade}}</td>
+              <td>{{review.text}}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </form>
     </div>
   </div>
@@ -226,6 +261,7 @@
       return {
         listWorkers: [],
         listUsers: [],
+        reviews: [],
         tabSelected: "hours",
         edit: false,
         start: "",
@@ -250,15 +286,18 @@
       },
     },
     mounted() {
-      this.$axios.get('admin/list_users/')
-        .then(response => {
-          this.listUsers = response.data
-        })
-
-      this.$axios.get('admin/list_workers/')
-        .then(response => {
-          this.listWorkers = response.data
-        })
+      this.$axios.get('review/')
+      .then (response => {
+        this.reviews = response.data
+        this.$axios.get('admin/list_users/')
+          .then(response => {
+            this.listUsers = response.data
+            this.$axios.get('admin/list_workers/')
+              .then(response => {
+                this.listWorkers = response.data
+              })
+          })
+      })
 
       this.$axios.get('laundry/')
         .then(response => {

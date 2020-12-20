@@ -4,7 +4,23 @@
       <div class="hero">
         <div class="container emp-profile">
           <client-only>
-            <vue-cal ref="vuecal" :time-from="6 * 60" :time-step="60" active-view="day" locale="hr" :disable-views="['years', 'year']" class="vuecal--blue-theme" today-button :selected-date="todayDate" :min-date="minDate" :max-date="maxDate" :hide-weekdays="[7]" :events="events" :split-days="splitDays" :sticky-split-labels="stickySplitLabels" :min-cell-width="minCellWidth" :min-split-width="minSplitWidth" :on-event-click="onEventClick">
+            <vue-cal ref="vuecal" 
+                :time-from="6 * 60" :time-step="60" 
+                active-view="day" 
+                locale="hr" 
+                :disable-views="['years', 'year']" 
+                class="vuecal--blue-theme" 
+                today-button 
+                :selected-date="todayDate" 
+                :min-date="minDate" 
+                :max-date="maxDate" 
+                :hide-weekdays="[7]" 
+                :events="events" 
+                :split-days="splitDays" 
+                :sticky-split-labels="stickySplitLabels" 
+                :min-cell-width="minCellWidth" 
+                :min-split-width="minSplitWidth" 
+                :on-event-click="onEventClick">
               <template v-slot:today-button>
                 <!-- Using Vuetify -->
                 <v-tooltip>
@@ -34,24 +50,34 @@
           <!-- reserved appointement -->
           <v-card-text v-if="selectedEvent.class == 'reserved' || selectedEvent.class == 'mine'">
             <span v-if="selectedEvent.user.email != ''"><strong>Email:</strong> {{ selectedEvent.user.email }}<br /></span>
-            <span><strong>Plaćeno:</strong> {{ selectedEvent.paid }}</span><br />
-            <span><strong>Košara posuđena:</strong>
+            <span><strong>Plaćanje:</strong> {{ selectedEvent.paid }}</span><br />
+            <span><strong>Košara:</strong>
               {{ selectedEvent.basket_taken }}</span><br />
             <span><strong>Cijena:</strong> {{ selectedEvent.price }} kn</span><br />
             <span><strong>Uređaj:</strong> {{ selectedEvent.machine }}</span><br />
-            <span><strong>Bilješka:</strong></span><br /><span>{{ selectedEvent.note }}</span>
-            <br />
+            <div v-if="selectedEvent.note != ''">
+              <span><strong>Bilješka:</strong></span><br />
+              <span>{{ selectedEvent.note }}</span><br />
+            </div>
+            
             <span v-if="selectedEvent.warning === true"><strong>Ako otkažete termin dobit ćete negativne bodove</strong></span>
-            <button @click.prevent="deleteAppointment()" v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" class="btn btn-danger">Obriši</button>
+            <button 
+              @click.prevent="deleteAppointment()" 
+              v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" 
+              class="btn btn-danger">Obriši
+            </button>
 
             <div v-if="user.is_staff">
+              <hr/>
+              <span><strong>Pošalji e-mail korisniku:</strong></span>
               <textarea class="form-control" rows="5" id="comment" v-model="selectedEvent.mailText"></textarea>
-              <button @click.prevent="sendMail()" class="btn btn-warning">Send mail</button>
+              <button @click.prevent="sendMail()" class="btn btn-warning">Pošalji</button>
             </div>
 
             <div v-if="selectedEvent.past === true && selectedEvent.user.id === this.$auth.user.id">
+              <hr/>
               <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">Termin propušten</button><br/>
-              <div v-if="selectedEvent.rating == null">
+              <div v-if="selectedEvent.rating == null && user.is_staff == false">
                 <strong>Odaberi i pritisni ocjenu za zaposlenika:</strong>
                 <select class="custom-select" v-model="selectedEvent.selectedEmployee">
                   <option required v-for="worker in selectedEvent.workers_list" v-bind:key="worker.id" v-bind:value="worker.id">
@@ -78,17 +104,21 @@
           <!-- free appointement -->
           <v-card-text v-if="selectedEvent.class == 'free'">
             <form id="addAppointment" @submit.prevent="addAppointment">
+              <span><strong>Plaćanje: </strong>{{ selectedEvent.price }} kn</span>
+              <span v-if="selectedEvent.paid !== true"> na blagajni.</span>
+              <span v-if="selectedEvent.paid === true"> putem kartice.</span>
+              <br />
               <div class="checkbox">
-                <label><input type="checkbox" v-model="appointmentForm.basket_taken" />
+                <label><input type="checkbox" v-model="selectedEvent.basket_taken" />
                   Posudi košaru</label>
               </div>
               <div class="checkbox" v-if="this.user.card != null">
-                <label><input type="checkbox" v-model="appointmentForm.paid" />
+                <label><input type="checkbox" v-model="selectedEvent.paid" />
                   Kartično plaćanje</label>
               </div>
               <div class="form-group">
                 <label for="comment">Bilješka:</label>
-                <textarea class="form-control" rows="5" id="comment" v-model="appointmentForm.note"></textarea>
+                <textarea class="form-control" rows="5" id="comment" v-model="selectedEvent.note"></textarea>
               </div>
               <button type="submit" class="btn btn-success">Rezerviraj</button>
             </form>
@@ -195,8 +225,6 @@ export default {
       workers[workers_list.data[work].id] = workers_list.data[work];
     }
 
-    console.log(workers);
-
     var that = this;
     var reserved = [];
     appointments.data.forEach(function (app) {
@@ -206,8 +234,8 @@ export default {
         note: app.note,
         machine: app.title,
         price: app.price,
-        paid: app.paid ? "DA" : "NE",
-        basket_taken: app.basket_taken ? "DA" : "NE",
+        paid: app.paid ? "karticom" : "na blagajni",
+        basket_taken: app.basket_taken ? "posuđena" : "nije posuđena",
         employee: workers,
         workers_list: workers_list.data,
         missed: app.missed,
@@ -234,37 +262,50 @@ export default {
     });
 
     var last = this.todayDate.addDays(14);
-    var d = this.todayDate;
 
-    while (d < last) {
-      var laundry = null;
+    for(var d = this.todayDate; d < last; d = d.addDays(1)) {
+      //  skip sunday
+      if(d.getDay() === 0)
+        continue;
       
-      for (var entry in laundries) {
-        if (d >= new Date(entry)) {
+      //  choose most recent work hours
+      let laundry = null;
+      for (var entry in laundries)
+        if (d >= new Date(entry))
           laundry = laundries[entry];
-        } else {
+        else 
           break;
-        }
-      }
 
-      var date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
-      for (var j = laundry.open_time_value; j < laundry.close_time_value; j++) {
-        if (d == this.todayDate && j <= d.getHours()) continue;
+      var tmpDate = new Date(d);
+      tmpDate.setHours(laundry.open_time_value,0,0,0);
+      const toHours = tmpDate.addHours(laundry.close_time_value - laundry.open_time_value);
+      for (; tmpDate < toHours; tmpDate = tmpDate.addHours(1)) {
+        if (d == this.todayDate && tmpDate <= d.getHours()) 
+          continue;
         var event = {};
-        event.start = new Date(date + " " + j + ":00");
-        event.end = new Date(date + " " + (j + 1) + ":00");
+        event.start = tmpDate.toString();
+        event.end = tmpDate.addHours(1).toString();
         event.class = "free";
-        event.title = `${j}:00 - ${j + 1}:00`;
-        var c = 0;
-        event.label = `${j}:00 - ${j + 1}:00`;
+        event.title = `${tmpDate.getHours()}:00 - ${tmpDate.addHours(1).getHours()}:00`;
+        event.label = `${tmpDate.getHours()}:00 - ${tmpDate.addHours(1).getHours()}:00`;
         for (var k = 1; k <= 10; k++) {
-          if (reserved.includes(k + "" + event.start.toString())) continue;
+          if (reserved.includes(k + "" + event.start.toString())) 
+            continue;
           let tmp = Object.assign({}, event);
-          if (j == parseInt(laundry.pause_start.substring(0, laundry.pause_start.length - 3))) {
+          if (tmpDate.getHours() == parseInt(laundry.pause_start.substring(0, laundry.pause_start.length - 3))) {
             let pauseEvent = Object.assign({}, pause);
-            pauseEvent.start = date + " " + laundry.pause_start;  
+            let pauseDate = new Date(d);
+            pauseDate.setHours(
+              parseInt(laundry.pause_start_value.substring(0, 2)), 
+              parseInt(laundry.pause_start_value.substring(3, 5))
+            );
+            pauseEvent.start = pauseDate.toString();
+            pauseDate.setHours(
+              parseInt(laundry.pause_end_value.substring(0, 2)), 
+              parseInt(laundry.pause_end_value.substring(3, 5))
+            );
+            pauseEvent.end = pauseDate.toString();
             pauseEvent.split = k;
-            pauseEvent.end = date + " " + laundry.pause_end;
             this.events.push(pauseEvent);
           }
           tmp.split = k;
@@ -273,7 +314,6 @@ export default {
           this.events.push(tmp);
         }
       }
-      d = d.addDays(1);
     }
     this.loadingDialog = false;
   },
@@ -428,7 +468,6 @@ export default {
         this.$toast.show("Poslan email korisniku!", {
           duration: 5000,
         });
-        location.reload();
       } catch (e) {
         this.$toast.error(`${e.response.status} ${e.response.statusText}`, {
           duration: 5000,
@@ -476,8 +515,8 @@ export default {
   background-color: rgba(238, 252, 241, 0.5);
 }
 .vuecal__cell-split .split-label {
-  color: rgba(0, 0, 0, 0.1);
-  font-size: 26px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 24px;
 }
 
 .vuecal__event.free {
@@ -493,12 +532,6 @@ export default {
 
 .vuecal__event.mine {
   background-color: rgba(173, 192, 235, 0.9);
-  border: 1px solid rgb(144, 210, 190);
-  color: rgb(0, 0, 0, 0.3);
-}
-
-.vuecal__event.excange {
-  background-color: rgba(252, 248, 197, 0.9);
   border: 1px solid rgb(144, 210, 190);
   color: rgb(0, 0, 0, 0.3);
 }
