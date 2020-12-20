@@ -275,7 +275,6 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
         email = appointment.user.email
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            print(serializer.validated_data)
             send_mail(
                     'Poruka iz praonice!',
                     serializer.validated_data.get('text'),

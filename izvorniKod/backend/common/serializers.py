@@ -77,7 +77,6 @@ class UserSerializer(DynamicFieldsModelSerializer):
         if 'username' in validated_data:
             obj.username = validated_data.get('username')
         obj.save()
-        print(obj.first_name)
         return obj
 
 

@@ -107,7 +107,6 @@ class Appointment(models.Model):
         utc = pytz.UTC
         if utc.localize(datetime.now() + timedelta(hours=3)) >= self.start:
             user = self.user
-            print(user)
             user.negative_points += 1
             user.save()
         super(Appointment, self).delete()

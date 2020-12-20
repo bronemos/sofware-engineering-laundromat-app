@@ -135,16 +135,12 @@
           date.setHours(hrs, mins);
           this.newHoursPrice['pause_start'] = date.toLocaleTimeString("hr-HR", options);
         }
-        console.log('hrs, mins: ' + hrs + ', ' + mins);
         if (mins + 30 >= 60) {
           hrs = (hrs + 1) % 24;
         }
         mins = (mins + 30) % 60;
         date.setHours(hrs, mins);
 
-        console.log('pause_start: ' + this.newHoursPrice['pause_start']);
-        console.log('calc hrs, mins: ' + hrs + ', ' + mins);
-        console.log('pause_end: ', date.toLocaleTimeString("hr-HR", options))
         this.newHoursPrice["pause_end"] = date.toLocaleTimeString("hr-HR", options);
       },
     },
