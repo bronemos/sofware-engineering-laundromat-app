@@ -270,7 +270,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="reservation in reservations" :key="reservation" class="show_bt'">
+            <tr v-for="reservation in reservations" :key="reservation.id" class="show_bt'">
               <td>{{reservation.machine.type === 'washer' ? 'Pranje' : 'Sušenje'}}</td>
               <td>{{(new Date(reservation.start)).getDate() + '/' + ((new Date(reservation.start)).getMonth() +1) + '/'
                 +

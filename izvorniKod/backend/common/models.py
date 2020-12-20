@@ -1,3 +1,4 @@
+import random
 import uuid
 import datetime
 import pytz
@@ -45,9 +46,13 @@ class Card(models.Model):
     cc_code = SecurityCodeField()
 
 
+def random_string():
+    return str(random.randint(10000, 99999))
+
+
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    JMBAG = models.CharField(null=False, unique=True, blank=False, max_length=10, default='xxx')
+    JMBAG = models.CharField(null=False, unique=True, blank=False, max_length=10, default=random_string)
     card = models.OneToOneField(Card, null=True, blank=True, on_delete=models.SET_NULL)
     negative_points = models.IntegerField(null=False, blank=False, default=0)
 

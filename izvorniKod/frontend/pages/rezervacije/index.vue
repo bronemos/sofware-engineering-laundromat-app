@@ -60,7 +60,7 @@
               <span>{{ selectedEvent.note }}</span><br />
             </div>
             
-            <span v-if="selectedEvent.warning === true"><strong>Ako otkažete termin dobit ćete negativne bodove</strong></span>
+            <span v-if="selectedEvent.warning === true"><strong>Ako otkažete termin manje od 3 sata prije početka dobit ćete negativne bodove</strong></span>
             <button 
               @click.prevent="deleteAppointment()" 
               v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" 

@@ -12,7 +12,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="user in pendingUsers" :key="pendingUsers" class="show_bt'">
+          <tr v-for="user in pendingUsers" :key="user.id" class="show_bt'">
             <td>{{user.first_name}}</td>
             <td>{{user.last_name}}</td>
             <td>{{user.JMBAG}}</td>
