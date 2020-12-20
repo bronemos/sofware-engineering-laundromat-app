@@ -237,7 +237,7 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        laundry_now = serializer.asve()
+        laundry_now = serializer.save()
         for laundry in Laundry.objects.filter(date_changed__gte=datetime.now()):
             laundry.pause_start = laundry_now.pause_start
             laundry.pause_end = laundry_now.pause_end
@@ -274,15 +274,11 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
         appointment = self.get_object()
         email = appointment.user.email
         serializer = self.get_serializer(data=request.data)
-        message = None
         if serializer.is_valid():
             print(serializer.validated_data)
-            message = serializer.validated_data.get('text')
-        print(request.data)
-        if message is not None:
             send_mail(
                     'Poruka iz praonice!',
-                    message,
+                    serializer.validated_data.get('text'),
                     "noreply@somehost.local",
                     [email]
                 )
