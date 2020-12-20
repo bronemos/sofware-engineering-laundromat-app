@@ -242,7 +242,7 @@
             <tr v-for="review in reviews" :key="reviews" class="show_bt'">
               <td>{{review.employee}}</td>
               <td>{{review.user}}</td>
-              <td>{{review.grade}}</td>
+              <td><star-rating star-size="30" v-model="review.grade" read-only></star-rating></td>
               <td>{{review.text}}</td>
             </tr>
             </tbody>
@@ -287,17 +287,27 @@
     },
     mounted() {
       this.$axios.get('review/')
-      .then (response => {
-        this.reviews = response.data
-        this.$axios.get('admin/list_users/')
-          .then(response => {
-            this.listUsers = response.data
-            this.$axios.get('admin/list_workers/')
-              .then(response => {
-                this.listWorkers = response.data
-              })
-          })
-      })
+        .then(response => {
+          this.reviews = response.data
+          this.$axios.get('admin/list_users/')
+            .then(response => {
+              this.listUsers = response.data
+              this.$axios.get('admin/list_workers/')
+                .then(response => {
+                  this.listWorkers = response.data
+                  for (let review of this.reviews) {
+                    for (let worker of this.listWorkers) {
+                      if (review.employee === worker.id)
+                        review.employee = worker.first_name + ' ' + worker.last_name
+                    }
+                    for (let user of this.listUsers){
+                      if (review.user === user.id)
+                        review.user = user.first_name + ' ' + user.last_name
+                    }
+                  }
+                })
+            })
+        })
 
       this.$axios.get('laundry/')
         .then(response => {

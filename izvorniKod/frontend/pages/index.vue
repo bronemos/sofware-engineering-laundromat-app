@@ -109,7 +109,7 @@ export default {
 }
 
 .info-container {
-  color: #aeb6be;
+  color: #64686c;
   position: absolute;
   top: 50%;
 }
