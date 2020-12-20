@@ -3,8 +3,8 @@
     <div class="form-box">
       <div class="button-box">
         <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
-        <button type="button" class="toggle-btn" @click="login=true">Prijava</button>
-        <button type="button" class="toggle-btn" @click="login=false">Registracija</button>
+        <button type="button" v-bind:class="login ? 'toggle-btn-white' : 'toggle-btn-black'" @click="login=true">Prijava</button>
+        <button type="button" v-bind:class="login ? 'toggle-btn-black' : 'toggle-btn-white'" @click="login=false">Registracija</button>
 
       </div>
       <form id="login" class="input-group-login" :class="login ? 'login_50' : 'login_n400'" @submit.prevent="loginUser">
@@ -24,6 +24,8 @@
         <div class="error" v-if="!$v.registerForm.JMBAG.minLength">JMBAG mora imati točno 10 znamenaka</div>
         <div class="error" v-if="!$v.registerForm.JMBAG.maxLength">JMBAG mora imati točno 10 znamenaka</div>
         <!-- <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div> -->
+        <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email" >
+        <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div>
 
         <input type="password" class="input-field" placeholder="Lozinka" required v-model="registerForm.password">
         <div class="error" v-if="!$v.registerForm.password.verifyPw && registerForm.password.length !== 0">Lozinka mora sadržavati najmanje 8 znakova te slova
@@ -120,6 +122,18 @@
         try {
           let response = await this.$axios.post('account/', this.registerForm)
           this.$toast.success('Zahtjev uspješno poslan, molim pričekajte potvrdu računa!', {duration: 5000})
+          
+        this.registerForm = {
+           "username": '',
+          "first_name": '',
+          "last_name": '',
+          "JMBAG":'',
+          "email": '',
+          "password": '',
+          "passwordAgain": '',
+  
+            };
+        
         } catch (e) {
           this.$toast.error(`${e.response.status} ${e.response.statusText}`, {duration: 5000});
           if (e.response.data) {
@@ -216,15 +230,25 @@
 
   }
 
-  .toggle-btn {
+  .toggle-btn-white {
     padding: 10px 30px;
     cursor: pointer;
     background: transparent;
     border: 0;
     outline: none;
     position: relative;
-    color: black;
+    color:white;
   }
+   .toggle-btn-black {
+    padding: 10px 30px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    outline: none;
+    position: relative;
+    color:black;
+  }
+  
 
   .btn {
     top: 0;

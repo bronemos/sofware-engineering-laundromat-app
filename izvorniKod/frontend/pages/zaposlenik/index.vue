@@ -300,6 +300,7 @@
 
   .title h2 {
     margin: 0;
+    font-size: 1.3rem;
   }
 
   .row:after {
