@@ -101,24 +101,32 @@
             </div>
           </v-card-text>
 
-          <!-- free appointement -->
+           <!-- free appointement -->
           <v-card-text v-if="selectedEvent.class == 'free'">
             <form id="addAppointment" @submit.prevent="addAppointment">
-              <span><strong>Plaćanje: </strong>{{ selectedEvent.price }} kn</span>
-              <span v-if="selectedEvent.paid !== true"> na blagajni.</span>
-              <span v-if="selectedEvent.paid === true"> putem kartice.</span>
-              <br />
               <div class="checkbox">
-                <label><input type="checkbox" v-model="selectedEvent.basket_taken" />
-                  Posudi košaru</label>
+                <label
+                  ><input
+                    type="checkbox"
+                    v-model="appointmentForm.basket_taken"
+                  />
+                  Posudi košaru</label
+                >
               </div>
               <div class="checkbox" v-if="this.user.card != null">
-                <label><input type="checkbox" v-model="selectedEvent.paid" />
-                  Kartično plaćanje</label>
+                <label
+                  ><input type="checkbox" v-model="appointmentForm.paid" />
+                  Kartično plaćanje</label
+                >
               </div>
               <div class="form-group">
                 <label for="comment">Bilješka:</label>
-                <textarea class="form-control" rows="5" id="comment" v-model="selectedEvent.note"></textarea>
+                <textarea
+                  class="form-control"
+                  rows="5"
+                  id="comment"
+                  v-model="appointmentForm.note"
+                ></textarea>
               </div>
               <button type="submit" class="btn btn-success">Rezerviraj</button>
             </form>
