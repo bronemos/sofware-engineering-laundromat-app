@@ -280,7 +280,7 @@ export default {
       tmpDate.setHours(laundry.open_time_value,0,0,0);
       const toHours = tmpDate.addHours(laundry.close_time_value - laundry.open_time_value);
       for (; tmpDate < toHours; tmpDate = tmpDate.addHours(1)) {
-        if (d == this.todayDate && tmpDate <= d.getHours()) 
+        if (d == this.todayDate && tmpDate.getHours() <= d.getHours()) 
           continue;
         var event = {};
         event.start = tmpDate.toString();
