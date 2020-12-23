@@ -111,6 +111,7 @@
               <th>Ime Studenta</th>
               <th>Prezime Studenta</th>
               <th>JMBAG</th>
+              <th>Negativni bodovi</th>
               <th></th>
             </tr>
             </thead>
@@ -119,6 +120,7 @@
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
               <td>{{user.JMBAG}}</td>
+              <td>{{user.negative_points}}</td>
               <td>
                 <button type="button" id="myBtn-user" class="myBtn" @click="deleteUser(user.id)">Blokiraj</button>
               </td>
@@ -133,15 +135,16 @@
               <th>Ime Zaposlenika</th>
               <th>Prezime Zaposlenika</th>
               <th>JMBAG</th>
+              <th>Negativni bodovi</th>
               <th></th>
             </tr>
             </thead>
             <tbody>
-            <!-- za našu bazu promijeniti isActive u aktivan -->
             <tr v-for="user in listWorkers" :key="user.id" class="show_bt'">
               <td>{{user.first_name}}</td>
               <td>{{user.last_name}}</td>
               <td>{{user.JMBAG}}</td>
+              <td>{{user.negative_points}}</td>
               <td>
                 <button type="button" id="myBtn-worker" class="myBtn" @click="deleteUser(user.id)">Otpusti</button>
               </td>
@@ -602,7 +605,7 @@
 
   table {
     display: grid;
-    grid-template-columns: minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr);
+    grid-template-columns: minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(150px, 1.5fr);
     grid-template-rows: 50px;
     background: #fff;
     /* height: 480px; */
