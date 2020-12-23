@@ -66,10 +66,15 @@ class Laundry(models.Model):
     date_changed = models.DateTimeField(default=return_date_changed, blank=True)
     open_time = models.TimeField(null=False, blank=False)
     close_time = models.TimeField(null=False, blank=False)
+    middle = models.TimeField(null=True, blank=True)
     pause_start = models.TimeField(null=False, blank=False)
     pause_end = models.TimeField(null=True, blank=True)
+    pause2_start = models.TimeField(null=False, blank=False, default='12:00:00')
+    pause2_end = models.TimeField(null=True, blank=True)
     wash_price = models.FloatField(null=False, blank=False)
     drying_price = models.FloatField(null=False, blank=False)
+    first_shift_worker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shift', null=True)
+    second_shift_worker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shift_2', null=True)
 
     class Meta:
         ordering = ['-date_changed']
@@ -82,6 +87,12 @@ class Laundry(models.Model):
     def save(self, *args, **kwargs):
         if self.pause_start is not None:
             self.pause_end = self.add_mins(self.pause_start, 30)
+        if self.pause2_start is not None:
+            self.pause2_end = self.add_mins(self.pause2_start, 30)
+        self.middle = self.add_mins(
+            self.open_time,
+            (self.close_time.hour * 60 + self.close_time.minute - self.open_time.hour * 60 - self.open_time.minute) / 2
+        )
         super(Laundry, self).save(*args, **kwargs)
 
 

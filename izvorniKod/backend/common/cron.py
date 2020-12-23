@@ -11,4 +11,12 @@ def my_cron_job():
     for user_id in ids:
         User.objects.filter(id=user_id).delete()
 
+    laundry = Laundry.objects.filter(date_created__lte=datetime.now()).first()
+
+    for appointment in Appointment.objects.filter(start__gte=datetime.now(), start__lte=datetime.now() + timedelta(days=1)):
+        if appointment.start.time() <= laundry.middle:
+            appointment.employee = laundry.first_shift_worker
+        else:
+            appointment.employee = laundry.second_shift_worker
+        appointment.save()
 
