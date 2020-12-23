@@ -69,7 +69,7 @@ class Laundry(models.Model):
     middle = models.TimeField(null=True, blank=True)
     pause_start = models.TimeField(null=False, blank=False)
     pause_end = models.TimeField(null=True, blank=True)
-    pause2_start = models.TimeField(null=False, blank=False, default='12:00:00')
+    pause2_start = models.TimeField(null=False, blank=False)
     pause2_end = models.TimeField(null=True, blank=True)
     wash_price = models.FloatField(null=False, blank=False)
     drying_price = models.FloatField(null=False, blank=False)
