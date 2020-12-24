@@ -13,7 +13,7 @@
         <div class="work-hours fade-in delay" >
           <h3>Radno vrijeme:</h3>
           <h5>Pon-Sub: od {{laundry.open_time}} do {{laundry.close_time}}</h5>
-          <h5>Pauza: od {{laundry.pause_start}} do {{laundry.pause_end}}</h5>
+          <h5>Pauza: od {{laundry.pause_start}} do {{laundry.pause_end}} i od {{laundry.pause2_start}} do {{laundry.pause2_end}}</h5>
           <h5>Ned: Ne radimo!</h5>
         </div>
         <div class=" fade-in delay" >
@@ -47,6 +47,8 @@ export default {
     this.laundry.close_time = this.laundry.close_time.substring(0, this.laundry.close_time.length - 3);
     this.laundry.pause_start = this.laundry.pause_start.substring(0, this.laundry.pause_start.length - 3);
     this.laundry.pause_end = this.laundry.pause_end.substring(0, this.laundry.pause_end.length - 3);
+    this.laundry.pause2_start = this.laundry.pause2_start.substring(0, this.laundry.pause2_start.length - 3);
+    this.laundry.pause2_end = this.laundry.pause2_end.substring(0, this.laundry.pause2_end.length - 3);
   }
 }
 </script>

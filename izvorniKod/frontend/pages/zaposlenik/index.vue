@@ -26,17 +26,21 @@
       <div class="column">
         <div class="inner-body">
           <div class="title">
-            <h2>Promjena vremena pauze i cijena</h2>
+            <h2>Promjena vremena pauze <span v-if="user !== null && user.is_superuser">i cijena</span></h2>
           </div>
           <div class="form-body">
             <!-- <div class="inline-display" >Početak radnog vremena:</div>
             <input type="time" v-model="newHoursPrice.open_time" placeholder="10:00">
             <div class="inline-display">Kraj radnog vremena:</div>
             <input type="time" v-model="newHoursPrice.close_time" placeholder="22:00"> -->
-            <div class="inline-display">Početak pauze:</div>
-            <input type="time" v-model="newHoursPrice.pause_start" @change="calculatePauseEnd()">
-            <div class="inline-display">Kraj pauze:</div>
+            <div class="inline-display">Početak prve pauze:</div>
+            <input type="time" v-model="newHoursPrice.pause_start" @change="calculatePauseEnd('pause_start')">
+            <div class="inline-display">Kraj prve pauze:</div>
             <input type="time" v-model="newHoursPrice.pause_end" readonly>
+            <div class="inline-display">Početak druge pauze:</div>
+            <input type="time" v-model="newHoursPrice.pause2_start" @change="calculatePauseEnd('pause2_start')">
+            <div class="inline-display">Kraj druge pauze:</div>
+            <input type="time" v-model="newHoursPrice.pause2_end" readonly>
             <div class="inline-display" v-if="user !== null && user.is_superuser">Cijena pranja:</div>
             <input type="number" v-if="user !== null && user.is_superuser" v-model="newHoursPrice.wash_price"
                    placeholder="10.00">
@@ -63,6 +67,8 @@
         newHoursPrice: {
           "pause_start": null,
           "pause_end": null,
+          "pause2_start": null,
+          "pause2_end": null,
           "wash_price": null,
           "drying_price": null
         },
@@ -104,6 +110,8 @@
             this.newHoursPrice = {
               "pause_start": null,
               "pause_end": null,
+              "pause2_start": null,
+              "pause2_end": null,
               "wash_price": null,
               "drying_price": null
             };
@@ -112,7 +120,7 @@
           }
         }
       },
-      async calculatePauseEnd() {
+      async calculatePauseEnd(pauseStart) {
         let date = new Date();
         const options = {
           timeZone: "Europe/Zagreb",
@@ -120,12 +128,12 @@
           hour: "2-digit",
           minute: "2-digit"
         };
-        let hrs = parseInt(this.newHoursPrice['pause_start'].substring(0, 3));
-        let mins = parseInt(this.newHoursPrice['pause_start'].substring(3, 5));
+        let hrs = parseInt(this.newHoursPrice[pauseStart].substring(0, 3));
+        let mins = parseInt(this.newHoursPrice[pauseStart].substring(3, 5));
         if (mins >= 30) {
           mins = 29;
           date.setHours(hrs, mins);
-          this.newHoursPrice['pause_start'] = date.toLocaleTimeString("hr-HR", options);
+          this.newHoursPrice[pauseStart] = date.toLocaleTimeString("hr-HR", options);
         }
         if (mins + 30 >= 60) {
           hrs = (hrs + 1) % 24;
@@ -133,7 +141,8 @@
         mins = (mins + 30) % 60;
         date.setHours(hrs, mins);
 
-        this.newHoursPrice["pause_end"] = date.toLocaleTimeString("hr-HR", options);
+        let pauseEnd = pauseStart.slice(0, pauseStart.indexOf('_') + 1) + 'end';
+        this.newHoursPrice[pauseEnd] = date.toLocaleTimeString("hr-HR", options);
       },
     },
 
@@ -265,8 +274,16 @@
 
   .form-body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 0.5fr;
     padding: 5px;
+  }
+
+  @media only screen and (min-width: 1280px) {
+    .form-body {
+      display: grid;
+      grid-template-columns: 1fr 0.5fr 1fr 0.5fr;
+      padding: 5px;
+    }
   }
 
   .row {
