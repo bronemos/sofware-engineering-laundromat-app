@@ -3,39 +3,38 @@
     <div class="form-box">
       <div class="button-box">
         <div id="btn" v-bind:class="login ? 'btn_0' : 'btn_110'"></div>
-        <button type="button" v-bind:class="login ? 'toggle-btn-white' : 'toggle-btn-black'" @click="login=true">Prijava</button>
-        <button type="button" v-bind:class="login ? 'toggle-btn-black' : 'toggle-btn-white'" @click="login=false">Registracija</button>
+        <button type="button" v-bind:class="login ? 'toggle-btn-white' : 'toggle-btn-black'" @click="login=true">{{ $t('login') }}</button>
+        <button type="button" v-bind:class="login ? 'toggle-btn-black' : 'toggle-btn-white'" @click="login=false">{{ $t('register') }}</button>
 
       </div>
       <form id="login" class="input-group-login" :class="login ? 'login_50' : 'login_n400'" @submit.prevent="loginUser">
-        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="loginForm.username">
-        <input type="password" class="input-field" placeholder="Lozinka" required v-model="loginForm.password">
+        <input type="text" class="input-field" :placeholder="$t('username')" required v-model="loginForm.username">
+        <input type="password" class="input-field" :placeholder="$t('password')" required v-model="loginForm.password">
         <!--- <input type="checkbox" class="check-box"><span>&nbsp;&nbsp;&nbsp;&nbsp;Zapamti zaporku</span>--->
-        <button type="submit" class="submit-btn">Prijava</button>
+        <button type="submit" class="submit-btn">{{ $t('login') }}</button>
       </form>
 
       <form id="register" class="input-group" :class="login ? 'register_450' : 'register_50'" @submit.prevent="registerUser" autocomplete="off">
-        <input type="text" class="input-field" placeholder="Korisničko ime" required v-model="registerForm.username">
-        <input type="text" class="input-field" placeholder="Ime" required v-model="registerForm.first_name">
-        <input type="text" class="input-field" placeholder="Prezime" required v-model="registerForm.last_name">
-        <input type="text" class="input-field" placeholder="JMBAG" required v-model="registerForm.JMBAG">
-        <div class="error" v-if="!$v.registerForm.JMBAG.numeric">JMBAG mora biti broj</div>
-        <div class="error" v-if="!$v.registerForm.JMBAG.minLength">JMBAG mora imati točno 10 znamenaka</div>
-        <div class="error" v-if="!$v.registerForm.JMBAG.maxLength">JMBAG mora imati točno 10 znamenaka</div>
-        <!-- <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div> -->
-        <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email">
-        <div class="error" v-if="!$v.registerForm.email.email">Email mora sadržavati @ i valjanu domenu</div>
+        <input type="text" class="input-field" :placeholder="$t('username')" required v-model="registerForm.username">
+        <input type="text" class="input-field" :placeholder="$t('name')" required v-model="registerForm.first_name">
+        <input type="text" class="input-field" :placeholder="$t('surname')" required v-model="registerForm.last_name">
 
-        <input type="password" class="input-field" placeholder="Lozinka" required v-model="registerForm.password">
-        <div class="error" v-if="!$v.registerForm.password.verifyPw && registerForm.password.length !== 0">Lozinka mora sadržavati najmanje 8 znakova te slova
-          i brojeve.
-        </div>
-        <input type="password" class="input-field" placeholder="Ponovite lozinku" required v-model="registerForm.passwordAgain">
-        <div class="error" v-if="!$v.registerForm.passwordAgain.sameAs">Lozinka nije ista</div>
+        <input type="text" class="input-field" placeholder="JMBAG" required v-model="registerForm.JMBAG">
+        <div class="error" v-if="!$v.registerForm.JMBAG.numeric">{{ $t('jmbag_is_number') }}</div>
+        <div class="error" v-if="!$v.registerForm.JMBAG.minLength">{{ $t('jmbag_check') }}</div>
+        <div class="error" v-if="!$v.registerForm.JMBAG.maxLength">{{ $t('jmbag_check') }}</div>
+
+        <input type="email" class="input-field" placeholder="Email" required v-model="registerForm.email">
+        <div class="error" v-if="!$v.registerForm.email.email">{{ $t('email_check') }}</div>
+
+        <input type="password" class="input-field" :placeholder="$t('password')" required v-model="registerForm.password">
+        <div class="error" v-if="!$v.registerForm.password.verifyPw && registerForm.password.length !== 0">{{ $t('password_check') }}</div>
+        <input type="password" class="input-field" :placeholder="$t('repeat_password')" required v-model="registerForm.passwordAgain">
+        <div class="error" v-if="!$v.registerForm.passwordAgain.sameAs">{{ $t('repeat_password_check') }}</div>
 
         <!---  <input type="checkbox" class="check-box">
         <span> &nbsp;&nbsp;&nbsp;&nbsp; Slažem se s uvjetima & odredbama</span>--->
-        <button type="submit" class="submit-btn">Registracija</button>
+        <button type="submit" class="submit-btn">{{ $t('register') }}</button>
       </form>
     </div>
   </div>

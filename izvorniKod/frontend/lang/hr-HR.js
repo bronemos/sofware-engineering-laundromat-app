@@ -80,5 +80,15 @@ export default {
     ofUser: "korisnika",
     grade: "Ocjena",
     review: "Recenzija",
-    addWorker: "Dodaj zaposlenika"
+    addWorker: "Dodaj zaposlenika",
+    login: "Prijava",
+    register: "Registracija",
+    username: "Korisničko ime",
+    password: "Lozinka",
+    repeat_password: "Ponovite lozinku",
+    jmbag_is_number: "JMBAG mora biti broj",
+    jmbag_check: "JMBAG mora imati točno 10 znamenaka",
+    email_check: "Email mora sadržavati @ i valjanu domenu",
+    password_check: "Lozinka mora sadržavati najmanje 8 znakova te slova i brojeve.",
+    repeat_password_check: "Lozinka nije ista",
   }

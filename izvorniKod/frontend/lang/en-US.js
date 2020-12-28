@@ -81,5 +81,15 @@ export default {
     ofUser: "user",
     grade: "Grade",
     review: "Review",
-    addWorker: "Add worker"
+    addWorker: "Add worker",
+    login: "Log in",
+    register: "Sing in",
+    username: "Username",
+    password: "Password",
+    repeat_password: "Repeat password",
+    jmbag_is_number: "JMBAG must be number",
+    jmbag_check: "JMBAG must have exactly 10 digits",
+    email_check: "Email must have @ and valid domain",
+    password_check: "Password length must be grater than or equal to 8, password must include letters and numbers",
+    repeat_password_check: "Passwords does not match",
 }
