@@ -94,6 +94,8 @@ class LaundrySerializer(DynamicFieldsModelSerializer):
     def validate(self, data):
         if data.get('pause_start') is not None and data.get('pause_start').minute >= 30:
             raise serializers.ValidationError('Pauza mora završiti prije novog termina!!!')
+        if data.get('pause2_start') is not None and data.get('pause2_start').minute >= 30:
+            raise serializers.ValidationError('Pauza mora završiti prije novog termina!!!')
         return data
 
 
