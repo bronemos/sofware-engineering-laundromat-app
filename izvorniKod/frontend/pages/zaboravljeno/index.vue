@@ -19,7 +19,12 @@ import PostForm from "@/components/PostForm";
 export default {
   name: "Izgubljeno_nadeno",
   components: {Post, PostForm },
-
+  nuxtI18n: {
+    paths: {
+      hr: "/zaboravljeno",
+      en: "/lost",
+    },
+  },
   computed: {
     user() {
       if (this.$auth.loggedIn) {

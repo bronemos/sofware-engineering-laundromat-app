@@ -7,26 +7,16 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-          <b-nav-item href="/prijava/" v-if="user === null">Prijavi se</b-nav-item>
-          <b-nav-item href="/rezervacije/" v-if="user !== null"
-            >Rezervacije</b-nav-item
-          >
-          <b-nav-item href="/profil/" v-if="user !== null">Profil</b-nav-item>
-          <b-nav-item href="/zaboravljeno/" v-if="user !== null">Zaboravljeno</b-nav-item>
-          <b-nav-item href="/poslovi/">Poslovi</b-nav-item>
-          <b-nav-item
-            href="/zaposlenik/"
-            v-if="user !== null && (user.is_superuser || user.is_staff)"
-            >Zaposlenik</b-nav-item
-          >
-          <b-nav-item
-            href="/admin/"
-            v-if="user !== null && user.is_superuser"
-            >Admin</b-nav-item
-          >
-          <b-nav-item @click="logout" v-if="user !== null"
-            >Odjavite se</b-nav-item
-          >
+          <b-nav-item :to="localePath('prijava')" v-if="user === null">{{ $t('signIn') }}</b-nav-item>
+          <b-nav-item :to="localePath('rezervacije')"  v-if="user !== null">{{ $t('reservation') }}</b-nav-item>
+          <b-nav-item :to="localePath('profil')" v-if="user !== null">{{ $t('profile') }}</b-nav-item>
+          <b-nav-item :to="localePath('zaboravljeno')" v-if="user !== null">{{ $t('lostAndFound') }}</b-nav-item>
+          <b-nav-item :to="localePath('poslovi')">{{ $t('jobs') }}</b-nav-item>
+          <b-nav-item :to="localePath('zaposlenik')" v-if="user !== null && (user.is_superuser || user.is_staff)">{{ $t('worker') }}</b-nav-item>
+          <b-nav-item :to="localePath('admin')" v-if="user !== null && user.is_superuser">Admin</b-nav-item>
+          <b-nav-item @click="logout" v-if="user !== null">{{ $t('signOut') }}</b-nav-item>
+          <b-nav-item :to="switchLocalePath('hr')">🇭🇷</b-nav-item>
+          <b-nav-item :to="switchLocalePath('en')">🇺🇸</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>

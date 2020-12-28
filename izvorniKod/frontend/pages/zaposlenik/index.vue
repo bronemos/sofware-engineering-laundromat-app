@@ -5,8 +5,8 @@
         <table>
           <thead>
           <tr>
-            <th>Ime Studenta</th>
-            <th>Prezime Studenta</th>
+            <th>{{ $t('nameStudent') }}</th>
+            <th>{{ $t('surnameStudent') }}</th>
             <th>JMBAG</th>
             <th></th>
           </tr>
@@ -17,7 +17,7 @@
             <td>{{user.last_name}}</td>
             <td>{{user.JMBAG}}</td>
             <td>
-              <button id="myBtn" @click="activate(user.id)">Aktiviraj</button>
+              <button id="myBtn" @click="activate(user.id)">{{ $t('activate') }}</button>
             </td>
           </tr>
           </tbody>
@@ -26,30 +26,30 @@
       <div class="column">
         <div class="inner-body">
           <div class="title">
-            <h2>Promjena vremena pauze <span v-if="user !== null && user.is_superuser">i cijena</span></h2>
+            <h2>{{ $t('changeBreakTime') }} <span v-if="user !== null && user.is_superuser"> {{ $t('andPrices') }}</span></h2>
           </div>
           <div class="form-body">
             <!-- <div class="inline-display" >Početak radnog vremena:</div>
             <input type="time" v-model="newHoursPrice.open_time" placeholder="10:00">
             <div class="inline-display">Kraj radnog vremena:</div>
             <input type="time" v-model="newHoursPrice.close_time" placeholder="22:00"> -->
-            <div class="inline-display">Početak prve pauze:</div>
+            <div class="inline-display">{{ $t('start') }} {{ $t('first') }} {{ $t('break') }}:</div>
             <input type="time" v-model="newHoursPrice.pause_start" @change="calculatePauseEnd('pause_start')">
-            <div class="inline-display">Kraj prve pauze:</div>
+            <div class="inline-display">{{ $t('end') }} {{ $t('first') }} {{ $t('break') }}:</div>
             <input type="time" v-model="newHoursPrice.pause_end" readonly>
-            <div class="inline-display">Početak druge pauze:</div>
+            <div class="inline-display">{{ $t('start') }} {{ $t('second') }} {{ $t('break') }}:</div>
             <input type="time" v-model="newHoursPrice.pause2_start" @change="calculatePauseEnd('pause2_start')">
-            <div class="inline-display">Kraj druge pauze:</div>
+            <div class="inline-display">{{ $t('end') }} {{ $t('second') }} {{ $t('break') }}:</div>
             <input type="time" v-model="newHoursPrice.pause2_end" readonly>
-            <div class="inline-display" v-if="user !== null && user.is_superuser">Cijena pranja:</div>
+            <div class="inline-display" v-if="user !== null && user.is_superuser">{{ $t('price') }} {{ $t('washingLowercase') }}:</div>
             <input type="number" v-if="user !== null && user.is_superuser" v-model="newHoursPrice.wash_price"
                    placeholder="10.00">
-            <div class="inline-display" v-if="user !== null && user.is_superuser">Cijena sušenja:</div>
+            <div class="inline-display" v-if="user !== null && user.is_superuser">{{ $t('price') }} {{ $t('dryingLowercase') }}:</div>
             <input type="number" v-if="user !== null && user.is_superuser" v-model="newHoursPrice.drying_price"
                    placeholder="10.00">
           </div>
           <div class="padd-15">
-            <button id="myBtn" @click.prevent="changeTimePrice()">Promijeni</button>
+            <button id="myBtn" @click.prevent="changeTimePrice()">{{ $t('change') }}</button>
           </div>
         </div>
       </div>
@@ -59,6 +59,12 @@
 
 <script>
   export default {
+    nuxtI18n: {
+    paths: {
+      hr: "/zaposlenik",
+      en: "/worker",
+    },
+  },
     middleware: 'auth-staff',
     data() {
       return {
