@@ -47,6 +47,25 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/toast',
     '@nuxtjs/auth',
+    ['nuxt-i18n', {
+      lazy: true,
+      locales: [
+        {
+          name: 'Hrvatski',
+          code: 'hr',
+          iso: 'hr-HR',
+          file: 'hr-HR.js'
+        },
+        {
+          name: 'English',
+          code: 'en',
+          iso: 'en-US',
+          file: 'en-US.js'
+        },
+      ],
+      langDir: 'lang/',
+      defaultLocale: 'hr',
+    }]
   ],
   /*
   ** Axios module configuration

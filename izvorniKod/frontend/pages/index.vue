@@ -6,20 +6,20 @@
           Terminko
         </h1>
         <h2 class="subtitle fade-in">
-          Aplikacija za praonicu rublja
+          {{ $t('greeting') }}
         </h2>
       </div>
       <div class="info-container">
         <div class="work-hours fade-in delay" >
-          <h3>Radno vrijeme:</h3>
-          <h5>Pon-Sub: od {{laundry.open_time}} do {{laundry.close_time}}</h5>
-          <h5>Pauza: od {{laundry.pause_start}} do {{laundry.pause_end}}</h5>
-          <h5>Ned: Ne radimo!</h5>
+          <h3>{{ $t('workHours') }}</h3>
+          <h5>{{ $t('monToSat')}}: {{laundry.open_time}} - {{laundry.close_time}}</h5>
+          <h5>{{ $t('pauses')}}: {{laundry.pause_start}} - {{laundry.pause_end}} | {{laundry.pause2_start}} - {{laundry.pause2_end}}</h5>
+          <h5>{{ $t('sundayNotWorking')}}</h5>
         </div>
         <div class=" fade-in delay" >
-          <h3>Cijene:</h3>
-          <h5>Pranje: {{laundry.wash_price}} kn</h5>
-          <h5>Sušenje: {{laundry.drying_price}} kn</h5>
+          <h3>{{ $t('prices') }}:</h3>
+          <h5>{{ $t('washing') }}: {{laundry.wash_price}} kn</h5>
+          <h5>{{ $t('drying') }}: {{laundry.drying_price}} kn</h5>
         </div>
       </div>
       
@@ -47,6 +47,8 @@ export default {
     this.laundry.close_time = this.laundry.close_time.substring(0, this.laundry.close_time.length - 3);
     this.laundry.pause_start = this.laundry.pause_start.substring(0, this.laundry.pause_start.length - 3);
     this.laundry.pause_end = this.laundry.pause_end.substring(0, this.laundry.pause_end.length - 3);
+    this.laundry.pause2_start = this.laundry.pause2_start.substring(0, this.laundry.pause2_start.length - 3);
+    this.laundry.pause2_end = this.laundry.pause2_end.substring(0, this.laundry.pause2_end.length - 3);
   }
 }
 </script>

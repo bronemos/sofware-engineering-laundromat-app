@@ -7,7 +7,7 @@
             <vue-cal ref="vuecal" 
                 :time-from="6 * 60" :time-step="60" 
                 active-view="day" 
-                locale="hr" 
+                :locale="$i18n.locale"
                 :disable-views="['years', 'year']" 
                 class="vuecal--blue-theme" 
                 today-button 
@@ -26,7 +26,7 @@
                 <v-tooltip>
                   <template v-slot:activator="{ on }">
                     <v-btn v-on="on">
-                      <span>Danas</span>
+                      <span>{{ $t('today') }}</span>
                     </v-btn>
                   </template>
                 </v-tooltip>
@@ -50,35 +50,40 @@
           <!-- reserved appointement -->
           <v-card-text v-if="selectedEvent.class == 'reserved' || selectedEvent.class == 'mine'">
             <span v-if="selectedEvent.user.email != ''"><strong>Email:</strong> {{ selectedEvent.user.email }}<br /></span>
-            <span><strong>Plaćanje:</strong> {{ selectedEvent.paid }}</span><br />
-            <span><strong>Košara:</strong>
-              {{ selectedEvent.basket_taken }}</span><br />
-            <span><strong>Cijena:</strong> {{ selectedEvent.price }} kn</span><br />
-            <span><strong>Uređaj:</strong> {{ selectedEvent.machine }}</span><br />
+            <span><strong>{{ $t("paying" )}}:</strong> 
+              <span v-if="selectedEvent.paid === true">{{ $t("payedOnline" )}} </span> 
+              <span v-if="selectedEvent.paid === false">{{ $t("onCashRegister" )}} </span>
+            </span><br />
+            <span><strong>{{ $t("basket" )}}:</strong>
+              <span v-if="selectedEvent.basket_taken === true">{{ $t("taken" )}} </span> 
+              <span v-if="selectedEvent.basket_taken === false">{{ $t("notTaken" )}} </span>
+            </span><br />
+            <span><strong>{{ $t("price") }}:</strong> {{ selectedEvent.price }} kn</span><br />
+            <span><strong>{{ $t("device") }}:</strong> {{ selectedEvent.label }}</span><br />
             <div v-if="selectedEvent.note != ''">
-              <span><strong>Bilješka:</strong></span><br />
+              <span><strong>{{ $t("note") }}:</strong></span><br />
               <span>{{ selectedEvent.note }}</span><br />
             </div>
             
-            <span v-if="selectedEvent.warning === true"><strong>Ako otkažete termin manje od 3 sata prije početka dobit ćete negativne bodove</strong></span>
+            <span v-if="selectedEvent.warning === true"><strong>{{ $t("warningPoints") }}</strong></span>
             <button 
               @click.prevent="deleteAppointment()" 
               v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" 
-              class="btn btn-danger">Obriši
+              class="btn btn-danger">{{ $t("delete") }}
             </button>
 
             <div v-if="user.is_staff">
               <hr/>
-              <span><strong>Pošalji e-mail korisniku:</strong></span>
+              <span><strong>{{ $t("sendMailMsg") }}:</strong></span>
               <textarea class="form-control" rows="5" id="comment" v-model="selectedEvent.mailText"></textarea>
-              <button @click.prevent="sendMail()" class="btn btn-warning">Pošalji</button>
+              <button @click.prevent="sendMail()" class="btn btn-warning">{{ $t("send") }}</button>
             </div>
 
             <div v-if="selectedEvent.past === true && selectedEvent.user.id === this.$auth.user.id">
               <hr/>
-              <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">Termin propušten</button><br/>
+              <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">{{ $t("apppointmentMissed")}}</button><br/>
               <div v-if="selectedEvent.rating == null && user.is_staff == false">
-                <strong>Odaberi i pritisni ocjenu za zaposlenika:</strong>
+                <strong>{{ $t("rateWorker") }}:</strong>
                 <select class="custom-select" v-model="selectedEvent.selectedEmployee">
                   <option required v-for="worker in selectedEvent.workers_list" v-bind:key="worker.id" v-bind:value="worker.id">
                     {{ worker.last_name }} {{ worker.first_name }}
@@ -110,17 +115,17 @@
                     type="checkbox"
                     v-model="appointmentForm.basket_taken"
                   />
-                  Posudi košaru</label
+                  {{ $t("takeBasket") }}</label
                 >
               </div>
               <div class="checkbox" v-if="this.user.card != null">
                 <label
                   ><input type="checkbox" v-model="appointmentForm.paid" />
-                  Kartično plaćanje</label
+                  {{ $t("payByCard") }}</label
                 >
               </div>
               <div class="form-group">
-                <label for="comment">Bilješka:</label>
+                <label for="comment"> {{ $t("note") }}:</label>
                 <textarea
                   class="form-control"
                   rows="5"
@@ -128,7 +133,7 @@
                   v-model="appointmentForm.note"
                 ></textarea>
               </div>
-              <button type="submit" class="btn btn-success">Rezerviraj</button>
+              <button type="submit" class="btn btn-success">{{ $t("reserve") }}</button>
             </form>
           </v-card-text>
         </v-card>
@@ -138,7 +143,7 @@
       <v-dialog v-model="loadingDialog" width="unset" v-if="loadingDialog">
         <v-card>
           <v-card-title class="d-flex justify-content-center">
-            <strong>Učitavanje rezervacija....</strong>
+            <strong>{{ $t("loading") }}...</strong>
           </v-card-title>
           <v-card-text class="d-flex justify-content-center">
             <img src="https://media2.giphy.com/media/10etb2jVqCZYWc/giphy.gif" />
@@ -151,6 +156,12 @@
 
 <script>
 export default {
+  nuxtI18n: {
+    paths: {
+      hr: '/rezervacije',
+      en: '/reservations'
+    }
+  },
   middleware: "auth",
   data: () => ({
     prices: {
@@ -187,8 +198,18 @@ export default {
     ],
     events: [],
   }),
-
   async fetch() {
+    if(this.$i18n.locale === "en") {
+      for(var i = 0; i < 10; i++) {
+        if(i % 2 == 0)  {
+          this.splitDays[i].label = `Washer ${i + 1}`
+        } else {
+          this.splitDays[i].label = `Dryer ${i + 1}`
+        }
+      }
+    }
+    
+
     let res = await this.$axios.get(`laundry`); 
     let res2 = await this.$axios.get(`laundry/future_laundry`);
 
@@ -242,8 +263,8 @@ export default {
         note: app.note,
         machine: app.title,
         price: app.price,
-        paid: app.paid ? "karticom" : "na blagajni",
-        basket_taken: app.basket_taken ? "posuđena" : "nije posuđena",
+        paid: app.paid,
+        basket_taken: app.basket_taken,
         employee: workers,
         workers_list: workers_list.data,
         missed: app.missed,

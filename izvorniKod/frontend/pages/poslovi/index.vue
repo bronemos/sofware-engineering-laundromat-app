@@ -19,6 +19,12 @@ import Post from "@/components/Post";
 import PostForm from "@/components/PostForm";
 
 export default {
+  nuxtI18n: {
+    paths: {
+      hr: '/poslovi',
+      en: '/jobs'
+    }
+  },
   name: "Poslovi",
   components: {Post, PostForm },
 

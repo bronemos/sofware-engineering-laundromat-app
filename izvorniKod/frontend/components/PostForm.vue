@@ -6,13 +6,13 @@
           class="form-control"
           rows="5"
           v-model="newPost.text"
-          placeholder="Napišite tekst"
+          v-bind:placeholder="$t('writeText')"
         ></textarea>
         <div v-if="!imageUploaded" class="image-upload">
           <label for="file">
             <p>
               <img class="upload_icon" src="~@/static/images/upload.png" />
-              Priložite fotografiju
+              {{ $t("attachPhoto") }}
               <input
                 id="file"
                 name="image"
