@@ -85,7 +85,7 @@ class AccountViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.De
         if user.is_authenticated:
             return Response(
                 {'user': UserSerializer(user, only_fields=['username', 'first_name', 'last_name', 'email', 'negative_points',
-                                                           'is_superuser', 'is_staff', 'JMBAG', 'id', 'card']).data},
+                                                           'is_superuser', 'is_staff', 'JMBAG', 'id', 'card', 'baskets']).data},
                 status=status.HTTP_200_OK
             )
 
@@ -116,7 +116,7 @@ class CardViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.Upda
 
 
 class AdminViewSet(viewsets.GenericViewSet):
-    queryset = User.objects.filter(is_active=True, is_superuser=False)
+    queryset = User.objects.filter(is_active=True)
     permission_classes = [IsAdminUser]
 
     permission_classes_by_action = {
@@ -136,13 +136,16 @@ class AdminViewSet(viewsets.GenericViewSet):
         if self.action == 'create_worker_account':
             kwargs['only_fields'] = ['password', 'username', 'first_name', 'last_name', 'email', 'JMBAG', 'is_staff']
             return super().get_serializer(*args, **kwargs)
+        if self.action == 'return_basket':
+            kwargs['only_fields'] = ['id']
+            return super().get_serializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
     @action(detail=False, methods=['GET'], name='list_users')
     def list_users(self, request):
         return Response(
             UserSerializer(
-                self.get_queryset().filter(is_staff=False),
+                self.get_queryset().filter(is_staff=False, is_superuser=False),
                 only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined',
                              'negative_points'],
                 many=True
@@ -154,7 +157,7 @@ class AdminViewSet(viewsets.GenericViewSet):
     def list_workers(self, request):
         return Response(
             UserSerializer(
-                self.get_queryset().filter(is_staff=True),
+                self.get_queryset().filter(is_staff=True, is_superuser=False),
                 only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined',
                              'negative_points'],
                 many=True
@@ -188,6 +191,31 @@ class AdminViewSet(viewsets.GenericViewSet):
                 only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined']
             ).data,
             status=status.HTTP_201_CREATED
+        )
+
+    @action(detail=False, methods=['GET'], name='baskets')
+    def baskets(self, request):
+        return Response(
+            UserSerializer(
+                User.objects.filter(baskets__gt=0),
+                only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined', 'baskets'],
+                many=True
+            ).data,
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=['POST'], name='return_basket')
+    def return_basket(self, request, pk=None):
+        user = self.get_object()
+        if user.baskets >= 0:
+            user.baskets -= 1
+            user.save()
+        return Response(
+            UserSerializer(
+                user,
+                only_fields=['id', 'first_name', 'last_name', 'username', 'email', 'JMBAG', 'date_joined', 'baskets'],
+            ).data,
+            status=status.HTTP_200_OK
         )
 
 
@@ -273,6 +301,16 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
             return [permission() for permission in self.permission_classes_by_action[self.action]]
         except KeyError:
             return [permission() for permission in self.permission_classes]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        appointment = serializer.save()
+        if appointment.basket_taken:
+            user = appointment.user
+            user.baskets += 1
+            user.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['POST'], name='send_email')
     def send_email(self, request, pk=None):

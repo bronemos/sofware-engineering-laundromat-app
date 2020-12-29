@@ -55,6 +55,7 @@ class User(AbstractUser):
     JMBAG = models.CharField(null=False, unique=True, blank=False, max_length=10, default=random_string)
     card = models.OneToOneField(Card, null=True, blank=True, on_delete=models.SET_NULL)
     negative_points = models.IntegerField(null=False, blank=False, default=0)
+    baskets = models.IntegerField(null=True, blank=True, default=0)
 
 
 def return_date_changed():
