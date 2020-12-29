@@ -115,6 +115,7 @@ class AppointmentSerializer(DynamicFieldsModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     user_obj = serializers.SerializerMethodField()
     machine = RelatedFieldAlternative(queryset=Machine.objects.all(), serializer=MachineSerializer)
+    employee = UserSerializer(only_fields=['id', 'username', 'email', 'first_name', 'last_name'], read_only=True)
     review = serializers.SerializerMethodField(read_only=True)
     end = serializers.SerializerMethodField()
     title = serializers.SerializerMethodField()
