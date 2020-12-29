@@ -89,5 +89,7 @@ export default {
     email_check: "Email mora sadržavati @ i valjanu domenu",
     password_check: "Lozinka mora sadržavati najmanje 8 znakova te slova i brojeve.",
     repeat_password_check: "Lozinka nije ista",
-    shifts: "Smjene"
+    shifts: "Smjene",
+    letGo: "Otpusti",
+    shift: "Smjena"
   }

@@ -56,8 +56,8 @@ export default {
     passwordInvalid: "Password format invalid.",
     attachPhoto: "Attach photo",
     writeText: "Write text",
-    nameStudent: "Students name",
-    surnameStudent: "Students surname",
+    nameStudent: "Student's name",
+    surnameStudent: "Student's surname",
     activate: "Activate",
     changeBreakTime: "Change break time",
     andPrices: "and prices",
@@ -71,8 +71,8 @@ export default {
     reviews: "Reviews",
     workHoursLowercase: "work hours",
     block: "Block",
-    workerName: "Workers name",
-    workerSurname: "Workers surname",
+    workerName: "Worker's name",
+    workerSurname: "Worker's surname",
     name: "Name",
     surname: "Surname",
     ofWorker: "worker",
@@ -91,4 +91,6 @@ export default {
     password_check: "Password length must be grater than or equal to 8, password must include letters and numbers",
     repeat_password_check: "Passwords does not match",
     shifts: "Shifts",
+    letGo: "Let go",
+    shift: "Shift"
 }
