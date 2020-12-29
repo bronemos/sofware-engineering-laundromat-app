@@ -17,6 +17,15 @@
                   </button>
                 </li>
                 <li class="nav-item">
+                  <button class="nav-link" v-bind:class="tabSelected === 'shifts' ? 'active' : ''" id="shifts" @click.prevent="
+                      tabSelected = 'shifts';
+                      editHours = false;
+                      addingWorker = false;
+                    ">
+                    {{ $t("shifts") }}
+                  </button>
+                </li>
+                <li class="nav-item">
                   <button class="nav-link" v-bind:class="tabSelected === 'users' ? 'active' : ''" id="users" @click.prevent="
                       tabSelected = 'users';
                       editHours = false;
@@ -106,7 +115,7 @@
             <thead>
               <tr>
                 <th>{{ $t("workerName") }}</th>
-                <th>{{ $t("workerSuername") }}</th>
+                <th>{{ $t("workerSurname") }}</th>
                 <th>JMBAG</th>
                 <th>{{ $t("negativePoints") }}</th>
                 <th></th>

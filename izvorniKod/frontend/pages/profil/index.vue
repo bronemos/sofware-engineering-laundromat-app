@@ -198,7 +198,7 @@
                 <th>{{ $t("end") }}</th>
                 <th>{{ $t("price") }}</th>
                 <th>{{ $t("note") }}</th>
-                <th>{{ $t("payed") }}</th>
+                <th>{{ $t("paid") }}</th>
                 <th>{{ $t("basket") }}</th>
                 <th>{{ $t("type") }}</th>
               </tr>

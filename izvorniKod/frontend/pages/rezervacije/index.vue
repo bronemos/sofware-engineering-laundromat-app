@@ -4,22 +4,22 @@
       <div class="hero">
         <div class="container emp-profile">
           <client-only>
-            <vue-cal ref="vuecal" 
-                :time-from="6 * 60" :time-step="60" 
-                active-view="day" 
+            <vue-cal ref="vuecal"
+                :time-from="6 * 60" :time-step="60"
+                active-view="day"
                 :locale="$i18n.locale"
-                :disable-views="['years', 'year']" 
-                class="vuecal--blue-theme" 
-                today-button 
-                :selected-date="todayDate" 
-                :min-date="minDate" 
-                :max-date="maxDate" 
-                :hide-weekdays="[7]" 
-                :events="events" 
-                :split-days="splitDays" 
-                :sticky-split-labels="stickySplitLabels" 
-                :min-cell-width="minCellWidth" 
-                :min-split-width="minSplitWidth" 
+                :disable-views="['years', 'year']"
+                class="vuecal--blue-theme"
+                today-button
+                :selected-date="todayDate"
+                :min-date="minDate"
+                :max-date="maxDate"
+                :hide-weekdays="[7]"
+                :events="events"
+                :split-days="splitDays"
+                :sticky-split-labels="stickySplitLabels"
+                :min-cell-width="minCellWidth"
+                :min-split-width="minSplitWidth"
                 :on-event-click="onEventClick">
               <template v-slot:today-button>
                 <!-- Using Vuetify -->
@@ -50,12 +50,12 @@
           <!-- reserved appointement -->
           <v-card-text v-if="selectedEvent.class == 'reserved' || selectedEvent.class == 'mine'">
             <span v-if="selectedEvent.user.email != ''"><strong>Email:</strong> {{ selectedEvent.user.email }}<br /></span>
-            <span><strong>{{ $t("paying" )}}:</strong> 
-              <span v-if="selectedEvent.paid === true">{{ $t("payedOnline" )}} </span> 
+            <span><strong>{{ $t("paying" )}}:</strong>
+              <span v-if="selectedEvent.paid === true">{{ $t("paidOnline" )}} </span>
               <span v-if="selectedEvent.paid === false">{{ $t("onCashRegister" )}} </span>
             </span><br />
             <span><strong>{{ $t("basket" )}}:</strong>
-              <span v-if="selectedEvent.basket_taken === true">{{ $t("taken" )}} </span> 
+              <span v-if="selectedEvent.basket_taken === true">{{ $t("taken" )}} </span>
               <span v-if="selectedEvent.basket_taken === false">{{ $t("notTaken" )}} </span>
             </span><br />
             <span><strong>{{ $t("price") }}:</strong> {{ selectedEvent.price }} kn</span><br />
@@ -64,11 +64,11 @@
               <span><strong>{{ $t("note") }}:</strong></span><br />
               <span>{{ selectedEvent.note }}</span><br />
             </div>
-            
+
             <span v-if="selectedEvent.warning === true"><strong>{{ $t("warningPoints") }}</strong></span>
-            <button 
-              @click.prevent="deleteAppointment()" 
-              v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false" 
+            <button
+              @click.prevent="deleteAppointment()"
+              v-if="(user.is_staff || (this.$auth.user.id == user.id && selectedEvent.class == 'mine')) && selectedEvent.past == false"
               class="btn btn-danger">{{ $t("delete") }}
             </button>
 
@@ -81,7 +81,7 @@
 
             <div v-if="selectedEvent.past === true && selectedEvent.user.id === this.$auth.user.id">
               <hr/>
-              <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">{{ $t("apppointmentMissed")}}</button><br/>
+              <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">{{ $t("appointmentMissed")}}</button><br/>
               <div v-if="selectedEvent.rating == null && user.is_staff == false">
                 <strong>{{ $t("rateWorker") }}:</strong>
                 <select class="custom-select" v-model="selectedEvent.selectedEmployee">
@@ -208,9 +208,9 @@ export default {
         }
       }
     }
-    
 
-    let res = await this.$axios.get(`laundry`); 
+
+    let res = await this.$axios.get(`laundry`);
     let res2 = await this.$axios.get(`laundry/future_laundry`);
 
     var laundries = {};
@@ -218,19 +218,19 @@ export default {
     laundries[res.data.date_changed].open_time_value = parseInt(
       res.data.open_time.substring(0, res.data.open_time.length - 6)
     );
-    laundries[res.data.date_changed].close_time_value = 
+    laundries[res.data.date_changed].close_time_value =
       parseInt(res.data.close_time.substring(0, res.data.close_time.length - 6));
-    laundries[res.data.date_changed].pause_start_value = 
+    laundries[res.data.date_changed].pause_start_value =
       res.data.pause_start.substring(0, res.data.pause_start.length - 3);
-    laundries[res.data.date_changed].pause_end_value = 
+    laundries[res.data.date_changed].pause_end_value =
       res.data.pause_end.substring(0,res.data.close_time.length - 3);
 
     for (var entry in res2.data) {
       let obj = Object.assign({}, res2.data[entry]);
       if (new Date(obj.date_changed) < new Date().addDays(14)) {
-        obj.open_time_value = 
+        obj.open_time_value =
           parseInt(obj.open_time.substring(0, obj.open_time.length - 6));
-        obj.close_time_value = 
+        obj.close_time_value =
           parseInt(obj.close_time.substring(0, obj.close_time.length - 6));
         obj.pause_start_value = obj.pause_start.substring(0,obj.pause_start.length - 3);
         obj.pause_end_value = obj.pause_end.substring(0,obj.close_time.length - 3);
@@ -296,20 +296,20 @@ export default {
       //  skip sunday
       if(d.getDay() === 0)
         continue;
-      
+
       //  choose most recent work hours
       let laundry = null;
       for (var entry in laundries)
         if (d >= new Date(entry))
           laundry = laundries[entry];
-        else 
+        else
           break;
 
       var tmpDate = new Date(d);
       tmpDate.setHours(laundry.open_time_value,0,0,0);
       const toHours = tmpDate.addHours(laundry.close_time_value - laundry.open_time_value);
       for (; tmpDate < toHours; tmpDate = tmpDate.addHours(1)) {
-        if (d == this.todayDate && tmpDate.getHours() <= d.getHours()) 
+        if (d == this.todayDate && tmpDate.getHours() <= d.getHours())
           continue;
         var event = {};
         event.start = tmpDate.toString();
@@ -318,19 +318,19 @@ export default {
         event.title = `${tmpDate.getHours()}:00 - ${tmpDate.addHours(1).getHours()}:00`;
         event.label = `${tmpDate.getHours()}:00 - ${tmpDate.addHours(1).getHours()}:00`;
         for (var k = 1; k <= 10; k++) {
-          if (reserved.includes(k + "" + event.start.toString())) 
+          if (reserved.includes(k + "" + event.start.toString()))
             continue;
           let tmp = Object.assign({}, event);
           if (tmpDate.getHours() == parseInt(laundry.pause_start.substring(0, laundry.pause_start.length - 3))) {
             let pauseEvent = Object.assign({}, pause);
             let pauseDate = new Date(d);
             pauseDate.setHours(
-              parseInt(laundry.pause_start_value.substring(0, 2)), 
+              parseInt(laundry.pause_start_value.substring(0, 2)),
               parseInt(laundry.pause_start_value.substring(3, 5))
             );
             pauseEvent.start = pauseDate.toString();
             pauseDate.setHours(
-              parseInt(laundry.pause_end_value.substring(0, 2)), 
+              parseInt(laundry.pause_end_value.substring(0, 2)),
               parseInt(laundry.pause_end_value.substring(3, 5))
             );
             pauseEvent.end = pauseDate.toString();
@@ -351,7 +351,7 @@ export default {
       if (new Date() > new Date(event.start) && event.class === "free") {
         location.reload();
       }
-      if (new Date().addHours(3) >= new Date(event.start) 
+      if (new Date().addHours(3) >= new Date(event.start)
             && event.class === "mine" && event.past == false) {
         event.warning = true;
       }
