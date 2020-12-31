@@ -231,7 +231,7 @@
           </div>
         </div>
         <div class="row" v-if="tabSelected === 'reviews' && reviews.length > 0">
-          <table>
+          <table class="review-table">
             <thead>
             <tr>
               <th>{{ $t("nameAndSurname") }} {{ $t("ofWorker") }}</th>
@@ -637,6 +637,23 @@
       150px,
       1.5fr
     ) minmax(150px, 1.5fr) minmax(150px, 1.5fr);
+    grid-template-rows: 50px;
+    background: #fff;
+    /* height: 480px; */
+    max-height: 450px;
+    border-radius: 0.5rem;
+    /* padding: 15px; */
+    overflow: auto;
+    border-collapse: collapse;
+    /* min-width: 100%; */
+  }
+
+  .review-table {
+    display: grid;
+    grid-template-columns: minmax(150px, 1.5fr) minmax(150px, 1.5fr) minmax(
+      150px,
+      1.5fr
+    ) minmax(150px, 1.5fr);
     grid-template-rows: 50px;
     background: #fff;
     /* height: 480px; */
