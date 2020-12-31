@@ -253,15 +253,17 @@
             </tbody>
           </table>
         </div>
-        <div class="dropdown" v-if="tabSelected === 'shifts'">
+        <div v-if="tabSelected === 'shifts'">
           <label for="shift1">{{ $t("shift") }} 1</label>
-          <select name="shift1" id="shift1">
+          <select class="custom-select" name="shift1" id="shift1" v-model="currentTimes.first_shift_worker">
             <option v-for="worker in listWorkers" :key="worker.id" :value="worker.id">{{worker.first_name}}
               {{worker.last_name}}
             </option>
           </select>
+          <br>
+          <br>
           <label for="shift2">{{ $t("shift") }} 2</label>
-          <select name="shift2" id="shift2">
+          <select class="custom-select" name="shift2" id="shift2" v-model="currentTimes.second_shift_worker">
             <option v-for="worker in listWorkers" :key="worker.id" :value="worker.id">{{worker.first_name}}
               {{worker.last_name}}
             </option>
@@ -393,7 +395,13 @@
           }
         }
       },
-      async updateShifts () {
+      async updateShifts() {
+        try {
+          let response = await this.$axios.patch('/laundry/' + this.currentTimes.id + '/', this.currentTimes)
+          this.$toast.success("Pohrana uspješna", {duration: 5000})
+        } catch (e) {
+          this.$toast.error("Pohrana neuspješna", {duration: 5000})
+        }
 
       },
       async addWorker() {
@@ -445,6 +453,10 @@
     border: 1px solid #999;
     outline: none;
     background: transparent;
+  }
+
+  .custom-select {
+    width: 30%;
   }
 
   .input-profile {
