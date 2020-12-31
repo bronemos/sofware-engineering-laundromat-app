@@ -216,17 +216,17 @@
         <div class="row" v-if="tabSelected === 'reservations' && this.reservations.length > 0">
           <table>
             <thead>
-            <tr>
-              <th>{{ $t("type") }}</th>
-              <th>{{ $t("date") }}</th>
-              <th>{{ $t("start") }}</th>
-              <th>{{ $t("end") }}</th>
-              <th>{{ $t("price") }}</th>
-              <th>{{ $t("note") }}</th>
-              <th>{{ $t("paid") }}</th>
-              <th>{{ $t("basket") }}</th>
-              <th>{{ $t("type") }}</th>
-            </tr>
+              <tr>
+                <th>{{ $t("type") }}</th>
+                <th>{{ $t("date") }}</th>
+                <th>{{ $t("start") }}</th>
+                <th>{{ $t("end") }}</th>
+                <th>{{ $t("price") }}</th>
+                <th>{{ $t("note") }}</th>
+                <th>{{ $t("paid") }}</th>
+                <th>{{ $t("basket") }}</th>
+                <th>{{ $t("employee") }}</th>
+              </tr>
             </thead>
             <tbody>
             <tr v-for="reservation in reservations" :key="reservation.id" class="show_bt'">
@@ -234,15 +234,15 @@
               <td>{{(new Date(reservation.start)).getDate() + '/' + ((new Date(reservation.start)).getMonth() +1) + '/'
                 +
                 (new Date(reservation.start)).getFullYear()}}
-              </td>
-              <td>{{(new Date(reservation.start)).getHours() +'h'}}</td>
-              <td>{{(new Date(reservation.end)).getHours()+'h'}}</td>
-              <td>{{reservation.price + 'kn'}}</td>
-              <td>{{reservation.note}}</td>
-              <td>{{reservation.paid ? 'Da' : 'Ne'}}</td>
-              <td>{{reservation.basket_taken ? 'Da' : 'Ne'}}</td>
-              <td>{{reservation.employee}}</td>
-            </tr>
+                </td>
+                <td>{{(new Date(reservation.start)).getHours() +'h'}}</td>
+                <td>{{(new Date(reservation.end)).getHours()+'h'}}</td>
+                <td>{{reservation.price + 'kn'}}</td>
+                <td>{{reservation.note}}</td>
+                <td>{{reservation.paid ? 'Da' : 'Ne'}}</td>
+                <td>{{reservation.basket_taken ? 'Da' : 'Ne'}}</td>
+                <td>{{reservation.employee.first_name + ' ' + reservation.employee.last_name}}</td>
+              </tr>
             </tbody>
           </table>
         </div>
