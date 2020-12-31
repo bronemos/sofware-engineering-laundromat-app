@@ -245,7 +245,6 @@ export default {
     };
 
     let appointments = await this.$axios.get(`appointment/`);
-
     var that = this;
     var reserved = [];
     appointments.data.forEach(function (app) {

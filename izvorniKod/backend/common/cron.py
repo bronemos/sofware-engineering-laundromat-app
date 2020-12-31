@@ -13,7 +13,7 @@ def my_cron_job():
 
     laundry = Laundry.objects.filter(date_changed__lte=datetime.now()).first()
 
-    for appointment in Appointment.objects.filter(start__gte=datetime.now(), start__lte=datetime.now() + timedelta(days=1)):
+    for appointment in Appointment.objects.filter(start__gte=datetime.now(), start__lt=datetime.now() + timedelta(days=1)):
         if appointment.start.time() <= laundry.middle:
             appointment.employee = laundry.first_shift_worker
         else:

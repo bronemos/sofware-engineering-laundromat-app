@@ -266,6 +266,15 @@ class LaundryViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Upda
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         laundry_now = serializer.save()
+        for appointment in Appointment.objects.filter(
+                start__gte=datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
+                start__lt=datetime.now().replace(hour=23, minute=0, second=0, microsecond=0)
+        ):
+            if appointment.start.time() <= laundry_now.middle:
+                appointment.employee = laundry_now.first_shift_worker
+            else:
+                appointment.employee = laundry_now.second_shift_worker
+            appointment.save()
         for laundry in Laundry.objects.filter(date_changed__gte=datetime.now()):
             laundry.pause_start = laundry_now.pause_start
             laundry.pause_end = laundry_now.pause_end
@@ -312,6 +321,9 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
             user.save()
         if appointment.start.date() == datetime.now().date():
             laundry = Laundry.objects.filter(date_changed__lte=datetime.now()).first()
+            print(appointment.start.time())
+            print(laundry.middle)
+            print(appointment.start.time() <= laundry.middle)
             if appointment.start.time() <= laundry.middle:
                 appointment.employee = laundry.first_shift_worker
             else:
