@@ -241,12 +241,11 @@
             </tr>
             </thead>
             <tbody>
-            <!-- za našu bazu promijeniti isActive u aktivan -->
             <tr v-for="review in reviews" :key="review.id" class="show_bt'">
               <td>{{review.employee}}</td>
               <td>{{review.user}}</td>
               <td>
-                <star-rating star-size="30" v-model="review.grade" read-only></star-rating>
+                <star-rating :star-size="parseInt(30)" v-model="review.grade" read-only></star-rating>
               </td>
               <td>{{review.text}}</td>
             </tr>
