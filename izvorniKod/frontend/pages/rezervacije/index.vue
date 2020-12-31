@@ -83,12 +83,9 @@
               <hr/>
               <button @click.prevent="terminPropusten()" v-if="user.is_staff && selectedEvent.past == true && selectedEvent.missed === false" class="btn btn-danger">{{ $t("appointmentMissed")}}</button><br/>
               <div v-if="selectedEvent.rating == null && user.is_staff == false">
-                <strong>{{ $t("rateWorker") }}:</strong>
-                <select class="custom-select" v-model="selectedEvent.selectedEmployee">
-                  <option required v-for="worker in selectedEvent.workers_list" v-bind:key="worker.id" v-bind:value="worker.id">
-                    {{ worker.last_name }} {{ worker.first_name }}
-                  </option>
-                </select>
+                <strong>{{ $t("rateWorker") }}:</strong><br/>
+                <span>{{ selectedEvent.employee.first_name }}</span><br/>
+                <span>{{ selectedEvent.employee.last_name }}</span><br/>
                 <textarea class="form-control" rows="5" id="comment" v-model="selectedEvent.ratingText"></textarea>
                 <client-only>
                   <star-rating v-model="selectedEvent.ratingNumber" @rating-selected="setCurrentSelectedRating"></star-rating>
@@ -97,8 +94,8 @@
             </div>
 
             <div v-if="selectedEvent.rating != null">
-                <span>{{ selectedEvent.employee[selectedEvent.rating.employee].first_name }}</span><br/>
-                <span>{{ selectedEvent.employee[selectedEvent.rating.employee].last_name }}</span><br/>
+                <span>{{ selectedEvent.employee.first_name }}</span><br/>
+                <span>{{ selectedEvent.employee.last_name }}</span><br/>
                 <client-only>
                   <star-rating v-model="selectedEvent.rating.grade" read-only></star-rating>
                 </client-only>
@@ -248,15 +245,11 @@ export default {
     };
 
     let appointments = await this.$axios.get(`appointment`);
-    let workers_list = await this.$axios.get("admin/list_workers");
-    let workers = {}
-    for(var work in workers_list.data) {
-      workers[workers_list.data[work].id] = workers_list.data[work];
-    }
 
     var that = this;
     var reserved = [];
     appointments.data.forEach(function (app) {
+      console.log(app.employee)
       var event = {
         id: app.id,
         user: app.user_obj,
@@ -265,8 +258,7 @@ export default {
         price: app.price,
         paid: app.paid,
         basket_taken: app.basket_taken,
-        employee: workers,
-        workers_list: workers_list.data,
+        employee: app.employee,
         missed: app.missed,
         rating: app.review
       };
@@ -434,7 +426,7 @@ export default {
         let response = await this.$axios.post("review/", {
           grade: rating,
           user: this.user.id,
-          employee: this.selectedEvent.selectedEmployee,
+          employee: this.selectedEvent.employee.id,
           appointment: this.selectedEvent.id,
           text: this.selectedEvent.ratingText
         });

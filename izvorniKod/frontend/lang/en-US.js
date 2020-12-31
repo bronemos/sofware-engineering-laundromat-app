@@ -31,7 +31,7 @@ export default {
     reserve: "Reserve",
     loading: "Loading",
     send: "Send",
-    rateWorker: "Choose grade and rate the worker",
+    rateWorker: "Choose grade for the worker",
     appointmentMissed: "Appointment missed",
     takeBasket: "Take basket",
     payOnline: "Pay by card",

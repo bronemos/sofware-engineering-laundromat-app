@@ -29,7 +29,7 @@ export default {
     reserve: "Rezerviraj",
     loading: "Učitavanje",
     send: "Pošalji",
-    rateWorker: "Odaberi i pritisni ocjenu za zaposlenika",
+    rateWorker: "Odaberi ocjenu za zaposlenika",
     appointmentMissed: "Termin propušten",
     takeBasket: "Posudi košaru",
     payOnline: "Kartično plaćanje",
