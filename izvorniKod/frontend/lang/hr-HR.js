@@ -100,4 +100,5 @@ export default {
     borrowedBaskets: "Posuđene košare",
     borrowedBasketsInfo: "Trenutno nema posuđenih košara!",
     returnBtn: "Vrati",
+    payByCard: "Plaćanje karticom",
   }

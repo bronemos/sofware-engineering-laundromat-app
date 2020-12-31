@@ -207,8 +207,8 @@ export default {
     }
 
 
-    let res = await this.$axios.get(`laundry`);
-    let res2 = await this.$axios.get(`laundry/future_laundry`);
+    let res = await this.$axios.get(`laundry/`);
+    let res2 = await this.$axios.get(`laundry/future_laundry/`);
 
     var laundries = {};
     laundries[res.data.date_changed] = res.data;
@@ -244,12 +244,11 @@ export default {
       background: true,
     };
 
-    let appointments = await this.$axios.get(`appointment`);
+    let appointments = await this.$axios.get(`appointment/`);
 
     var that = this;
     var reserved = [];
     appointments.data.forEach(function (app) {
-      console.log(app.employee)
       var event = {
         id: app.id,
         user: app.user_obj,

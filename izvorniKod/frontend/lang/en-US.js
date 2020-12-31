@@ -101,4 +101,5 @@ export default {
     borrowedBaskets: "Borrowed baskets",
     borrowedBasketsInfo: "There are no borrowed baskets!",
     returnBtn: "Return",
+    payByCard: "Pay by card",
 }

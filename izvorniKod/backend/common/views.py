@@ -310,6 +310,13 @@ class AppointmentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.
             user = appointment.user
             user.baskets += 1
             user.save()
+        if appointment.start.date() == datetime.now().date():
+            laundry = Laundry.objects.filter(date_changed__lte=datetime.now()).first()
+            if appointment.start.time() <= laundry.middle:
+                appointment.employee = laundry.first_shift_worker
+            else:
+                appointment.employee = laundry.second_shift_worker
+            appointment.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=['POST'], name='send_email')

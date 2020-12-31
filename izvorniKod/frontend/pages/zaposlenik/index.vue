@@ -139,7 +139,7 @@
       async returnBasket(userId) {
         try {
           let response = await this.$axios.post(`/admin/${userId}/return_basket/`)
-          await this.$axios.get('admin/baskets')
+          await this.$axios.get('admin/baskets/')
             .then(response => {
               this.baskets = response.data
             })
@@ -213,9 +213,8 @@
         .then(response => {
           this.laundryId = response.data.id
         })
-      this.$axios.get('admin/baskets')
+      this.$axios.get('admin/baskets/')
         .then(response => {
-          console.log(response.data);
           this.baskets = response.data;
         })
     },

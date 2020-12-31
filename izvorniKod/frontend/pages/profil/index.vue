@@ -250,7 +250,7 @@ export default {
   },
 
   mounted() {
-    this.$axios.get("appointment/logged_user_appointments").then((response) => {
+    this.$axios.get("appointment/logged_user_appointments/").then((response) => {
       this.reservations = response.data;
     });
   },
