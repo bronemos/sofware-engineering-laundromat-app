@@ -200,7 +200,7 @@
                 <th>{{ $t("note") }}</th>
                 <th>{{ $t("paid") }}</th>
                 <th>{{ $t("basket") }}</th>
-                <th>{{ $t("type") }}</th>
+                <th>{{ $t("employee") }}</th>
               </tr>
             </thead>
             <tbody>
@@ -216,7 +216,7 @@
                 <td>{{reservation.note}}</td>
                 <td>{{reservation.paid ? 'Da' : 'Ne'}}</td>
                 <td>{{reservation.basket_taken ? 'Da' : 'Ne'}}</td>
-                <td>{{reservation.employee}}</td>
+                <td>{{reservation.employee.first_name + ' ' + reservation.employee.last_name}}</td>
               </tr>
             </tbody>
           </table>
