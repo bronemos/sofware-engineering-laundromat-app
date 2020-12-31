@@ -37,6 +37,9 @@ export default {
     details: "Detalji",
     paymentData: "Podaci za plaćanje",
     reservationList: "Lista rezervacija",
+    edit: "Uredi",
+    save: "Pohrani",
+    username: "Korisničko ime",
     nameAndSurname: "Ime i prezime",
     newPassword: "Nova lozinka",
     newPasswordAgain: "Potvrdi novu lozinku",
@@ -91,5 +94,10 @@ export default {
     repeat_password_check: "Lozinka nije ista",
     shifts: "Smjene",
     letGo: "Otpusti",
-    shift: "Smjena"
+    shift: "Smjena",
+    unconfReg: "Nepotvrđene registracije",
+    unconfRegInfo: "Trenutno nema nepotvrđenih korisnika!",
+    borrowedBaskets: "Posuđene košare",
+    borrowedBasketsInfo: "Trenutno nema posuđenih košara!",
+    returnBtn: "Vrati",
   }

@@ -39,6 +39,9 @@ export default {
     details: "Details",
     paymentData: "Payment details",
     reservationList: "Reservation list",
+    edit: "Edit",
+    save: "Save",
+    username: "Username",
     nameAndSurname: "Name and surname",
     newPassword: "New password",
     newPasswordAgain: "Type new password again",
@@ -92,5 +95,10 @@ export default {
     repeat_password_check: "Passwords does not match",
     shifts: "Shifts",
     letGo: "Let go",
-    shift: "Shift"
+    shift: "Shift",
+    unconfReg: "Unconfirmed registrations",
+    unconfRegInfo: "There are no unconfirmed users!",
+    borrowedBaskets: "Borrowed baskets",
+    borrowedBasketsInfo: "There are no borrowed baskets!",
+    returnBtn: "Return",
 }

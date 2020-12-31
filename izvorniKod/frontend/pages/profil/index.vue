@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="col-md-2" v-if="tabSelected === 'details' || tabSelected === 'payment'">
-            <input type="button" class="profile-edit-btn" name="btnAddMore" :value="editProfile || (tabSelected === 'payment') && user.card === null ? 'Pohrani' : 'Uredi'" @click.prevent="submitUpdate" />
+            <input type="button" class="profile-edit-btn" name="btnAddMore" :value="editProfile || (tabSelected === 'payment') && user.card === null ? $t('save') : $t('edit')" @click.prevent="submitUpdate" />
           </div>
         </div>
         <div class="row" v-if="!editProfile">
@@ -37,7 +37,7 @@
               <div class="tab-pane fade show active" id="details-tab" v-if="tabSelected === 'details'">
                 <div class="row">
                   <div class="col-md-4">
-                    <label>Username</label>
+                    <label>{{$t("username")}}</label>
                   </div>
                   <div class="col-md-4">
                     <p>{{user.username}}</p>

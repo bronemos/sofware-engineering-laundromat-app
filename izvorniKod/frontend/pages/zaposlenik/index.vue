@@ -1,8 +1,8 @@
 <template>
   <div class="root">
     <div class="row">
-      <div class="table-container">
-        <table>
+      <div class="table-container pendingUsers">
+        <table v-if="pendingUsers.length != 0">
           <thead>
           <tr>
             <th>{{ $t('nameStudent') }}</th>
@@ -22,6 +22,15 @@
           </tr>
           </tbody>
         </table>
+        <div v-if="pendingUsers.length == 0" class="inner-body">
+          <div class="title">
+            <h2>{{$t('unconfReg')}}</h2>
+          </div>
+          <div>
+            <span style='font-size:100px;'>&#128526;</span>
+            <div style="color:#707070; padding: 10px;">{{$t('unconfRegInfo')}}</div>
+          </div>
+        </div>
       </div>
       <div class="column">
         <div class="inner-body">
@@ -54,6 +63,37 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="table-container rentedBaskets">
+        <div v-if="baskets.length != 0" class="inner-body">
+          <div class="title">
+            <h2>{{$t('borrowedBaskets')}}</h2>
+          </div>
+          <table v-if="baskets.length != 0">
+            <tbody>
+            <tr v-for="user in baskets" :key="user.id" class="show_bt'">
+              <td>{{user.first_name}} {{user.last_name}}</td>
+              <td>{{user.baskets}}</td>
+              <td>
+                <button id="myBtn" @click="returnBasket(user.id)">{{$t('returnBtn')}}</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+         <div v-if="baskets.length == 0" class="inner-body">
+          <div class="title">
+            <h2>{{$t('borrowedBaskets')}}</h2>
+          </div>
+          <div>
+            <span style='font-size:100px;'>&#129447;</span>
+            <div style="color:#707070; padding: 10px;">{{$t('borrowedBasketsInfo')}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -69,6 +109,7 @@
     data() {
       return {
         pendingUsers: [],
+        baskets: [],
         laundryId: null,
         newHoursPrice: {
           "pause_start": null,
@@ -90,6 +131,17 @@
           await this.$axios.get('account/pending_users/')
             .then(response => {
               this.pendingUsers = response.data.pending
+            })
+        } catch (error) {
+          this.$toast.error(error, {duration: 8000});
+        }
+      },
+      async returnBasket(userId) {
+        try {
+          let response = await this.$axios.post(`/admin/${userId}/return_basket/`)
+          await this.$axios.get('admin/baskets')
+            .then(response => {
+              this.baskets = response.data
             })
         } catch (error) {
           this.$toast.error(error, {duration: 8000});
@@ -161,6 +213,11 @@
         .then(response => {
           this.laundryId = response.data.id
         })
+      this.$axios.get('admin/baskets')
+        .then(response => {
+          console.log(response.data);
+          this.baskets = response.data;
+        })
     },
 
     computed: {
@@ -189,9 +246,23 @@
     text-align: center;
   }
 
-  table {
+  .pendingUsers table {
     display: grid;
     grid-template-columns: minmax(150px, 1fr) minmax(150px, 1.2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+    grid-template-rows: 50px;
+    background: #fff;
+    /* height: 480px; */
+    max-height: 450px;
+    border-radius: 0.5rem;
+    /* padding: 15px; */
+    overflow: auto;
+    border-collapse: collapse;
+    /* min-width: 100%; */
+  }
+
+  .rentedBaskets table {
+    display: grid;
+    grid-template-columns: minmax(150px, 1fr) minmax(150px, 0.8fr) minmax(150px, 1fr);
     grid-template-rows: 50px;
     background: #fff;
     /* height: 480px; */
@@ -284,13 +355,13 @@
     padding: 5px;
   }
 
-  @media only screen and (min-width: 1280px) {
+  /* @media only screen and (min-width: 1280px) {
     .form-body {
       display: grid;
       grid-template-columns: 1fr 0.5fr 1fr 0.5fr;
       padding: 5px;
     }
-  }
+  } */
 
   .row {
     width: 100%;
