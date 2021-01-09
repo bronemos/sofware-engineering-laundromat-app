@@ -321,6 +321,11 @@
 			\eject
 		\section{Dijagram komponenti}
 		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			Dijagram komponenti prikazan slikom 4.7 prikazuje komponente i njihovu ovisnost unutar aplikacije. \\Nuxt ima funkciju routera koji u ovisnosti o url-u na frontend web aplikacije šalje odgovarajuće HTML, CSS i Javascript dokumente. Sami frontend je podijeljen na logičke komponente koje su nazvane ovisno o imenu stranice tj. dijelu aplikacije kojemu se pristupa. Sve frontend komponente ovisne su o \textit{layouts} i \textit{components} komponentama iz kojih povlače podatke o zaglavlju stranice koje je vidljivo u svakom trenutku.\\ Django REST API komunicira s bazom podataka te poslužuje potrebne JSON podatke koji su mu dostupni unutar baze.
+			
+			\begin{figure}[H]
+				\includegraphics[width=.9\linewidth]{slike/dijagram_komponenti.PNG}
+				\centering
+				\caption{Dijagram komponenti}
+				\label{fig:dijagram_komponenti}
+			\end{figure}
