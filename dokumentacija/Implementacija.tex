@@ -100,12 +100,102 @@
 		
 		\section{Upute za puštanje u pogon}
 		
-			\textbf{\textit{dio 2. revizije}}\\
+			Za puštanje u pogon, koristili smo heroku server (https://www.heroku.com/). Prvi korak za puštanje u pogon bila je podjela aplikacije na poslužiteljsku i korisničku stranu. Svaki se od tih djelova aplikacije treba staviti u zasebnu mapu. Imena mapi moraju odgovarati imenima aplikacija na heroku poslužitelju. Mi smo se odlučili za naziv terminko za korisničku stranu te naziv terminko1 za poslužiteljsku stranu.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.25]{slike/FrontendMapa.PNG}
+				\caption{Mapa za frontend: terminko}
+				\label{fig:promjene}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.25]{slike/BackendMapa.PNG}
+				\caption{Mapa za backend: terminko1}
+				\label{fig:promjene}
+			\end{figure}
 		
-			 \textit{U ovom poglavlju potrebno je dati upute za puštanje u pogon (engl. deployment) ostvarene aplikacije. Na primjer, za web aplikacije, opisati postupak kojim se od izvornog kôda dolazi do potpuno postavljene baze podataka i poslužitelja koji odgovara na upite korisnika. Za mobilnu aplikaciju, postupak kojim se aplikacija izgradi, te postavi na neku od trgovina. Za stolnu (engl. desktop) aplikaciju, postupak kojim se aplikacija instalira na računalo. Ukoliko mobilne i stolne aplikacije komuniciraju s poslužiteljem i/ili bazom podataka, opisati i postupak njihovog postavljanja. Pri izradi uputa preporučuje se \textbf{naglasiti korake instalacije uporabom natuknica} te koristiti što je više moguće \textbf{slike ekrana} (engl. screenshots) kako bi upute bile jasne i jednostavne za slijediti.}
+			Prvo smo na heroku postavili klijentsku stranu na način da smo prvo napravili aplikaciju terminko. Nakon izrade aplikacije, u odjeljku settings postavili smo konfiguracijske varijable kako je prikazano na slici te smo dodali "buildpack" za Node.js.
 			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{slike/KonfiguracijaFrontend.PNG}
+				\caption{Konfiguracija za frontend}
+				\label{fig:promjene}
+			\end{figure}
+		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.45]{slike/BuildpackFrontend.PNG}
+				\caption{Buildpack za frontend}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Na lokalnom smo stroju, u mapu terminko dodali Procfile i u nuxt-config.js dodali novi base-URL za upite na backend
 			
-			 \textit{Dovršenu aplikaciju potrebno je pokrenuti na javno dostupnom poslužitelju. Studentima se preporuča korištenje neke od sljedećih besplatnih usluga: \href{https://aws.amazon.com/}{Amazon AWS}, \href{https://azure.microsoft.com/en-us/}{Microsoft Azure} ili \href{https://www.heroku.com/}{Heroku}. Mobilne aplikacije trebaju biti objavljene na F-Droid, Google Play ili Amazon App trgovini.}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.25]{slike/ProcFileFrontend.PNG}
+				\caption{Procfile za frontend}
+				\label{fig:promjene}
+			\end{figure}
 			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.25]{slike/PromjenaFrontend.PNG}
+				\caption{Promjena axios base-URL}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Nakon toga, još nam je preosalo pozicionirati se u terminko mapu u terminalu, napisati naredbe git init, heroku git:remote -a terminko i git push heroku master. Nakon toga je klijentska strana bila spremna te smo krenuli s poslužiteljskom stranom.
 			
-			\eject 
+			Za poslužiteljsku smo stranu napravili aplikaciju terminko1 na heroku. Na poslužiteljskoj strani nije bilo konfiguracijskih varijabli, dok smo za "buildpack" stavili heroku/python u settings odjeljku. Za razliku od fontenda, na backendu smo na heroku, u tabu resources dodali Heroku Postgres.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.50]{slike/Postgres.PNG}
+				\caption{Postavljanje Postgres baze podataka na heroku}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Dakako i u mapu terminko1 morali smo dodati Procfile.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.25]{slike/ProcFileBackend.PNG}
+				\caption{Procfile na backendu}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Nakon toga, dobili smo podatke za prijavu na postgres server koje smo stavili u settings.py datoteku na backendu. U istoj smo datoteci promjenili i CORS origin whitelist, koji označava odalke nas backend može primati zahtjeve, te allowed hosts, koji označava na kojim se poslužiteljima naš backend smije pokretati.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.50]{slike/DatabaseData.PNG}
+				\caption{Postavljanje Postgres konfiguracije u settings.py}
+				\label{fig:promjene}
+			\end{figure}
+		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.80]{slike/CorsWhitelist.PNG}
+				\caption{Postavljanje cors whitelist u settings.py}
+				\label{fig:promjene}
+			\end{figure}
+		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.60]{slike/AllowedHosts.PNG}
+				\caption{Postavljanje allowed hosts varijable u settings.py}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Nakon toga, još nam je preosalo pozicionirati se u terminko1 mapu u terminalu, napisati naredbe git init, heroku git:remote -a terminko1 i git push heroku master. Nakon toga, cijela je aplikacija bila spremna. 
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.20]{slike/HerokuAplikacije.PNG}
+				\caption{Prikaz stanja na heroku po završetku deploya}
+				\label{fig:promjene}
+			\end{figure}
