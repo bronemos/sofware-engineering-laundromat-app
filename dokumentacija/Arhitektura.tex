@@ -322,12 +322,12 @@
 				\includegraphics[width=1\linewidth]{slike/Dijagram aktivnosti.png}
 				\centering
 				\caption{Dijagram aktivnosti}
-				\label{fig:promjene}
+				\label{fig:dijagram_aktivnosti}
 			\end{figure}
 			\eject
 		\section{Dijagram komponenti}
 		
-			Dijagram komponenti prikazan slikom 4.7 prikazuje komponente i njihovu ovisnost unutar aplikacije. \\Nuxt ima funkciju routera koji u ovisnosti o url-u na frontend web aplikacije šalje odgovarajuće HTML, CSS i Javascript dokumente. Sami frontend je podijeljen na logičke komponente koje su nazvane ovisno o imenu stranice tj. dijelu aplikacije kojemu se pristupa. Sve frontend komponente ovisne su o \textit{layouts} i \textit{components} komponentama iz kojih povlače podatke o zaglavlju stranice koje je vidljivo u svakom trenutku.\\ Django REST API komunicira s bazom podataka te poslužuje potrebne JSON podatke koji su mu dostupni unutar baze.
+			Dijagram komponenti prikazan na slici \ref{fig:dijagram_komponenti} prikazuje komponente i njihovu ovisnost unutar aplikacije. \\Nuxt ima funkciju routera koji u ovisnosti o url-u na frontend web aplikacije šalje odgovarajuće HTML, CSS i Javascript dokumente. Sami frontend je podijeljen na logičke komponente koje su nazvane ovisno o imenu stranice tj. dijelu aplikacije kojemu se pristupa. Sve frontend komponente ovisne su o \textit{layouts} i \textit{components} komponentama iz kojih povlače podatke o zaglavlju stranice koje je vidljivo u svakom trenutku.\\ Django REST API komunicira s bazom podataka te poslužuje potrebne JSON podatke koji su mu dostupni unutar baze.
 			
 			\begin{figure}[H]
 				\includegraphics[width=.9\linewidth]{slike/dijagram_komponenti.PNG}
