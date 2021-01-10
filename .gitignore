@@ -1,6 +1,7 @@
 # exclude izvorniKod from devdoc branch
 izvorniKod/
 backend/.idea/
+dokumentacija/PROGI_2020_Janezi_v1_0.pdf
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -293,4 +294,3 @@ TSWLatexianTemp*
 *.glstex
 
 # End of https://www.toptal.com/developers/gitignore/api/latex
-#PROGI_2020_Janezi_v1_0.pdf
