@@ -19,8 +19,61 @@
 	
 			
 			\subsection{Ispitivanje komponenti}
-			\textit{Potrebno je provesti ispitivanje jedinica (engl. unit testing) nad razredima koji implementiraju temeljne funkcionalnosti. Razraditi \textbf{minimalno 6 ispitnih slučajeva} u kojima će se ispitati redovni slučajevi, rubni uvjeti te izazivanje pogreške (engl. exception throwing). Poželjno je stvoriti i ispitni slučaj koji koristi funkcionalnosti koje nisu implementirane. Potrebno je priložiti izvorni kôd svih ispitnih slučajeva te prikaz rezultata izvođenja ispita u razvojnom okruženju (prolaz/pad ispita). }
+			U ovom ćemo poglavlju predstaviti 9 ispitnih slučajeva (unit testova). Svi se ispitni primjeri mogu pronaći u datoteci janezi/izvorniKod/backend/common/tests.py koja je sastavljena od 4 klase koje ukupno sadrže 9 testova te sadrži 137 linija programskog koda.
 			
+			\vspace{5mm} %5mm vertical space
+			
+			Ispitni slučajevi 1 i 2 odnose se na prijavu korisnika. Oba se ispitna slučaja nalaze u klasi AccountTests. U prvom se slučaju korisnik ne može prijaviti jer mu korisnički račun nije potvrđen, dok se u drugom slučaju, odmah nakon potvrde računa, korisnik može uspješno prijaviti. U prvom je slučaju očekivan odgovor 400 (pogreška), dok je u drugom slučaju očekivan odgovor 200. Oba ispitna primjera daju očekivani rezultat.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{slike/AccountTests.PNG}
+				\caption{Ispitni slučajevi vezani za prijavu korisnika}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Ispitni slučajevi 3 i 4 vezani su za administratora te provjeravaju ispravnost funkcionalnosti blokiranja korisnika. Oba se ispitna slučaja nalaze u klasi AdminTests. Prvi slučaj izaziva pogrešku (kod 401 UNAUTHORIZED) jer korisnik koji nije administrator pokušava blokirati račun drugog korisnika. U drugom slučaju, korisnik koji je administrator blokira korisnika i provjerava se točnost akcije. Oba ispitna primjera daju očekivani rezultat.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{slike/AdminTests.PNG}
+				\caption{Ispitni slučajevi vezani za prijavu korisnika}
+				\label{fig:promjene}
+			\end{figure}
+	
+			Ispitni slučajevi 5, 6 i 7 odnose se na funkcionalnost vraćanja košare. Oba se ispitna slučaja nalaze u klasi WorkerTests. Prvi slučaj predstavlja situaciju u kojoj korisnik koji ne radi u praonici pokušava vratiti košaru. Taj bi slučaj trebao vratiti poruku 401 UNAUTHORIZED kako netko ne bi mogao zloupotrebljavati povrat košare. Drugi test provjerava ponašanje aplikacije u slučaju kad radnik pokuša označiti da je netko vratio košaru te osim provjere uspješnosti (kod 200), provjerava se i je li se broj košara tog korisnika smanjio na 0 (linija 75 u kodu). Sva tri ispitna primjera daju rezultat u skladu s očekivanjima.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{slike/WorkerTests.PNG}
+				\caption{Ispitni slučajevi vezani za vraćanje košara}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Posljednja klasa ispitnih primjera, nalazi se u klasi AppointmentTests i sadrži ispitne primjere 8 i 9. Osmi ispitni primjer provjerava može li neregistrirani korisnik napraviti rezervaciju te je očekivano ponašanje pogreška s kodom 401. Ispitni primjer br. 9 ispituje rezervaciju termina nakon prijave i provjerava je li radnja bila uspješna (kod 201 CREATED). Oba ispitna primjera daju očekivani rezultat.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{slike/AppointmentTests1.PNG}
+				\caption{Ispitni slučajevi vezani za rezervaciju termina, slika 1/2}
+				\label{fig:promjene}
+			\end{figure}
+		
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{slike/AppointmentTests2.PNG}
+				\caption{Ispitni slučajevi vezani za rezervaciju termina, slika 2/2}
+				\label{fig:promjene}
+			\end{figure}
+		
+			Svi se spomenuti testovi mogu pokrenuti iz terminala aktivacijom virtualnog okruženja, pozicioniranjem u mapu backend i pozivanjem naredbe ./manage.py test. Kao što je već spomenuto, svi se testovi izvršavaju točno, a slika ~\ref{fig:TestsTerminal} pokretanja naredbe ./manage.py test dana je u prilogu. 
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[scale=0.65]{slike/TestsTerminal.PNG}
+				\caption{Pokretanje svih ispitnih slučajeva u terminalu}
+				\label{fig:TestsTerminal}
+			\end{figure}
 			
 			
 			\subsection{Ispitivanje sustava}
