@@ -62,7 +62,7 @@
 	\begin{packed_enum}
 		
 		\item prijaviti se u sustav
-		\item pregled vlastitog profila i uređivanje podataka
+		\item pregledati vlastiti profil i uređivati podatke
 		\item pristupiti zidu s obavijestima o izgubljenim stvarima
 		\item promijeniti vrijeme pauze
 		\item označiti tko je posudio košaru za rublje
@@ -470,7 +470,7 @@ content...
 	\item[] \begin{packed_enum}
 		
 		\item Administrator odabire opciju za stvaranje novog oglasa
-		\item Administrator ispunjava tekst i podatke oglasa
+		\item Administrator popunjava tekst i podatke oglasa
 		\item Oglas se objavljuje odabirom opcije za objavljivanje oglasa.
 	\end{packed_enum}
 	
@@ -481,7 +481,9 @@ content...
 		\item[2.a] Pogrešno uneseni podaci o natječaju
 		\item[] \begin{packed_enum}
 			
-			\item Omogućiti uređivanje oglasa nakon objave
+			\item Odabire opciju za uređivanje oglasa nakon objave
+			\item Administrator ispravlja pogrešku
+			\item Odabire opciju za spremanje promjena
 			
 		\end{packed_enum}				
 	\end{packed_item}
@@ -499,7 +501,7 @@ content...
 	\item[] \begin{packed_enum}
 		
 		\item Administrator odabire opciju promjene radnog vremena
-		\item Prikaže se modal za odabir novog radnog vremena
+		\item Prikaže se prozor za odabir novog radnog vremena
 		\item Administrator unosi novo radno vrijeme
 		\item Administrator odabire opciju za potvrdu novog radnog vremena
 	\end{packed_enum}
@@ -535,7 +537,7 @@ content...
 	\item[] \begin{packed_enum}
 		
 		\item Administrator odabire opciju promjene cijene sušenja
-		\item Prikaže se modal za unos nove cijene sušenja
+		\item Prikaže se prozor za unos nove cijene sušenja
 		\item Administrator unosi novu cijenu sušenja
 		\item Administrator odabire opciju za potvrdu nove cijene sušenja
 	\end{packed_enum}
@@ -557,6 +559,18 @@ content...
 		\item Administrator odabire korisnika ili više njih
 		\item Administrator odabire opciju za potvrdu zabrane pristupa
 	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Ne postoje registrirani korisnici
+		\item[] \begin{packed_enum}
+			
+			\item Prikaže se odgovarajuća poruka
+			
+		\end{packed_enum}				
+	\end{packed_item}
 \end{packed_item}
 
 \noindent \underbar{\textbf{UC16 - Uređivanje oglasa za posao}}
@@ -576,6 +590,18 @@ content...
 		\item Administrator unosi izmjene
 		\item Administrator odabire opciju za potvrdu izmjena
 	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Nema objavljenih oglasa
+		\item[] \begin{packed_enum}
+			
+			\item Prikaže se odgovarajuća poruka
+			
+		\end{packed_enum}				
+	\end{packed_item}
 \end{packed_item}
 
 \noindent \underbar{\textbf{UC17 - Brisanje oglasa za posao}}
@@ -595,6 +621,18 @@ content...
 		\item Administrator odabire opciju za brisanje
 		\item Administrator odabire opciju za potvrdu izmjena
 	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Nema objavljenih oglasa
+		\item[] \begin{packed_enum}
+			
+			\item Prikaže se odgovarajuća poruka
+			
+		\end{packed_enum}				
+	\end{packed_item}
 \end{packed_item}
 
 \noindent \underbar{\textbf{UC18 - Dodavanje novih korisnika}}
@@ -633,6 +671,18 @@ content...
 		\item Administrator odabire opciju za brisanje korisnika
 		\item Administrator odabire opciju za potvrdu izmjena
 	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Ne postoje registrirani korisnici
+		\item[] \begin{packed_enum}
+			
+			\item Prikaže se odgovarajuća poruka
+			
+		\end{packed_enum}				
+	\end{packed_item}
 \end{packed_item}
 
 \noindent \underbar{\textbf{UC20 - Uređivanje korisnika}}
@@ -641,7 +691,7 @@ content...
 	\item \textbf{Glavni sudionik: } Administrator
 	\item  \textbf{Cilj:} Urediti podatke o korisniku
 	\item  \textbf{Sudionici:} Baza podataka
-	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora, te postoje registrirani korisnici
+	\item  \textbf{Preduvjet:} Korisnik je registriran i dodijeljena su mu prava administratora te postoje registrirani korisnici
 	\item  \textbf{Opis osnovnog tijeka:}
 	
 	\item[] \begin{packed_enum}
@@ -652,6 +702,18 @@ content...
 		\item Administrator unosi izmjene
 		\item Administrator odabire opciju za potvrdu izmjena
 	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Ne postoje registrirani korisnici
+		\item[] \begin{packed_enum}
+			
+			\item Prikaže se odgovarajuća poruka
+			
+		\end{packed_enum}				
+	\end{packed_item}
 \end{packed_item}
 
 \noindent \underbar{\textbf{UC21 - Pregled recenzija svih zaposlenika}}
@@ -670,6 +732,18 @@ content...
 		\item Administrator odabire zaposlenika čije recenzije želi pogledati
 		\item Administrator odabire opciju za pregled recenzija
 	\end{packed_enum}
+	
+	\item  \textbf{Opis mogućih odstupanja:}
+	
+	\item[] \begin{packed_item}
+		
+		\item[2.a] Ne postoje registrirani korisnici
+		\item[] \begin{packed_enum}
+			
+			\item Prikaže se odgovarajuća poruka
+			
+		\end{packed_enum}				
+	\end{packed_item}
 \end{packed_item}
 
 \noindent \underbar{\textbf{UC22 - Oznaka posudbe košare za rublje}}
@@ -867,7 +941,7 @@ content...
 	
 	\item[] \begin{packed_item}
 		
-		\item[1.a] Korisnik ima nevažeću potvrdu o životu u studentskom   domu 
+		\item[1.a] Korisnik ima nevažeću potvrdu o stanovanju u studentskom   domu 
 		\item[] \begin{packed_enum}
 			
 			\item Zaposlenik mu ne potvrđuje registraciju
@@ -913,7 +987,7 @@ content...
 \end{comment}
 \textbf{Obrazac uporabe UC1 i UC2 - Registracija i Prijava korisnika}\\
 
-Neregistrirani korisnik unosi podatke u formu. Web preglednik vrši provjeru podataka i vraća povratnu informaciju korisniku sve dok ne unese potrebne podatke ili ne odustane. Kada se unesu točni podaci šalje se zahtjev za stvaranje računa prema web aplikaciji. Web aplikacija šalje upit prema bazi podataka kojim provjerava da li korisnik već postoji. Ako račun već postoji korisnika se obaviještava o pogreški, inače račun se zapisuje u bazu podataka. Tada korisnik (student) treba otići u praonicu sa potvrdom o boravištu. Zaposlenik nakon provjere potvrde aktivira korisnikov račun. Nakon toga korisnik se može prijaviti u sustav. Prijavu započinje unosom podataka u formu za prijavu. Web aplikacija dohvaća podatke o korisniku iz baze podataka. Provjerom utvrđuje ispravnost unesenih podataka. Ako su ispravni korisniku se prikazuje početna stranica, inače se dojavljuje pogreška.
+Neregistrirani korisnik unosi podatke u formu. Web preglednik vrši provjeru podataka i vraća povratnu informaciju korisniku sve dok ne unese potrebne podatke ili ne odustane. Kada se unesu točni podaci šalje se zahtjev za stvaranje računa prema web aplikaciji. Web aplikacija šalje upit prema bazi podataka kojim provjerava postoji li korisnik od prije. Ako račun već postoji korisnika se obaviještava o pogrešci, inače račun se zapisuje u bazu podataka. Tada korisnik (student) treba otići u praonicu sa potvrdom o boravištu. Zaposlenik nakon provjere potvrde aktivira korisnikov račun. Nakon toga korisnik se može prijaviti u sustav. Prijavu započinje unosom podataka u formu za prijavu. Web aplikacija dohvaća podatke o korisniku iz baze podataka. Provjerom utvrđuje ispravnost unesenih podataka. Ako su ispravni korisniku se prikazuje početna stranica, inače se dojavljuje pogreška.
 
 
 \begin{figure}[H]
