@@ -20,7 +20,7 @@
 		\label{fig:promjene}
 	\end{figure}	
 
-	\underline{\textit{Web preglednik}} je program čije je svrha omogućiti pregled web-stranice te njenog multimedijalnog sadržaja. Osim samog pregleda, web preglednik mora moći prevesti kod stoga je on ujedinio i kompajler. U našem slučaju web preglednik će prevoditi kod radnog okvira (\emph{engl. framework}) Nuxt.js koje je proširenje Vue.js frameworka.
+	\underline{\textit{Web preglednik}} je program čije je svrha omogućiti pregled web-stranice te njenog multimedijalnog sadržaja. Osim samog pregleda, web preglednik mora moći prevesti kôd stoga jer je on ujedno i kompajler. U našem slučaju web preglednik će prevoditi kôd radnog okvira (\emph{engl. framework}) Nuxt.js koje je proširenje Vue.js frameworka.
 
 	\underline{\textit{Web poslužitelj}} je sustav koji treba omogućiti odvijanje komunikacije web preglednika i baze podataka. Njegova zadaća je obrađivati zahtjeve koje zahtjeva web preglednik, po potrebi komunicirati s bazom podataka te vratiti rezultat obrade. Rezultat obrade biti se će SSR (engl. Server Side Rendered) - statički generirana stranica. Komunikacija s poslužiteljem odvija se putem protokola HTTP (\emph{engl. Hyper Text Transfer Protocol}). U našem slučaju za izradu web poslužitelja koristimo Python framework Django koji je besplatan i \emph{open source}.
 
@@ -40,13 +40,15 @@
 	\pagebreak
 				
 	\section{Baza podataka}
-			
+		
+		\begin{comment}
 			\textbf{\textit{dio 1. revizije}}\\
 			
 		\textit{Potrebno je opisati koju vrstu i implementaciju baze podataka ste odabrali, glavne komponente od kojih se sastoji i slično.}
+		\end{comment}
 				
 		\noindent Za potrebe našeg sustava koristit ćemo relacijsku bazu podataka PostgreSQL.
-		Baza se sastoji od relacija (tablica) i njihovih atributa. Bayu podataka koristimo za pohranu informacija o korisnicima, njihovim rezervacijama i podacima o praonici.
+		Baza se sastoji od relacija (tablica) i njihovih atributa. Bazu podataka koristimo za pohranu informacija o korisnicima, njihovim rezervacijama i podacima o praonici.
 		Baza podataka ove aplikacije sastoji se od sljedećih entiteta:
 		\begin{packed_item}
 			\item 	Machine
@@ -61,7 +63,7 @@
 		
 			\subsection{Opis tablica}
 			
-
+				\begin{comment}
 				\textit{Svaku tablicu je potrebno opisati po zadanom predlošku. Lijevo se nalazi točno ime varijable u bazi podataka, u sredini se nalazi tip podataka, a desno se nalazi opis varijable. Svjetlozelenom bojom označite primarni ključ. Svjetlo plavom označite strani ključ}
 				
 				\begin{longtabu} to \textwidth {|X[6, l]|X[6, l]|X[20, l]|}
@@ -83,6 +85,7 @@
 					
 					
 				\end{longtabu}
+				\end{comment}
 			
 			\noindent\textbf{Machine}  Ovaj entitet sadrži sve važne informacije vezane za uređaj u praonici. Sadrži atribute: id uređaja i type. Ovaj entitet u vezi je \textit{Many-to-One} s entitetom Appointment preko id-a uređaja.
 			
@@ -232,7 +235,9 @@
 			
 			
 			\subsection{Dijagram baze podataka}
+			\begin{comment}
 				\textit{ U ovom potpoglavlju potrebno je umetnuti dijagram baze podataka. Primarni i strani ključevi moraju biti označeni, a tablice povezane. Bazu podataka je potrebno normalizirati. Podsjetite se kolegija "Baze podataka".}
+			\end{comment}
 				
 				\begin{figure}[H]
 					\includegraphics[scale=0.2]{slike/BAZA.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
@@ -253,7 +258,7 @@
 			
 			
 		\section{Dijagram razreda}
-		
+		\begin{comment}
 			\textit{Potrebno je priložiti dijagram razreda s pripadajućim opisom. Zbog preglednosti je moguće dijagram razlomiti na više njih, ali moraju biti grupirani prema sličnim razinama apstrakcije i srodnim funkcionalnostima.}\\
 			
 			\textbf{\textit{dio 1. revizije}}\\
@@ -263,6 +268,7 @@
 			\textbf{\textit{dio 2. revizije}}\\			
 			
 			\textit{Prilikom druge predaje projekta dijagram razreda i opisi moraju odgovarati stvarnom stanju implementacije} \\
+		\end{comment}
 			
 			Zbog toga što je web poslužitelj napisan u Pythonu, ne možemo reći da u našem web modelu postoje razredi u pravom smislu riječi. Naime, moguće je pisati razred u Pythonu, ali nije moguće koristiti vrste pristupa. Sve metode, razredi i atributi su javne (i tako će biti označene na dijagramima). Moguće je naznačiti da želimo da se komponenta ponaša kao privatna korištenjem donje crtice u njenom imenu. Stoga zaključujemo da razredi u Pythonu postoje i moguće je izraditi dijagram razreda za komponente web aplikacije iako razredi nemaju potpune funkcionalnosti objektno orijentiranog jezika. Django koristi razrede prilikom svoje implementacije. Kao što je već navedeno, Django se temelji na modelu MTV (\emph{Model-Template-View}).\\\
 			
@@ -307,14 +313,25 @@
 			\eject 
 		
 		\section{Dijagram aktivnosti}
-			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			 \textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
-			
+		
+		Dijagram aktivnosti primjenjuje se za opis modela toka upravljanja ili toka podataka. Ne upotrebljava se za modeliranje događajima poticanog ponašanja. U modeliranju toka upravljanja svaki novi korak poduzima se nakon završenog prethodnog, a naglasak je na jednostavnosti. Na dijagramu aktivnosti 4.7 prikazan je
+		proces rezervacije termina u praonici. Korisnik se prijavi u sustav, odabire stranicu Rezervacije koja prikaže kalendar s dostupnim terminima za rezervaciju i odabire slobodan termin. Zatim mu se prikazuje forma preko koje može odabrati posudbu košare te napisati bilješku. Nakon toga odabire Rezerviraj čime se termin rezervira te se korisniku prikaže osvježen kalendar s njegovom upisanom rezervacijom termina.
+
+		
+				\begin{figure}[H]
+				\includegraphics[width=1\linewidth]{slike/Dijagram aktivnosti.png}
+				\centering
+				\caption{Dijagram aktivnosti}
+				\label{fig:promjene}
+			\end{figure}
 			\eject
 		\section{Dijagram komponenti}
 		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			Dijagram komponenti prikazan slikom 4.7 prikazuje komponente i njihovu ovisnost unutar aplikacije. \\Nuxt ima funkciju routera koji u ovisnosti o url-u na frontend web aplikacije šalje odgovarajuće HTML, CSS i Javascript dokumente. Sami frontend je podijeljen na logičke komponente koje su nazvane ovisno o imenu stranice tj. dijelu aplikacije kojemu se pristupa. Sve frontend komponente ovisne su o \textit{layouts} i \textit{components} komponentama iz kojih povlače podatke o zaglavlju stranice koje je vidljivo u svakom trenutku.\\ Django REST API komunicira s bazom podataka te poslužuje potrebne JSON podatke koji su mu dostupni unutar baze.
+			
+			\begin{figure}[H]
+				\includegraphics[width=.9\linewidth]{slike/dijagram_komponenti.PNG}
+				\centering
+				\caption{Dijagram komponenti}
+				\label{fig:dijagram_komponenti}
+			\end{figure}
