@@ -36,7 +36,7 @@
           type="submit"
           :disabled="disableSubmit"
         >
-          Post
+          {{ $t('post') }}
         </button>
       </div>
     </b-form>

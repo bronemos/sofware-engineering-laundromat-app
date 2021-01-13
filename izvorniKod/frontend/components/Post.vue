@@ -3,7 +3,7 @@
   <div class="card-container">
     <div class="card u-clearfix">
       <section>
-        <button v-if="type == 'lost' && (user.is_staff || user.is_superuser) || type == 'job' && user && user.is_superuser" class="button-delete" @click="deletePost">Obriši</button>
+        <button v-if="type == 'lost' && (user.is_staff || user.is_superuser) || type == 'job' && user && user.is_superuser" class="button-delete" @click="deletePost">{{ $t('delete') }}</button>
         <div class="card-body">
           <label
             ><img
@@ -16,9 +16,9 @@
               class="upload-icon"
               src="~@/static/images/lost.png"
             />
-            <span v-if="type == 'job'" class="card-title">Oglas za posao</span>
+            <span v-if="type == 'job'" class="card-title">{{ $t('jobAd') }}</span>
             <span v-if="type == 'lost'" class="card-title">
-              Zaboravljen odjevni predmet
+              {{ $t('forgottenClothesArticle')}}
             </span>
           </label>
           <span class="card-description">
@@ -29,7 +29,7 @@
 
           <div class="card-read "></div>
           <label class="subtle">
-            <span> Posted on: {{ date }} </span>
+            <span> {{ $t('postedOn') }}: {{ date }} </span>
           </label>
         </div>
         <div class="post-image">

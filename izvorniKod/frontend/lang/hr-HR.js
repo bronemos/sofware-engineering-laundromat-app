@@ -98,4 +98,8 @@ export default {
     borrowedBasketsInfo: "Trenutno nema posuđenih košara!",
     returnBtn: "Vrati",
     payByCard: "Plaćanje karticom",
+    forgottenClothesArticle: "Zaboravljen odjevni predmet",
+    jobAd: "Oglas za posao",
+    postedOn: "Objavljeno",
+    post: "Objavi",
   }

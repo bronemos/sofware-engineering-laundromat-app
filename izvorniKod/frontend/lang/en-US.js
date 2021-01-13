@@ -99,4 +99,8 @@ export default {
     borrowedBasketsInfo: "There are no borrowed baskets!",
     returnBtn: "Return",
     payByCard: "Pay by card",
+    forgottenClothesArticle: "Forgotten clothes article",
+    jobAd: "Job ad",
+    postedOn: "Posted on",
+    post: "Post",
 }
