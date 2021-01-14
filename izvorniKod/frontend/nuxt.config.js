@@ -28,11 +28,14 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~plugins/vue-cal.js', srr: false },
+    { src: '~plugins/star-rating.js', srr: false  }
   ],
   /*
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Nuxt.js modules
@@ -44,6 +47,25 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/toast',
     '@nuxtjs/auth',
+    ['nuxt-i18n', {
+      lazy: true,
+      locales: [
+        {
+          name: 'Hrvatski',
+          code: 'hr',
+          iso: 'hr-HR',
+          file: 'hr-HR.js'
+        },
+        {
+          name: 'English',
+          code: 'en',
+          iso: 'en-US',
+          file: 'en-US.js'
+        },
+      ],
+      langDir: 'lang/',
+      defaultLocale: 'hr',
+    }]
   ],
   /*
   ** Axios module configuration
@@ -71,7 +93,8 @@ export default {
   /*
   ** Build configuration
   */
-  build: {
+  build: {  
+    transpile: ['vue-cal', 'star-rating'],
     /*
     ** You can extend webpack config here
     */
