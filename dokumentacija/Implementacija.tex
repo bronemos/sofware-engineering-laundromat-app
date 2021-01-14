@@ -91,14 +91,14 @@
 				\caption{Pokretanje svih ispitnih slučajeva u terminalu}
 				\label{fig:TestsTerminal}
 			\end{figure}
-			
+			\eject
 			
 			\subsection{Ispitivanje sustava}
 			 \begin{packed_enum}
 			 	\item Pokušaj prijave neodgovarajućom lozinkom.
 			 	\begin{itemize}
 			 		\item Ulaz: korsničko ime i kriva lozinka u formi za prijavu
-			 		\item Izlaz: \i{toast} poruka sa ispisom "Pogrešna lozinka"
+			 		\item Izlaz: poruka sa ispisom "Pogrešna lozinka"
 			 	\begin{figure}[H]
 			 		\includegraphics[width=0.95\linewidth]{slike/test0.png}
 			 		\centering
@@ -106,12 +106,13 @@
 			 		\label{fig:dijagram_razmjestaja}
 			 	\end{figure}
 		 		\end{itemize}
+	 			Ovim ispitom provjeravamo pokušaj prijave registriranog korisnika u sustav sa neispravnom lozinkom (UC2 - Prijava). Korisniku se ne daje pristup sustavu te se ispisuje poruka "Pogrešna lozinka" kao povratna poruka njegove radnje.
 	 			\eject
 	 		
 	 		\item Pokušaj registracije sa previše uobičajnom lozinkom.
 	 		\begin{itemize}
 	 			\item Ulaz: korsničko ime i preuobičajna lozinka u formi za registraciju
-	 			\item Izlaz: \i{toast} poruka sa ispisom "Password too common"
+	 			\item Izlaz: poruka sa ispisom "Password too common"
 	 			\begin{figure}[H]
 	 				\includegraphics[width=0.95\linewidth]{slike/test1.png}
 	 				\centering
@@ -119,12 +120,13 @@
 	 				\label{fig:dijagram_razmjestaja}
 	 			\end{figure}
 	 		\end{itemize}
+ 			Ispitujemo pokušaj registracije korisnika se previše uobičajnom lozinkom (UC1 - Registracija). Ako se korisnik pokušava registrirati u sustav sa svim ispravnim podacima ali uobičajnom lozinkom (kao što su 123456789, abcdefgh, ime123,...). Odziv sustava je neuspjela registracija s povratnom porukom "Password too common".
  			\eject
  		
 	 		\item Pogrešni podaci kreditne kartice.
 	 		\begin{itemize}
 	 			\item Ulaz: broj kreditne kartice, CVV i datum isteka
-	 			\item Izlaz: \i{toast} poruka sa ispisom "Nevaljajuća kreditna kartica"
+	 			\item Izlaz: poruka sa ispisom "Nevaljajuća kreditna kartica"
 	 			\begin{figure}[H]
 	 				\includegraphics[width=0.95\linewidth]{slike/test2.png}
 	 				\centering
@@ -132,6 +134,7 @@
 	 				\label{fig:dijagram_razmjestaja}
 	 			\end{figure}
 	 		\end{itemize}
+ 			Ovim ispitom provjeravamo pokušaj dodavanja nepostojeće kreditne kartice u sustav korisnika (UC3 - Pregled vlastitog profila i uređivanje podataka). Ako jedan od odgovarajućih potrebnih podataka za kartično plaćanje nije točan (broj kreditne kartice, CVV ili datum isteka valjanosti) sustav ne dozvoljava spremanje navedene kartice na profil korisnika i vraća poruku "Nevaljajuća kreditna kartica".
  			\eject
 			 	
 			 	\item Registracija i brisanje postojećeg slobodnog termina.
@@ -145,6 +148,7 @@
 			 			\label{fig:dijagram_razmjestaja}
 			 		\end{figure}
 			 	\end{itemize}
+		 	Ispitujemo pokušaj rezervacije termina te brisanje vlastitog rezerviranog termina (UC4 - Rezervacija termina za pranje veša). Ako slobodni termin ne postoji u kalendaru korisnik ga ne može rezervirati. Korisnik isto tako može obrisati rezervirani termin, ali ako ga obriše tri sata prije početka termina dodjeljuju mu se negativni bodovi u koje uvid ima administrator sustava. 
 			 \end{packed_enum}
 		 	 \eject
 		
