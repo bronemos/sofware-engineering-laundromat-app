@@ -55,8 +55,9 @@
 			\item 	Appointment
 			\item 	User
 			\item 	Post
-			\item 	Recension
-			\item 	Washday
+			\item 	Review
+			\item 	Laundry
+			\item 	Card
 		\end{packed_item}	
 	
 		\noindent Osim naših tablica, Django sam stvara nove tablice poput permissiona, sessiona i logova.
@@ -87,7 +88,7 @@
 				\end{longtabu}
 				\end{comment}
 			
-			\noindent\textbf{Machine}  Ovaj entitet sadrži sve važne informacije vezane za uređaj u praonici. Sadrži atribute: id uređaja i type. Ovaj entitet u vezi je \textit{Many-to-One} s entitetom Appointment preko id-a uređaja.
+			\noindent\textbf{Machine}  Ovaj entitet sadrži sve važne informacije vezane za uređaj u praonici. Sadrži atribute: id uređaja i type. Ovaj entitet u vezi je \textit{One-to-Many} s entitetom Appointment preko id-a uređaja.
 			
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
@@ -106,7 +107,7 @@
 				
 			\end{longtabu}
 		
-			\noindent\textbf{Appointment}  Ovaj entitet sadrži sve važne informacije vezane za rezervirani termin u praonici. Sadrži atribute: id termina, time, machine\_id, price, opcionalni note, paid, basket\_taken, user\_id i employee\_id. Ovaj entitet u vezi je \textit{One-to-Many} s entitetom Machine preko id-a uređaja, vezi \textit{Many-to-One} s entitetom User preko id-a korisnika i id-a zaposlenika.
+			\noindent\textbf{Appointment}  Ovaj entitet sadrži sve važne informacije vezane za rezervirani termin u praonici. Sadrži atribute: id termina, start, machine\_id, price, opcionalni note, paid, basket\_taken, user\_id, employee\_id i missed. Ovaj entitet u vezi je \textit{Many-to-One} s entitetom Machine preko id-a uređaja, vezi \textit{Many-to-One} s entitetom User preko id-a korisnika i id-a zaposlenika i vezi \textit{One-to-One} s entitetom Review preko id-a termina.
 		
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
@@ -119,18 +120,19 @@
 				\hline 
 				\endlastfoot
 				\textbf{id} & INT	&  jedinstveni brojčani identifikator	\\ \hline
-				time & TIMESTAMP	&  	datum rezerviranog termina u praonici i vrijeme početka 	\\ \hline
+				start & TIMESTAMP	&  	datum rezerviranog termina u praonici i vrijeme početka 	\\ \hline
 				machine\_id (FK)	& INT &  jedinstveni identifikator uređaja kojeg rezerviramo u terminu (machine.id) 	\\ \hline 
 				price & FLOAT &  cijena usluge koju korisnik plaća (pranje ili sušenje) \\ \hline 
 				note & VARCHAR	& opcionalna bilješka zaposleniku \\ \hline 
 				paid & BOOLEAN	& korisnik bira hoće li platiti termin online ili uživo	\\ \hline 
-				basket\_taken & BOOLEAN	& korisnik može posuditi jednu košaru iz praonice 	\\ \hline 
+				basket\_taken & BOOLEAN	& korisnik može posuditi jednu košaru po terminu iz praonice 	\\ \hline 
 				user\_id (FK)	& INT &  jedinstveni identifikator korisnika koji je rezervirao termin (user.id) 	\\ \hline 
 				employee\_id (FK)	& INT &  jedinstveni identifikator zaposlenika koji radi za vrijeme rezerviranog termina (user.id)	\\ \hline
+				missed	& BOOLEAN &  zaposlenici vode evidenciju propuštenih termina	\\ \hline
 				
 			\end{longtabu}
 		
-			\noindent\textbf{User}  Ovaj entitet sadrži sve važne informacije vezane za različite korisnike u praonici. Sadrži atribute: id korisnika, username, password, first\_name, last\_name, jedinstveni JMBAG, jedinstveni email, is\_active, is\_staff, card\_number, negative\_points, date\_joined, last\_login, is\_superuser. Ovaj entitet u vezi je \textit{One-to-Many}  \textit{One-to-Many} s entitetom Appointment preko id-a korisnika, u vezi \textit{One-to-Many} s entitetom Post preko id-a korisnika i u vezi \textit{One-to-Many} s entitetom Recension preko id-a korisnika.
+			\noindent\textbf{User}  Ovaj entitet sadrži sve važne informacije vezane za različite korisnike u praonici. Sadrži atribute: id korisnika, username, password, first\_name, last\_name, jedinstveni JMBAG,  jedinstveni email, is\_active, is\_staff, card\_id, negative\_points, date\_joined, last\_login, is\_superuser i baskets. Ovaj entitet u vezi je \textit{One-to-Many} s entitetom Appointment preko id-a korisnika, u vezi \textit{One-to-Many} s entitetom Post preko id-a korisnika, u vezi \textit{One-to-Many} s entitetom Review preko id-a korisnika, u vezi \textit{One-to-One} s entitetom Card preko id-a kreditne kartice i u vezi \textit{Many-to-Many} s entitetom Laundry preko id-a korisnika
 		
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
@@ -153,17 +155,18 @@
 				is\_active & BOOLEAN &  svi korisnici čije registracije su potvrđene od zaposlenika i koji nisu blokirani\\ \hline 
 				is\_staff & BOOLEAN &  oznaka je li korisnik i zaposlenik\\ \hline 
 				is\_superuser	& BOOLEAN &   pokazuje je li korisnik ujedno i administrator	\\ \hline
-				card\_number	& VARCHAR &   broj kreditne kartice korisnika	\\ \hline
+				card\_id (FK)	& INT &   jedinstveni idnetifikator kreditne kartice (card.id) \\ \hline
 				negative\_points	& INT &   broj negativnih bodova korisnika	\\ \hline
 				date\_joined	& DATE &   datum registracije korisnika	\\ \hline
 				last\_login	& TIMESTAMP &  vrijeme zadnje prijave u sustav	\\ \hline
+				baskets	& INT &  broj košara koje je su trenutno kod korisnika	\\ \hline
 			
 				
 				
 			\end{longtabu}
 		
 			\noindent\textbf{Post}  Ovaj entitet sadrži sve važne informacije vezane za objavu. Sadrži atribute: id objave, photo, text, date, type i employee\_id. 
-			Ovaj entitet u vezi je \textit{Many-to-One} s entitetom User preko id-a zaposlenika.
+			Ovaj entitet u vezi je \textit{Many-to-One} s entitetom User preko id-a korisnika.
 		
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
@@ -181,20 +184,20 @@
 				text	& VARCHAR &   tekst objave	\\ \hline
 				date	& DATE &  datum objavljivanja objave	\\ \hline
 				type	& BOOLEAN &   ako je vrijednost zastavice 1, objava se prikazuje na "LostAndFound" stranici 	\\ \hline
-				employee\_id (FK)	& INT &  id zaposlenika koji radi za vrijeme rezerviranog termina (user.id) 	\\ \hline		
+				posted\_by\_id (FK)	& INT &  id korisnika koji je napravio objavu (user.id) 	\\ \hline		
 						
 				
 				
 			\end{longtabu}
 		
-			\noindent\textbf{Recension}  Ovaj entitet sadrži sve važne informacije vezane za recenzije. Sadrži atribute: id recenzije, user\_id, employee\_id, text i grade. Ovaj entitet u vezi je \textit{Many-to-One} s entitetom User preko id-a zaposlenika i id-a korisnika.
+			\noindent\textbf{Review}  Ovaj entitet sadrži sve važne informacije vezane za recenzije. Sadrži atribute: id recenzije, user\_id, employee\_id, text, grade i appointment\_id. Ovaj entitet u vezi je \textit{Many-to-One} s entitetom User preko id-a zaposlenika i id-a korisnika i u vezi \textit{One-to-One} s entitetom Appointment preko id-a termina.
 		
 			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Recension}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Review}}	 \\[3pt] \hline
 				\endfirsthead
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Recension}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Review}}	 \\[3pt] \hline
 				\endhead
 				
 				\hline 
@@ -205,30 +208,58 @@
 				employee\_id (FK)	& INT &  id recenziranog zaposlenika (user.id)	\\ \hline
 				text	& VARCHAR &   tekst recenzije	\\ \hline
 				grade	& INT & ocjena zaposlenika od 1 do 5	\\ \hline
-				
+				appointment\_id (FK)	& INT & id termina koji se recenzira (appointment.id)	\\ \hline
+								
 			\end{longtabu}
 			
-			\noindent\textbf{Washday}  Ovaj entitet sadrži sve važne informacije vezane za radni dan praonice. Sadrži atribute: id radnog dana, date, open\_time, close\_time, pause\_start, pause\_end i wash\_price. Ovaj entitet nije u vezi ni s jednim drugim entitetom.
+			\noindent\textbf{Laundry}  Ovaj entitet sadrži sve važne informacije vezane za radni dan praonice. Sadrži atribute: id radnog dana, date\_changed, open\_time, close\_time, pause\_start, pause\_end, wash\_price, drying\_price, first\_shift\_worker\_id, middle, pause2\_star, pause2\_end i second\_shift\_worker\_id. Ovaj entitet u vezi je \textit{Many-to-Many} s entitetom User preko id-a radnika prve i druge smjene.
 			
-			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+			\begin{longtabu} to \textwidth {|X[11, l]|X[6, l]|X[20, l]|}
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Washday}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Laundry}}	 \\[3pt] \hline
 				\endfirsthead
 				
-				\hline \multicolumn{3}{|c|}{\textbf{Washday}}	 \\[3pt] \hline
+				\hline \multicolumn{3}{|c|}{\textbf{Laundry}}	 \\[3pt] \hline
 				\endhead
 				
 				\hline 
 				\endlastfoot
 				
 				\textbf{id} & INT	&  jedinstveni brojčani  identifikator radnog dana praonice	\\ \hline
-				date & DATE	&  trenutni datum	\\ \hline
+				date\_changed & TIMESTAMP	&  vrijeme promjene radnog vremena	\\ \hline
 				open\_time	& TIME &   početak radnog vremena	\\ \hline
 				close\_time	& TIME & kraj radnog vremena	\\ \hline
-				pause\_start	& TIME & početak pauze	\\ \hline
-				pause\_end	& TIME & kraj pauze	\\ \hline
+				pause\_start	& TIME & početak prve pauze	\\ \hline
+				pause\_end	& TIME & kraj prve pauze	\\ \hline
 				wash\_price	& FLOAT & cijena jednog pranja	\\ \hline
 				drying\_price	& FLOAT & cijena jednog sušenja	\\ \hline
+				first\_shift\_worker\_id (FK) & INT & id zaposlenika prve smjene (user.id)	\\ \hline
+				middle	& TIME & sredina dana, početak druge smjene	\\ \hline
+				pause2\_start	& TIME & početak druge pauze	\\ \hline
+				pause2\_end	& TIME & kraj druge pauze	\\ \hline
+				second\_shift\_worker\_id (FK) & INT & id zaposlenika druge smjene (user.id)	\\ \hline
+				
+				
+				
+			\end{longtabu}
+		
+			\noindent\textbf{Card}  Ovaj entitet sadrži sve važne informacije vezane za kreditnu karticu korisnika. Sadrži atribute: id kartice, cc\_number, cc\_expiry i cc\_code. Ovaj entitet u vezi je \textit{One-to-One} s entitetom User preko id-a kreditne kartice.
+			
+			\begin{longtabu} to \textwidth {|X[8, l]|X[6, l]|X[20, l]|}
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Card}}	 \\[3pt] \hline
+				\endfirsthead
+				
+				\hline \multicolumn{3}{|c|}{\textbf{Card}}	 \\[3pt] \hline
+				\endhead
+				
+				\hline 
+				\endlastfoot
+				
+				\textbf{id} & INT	&  jedinstveni brojčani identifikator	\\ \hline
+				cc\_number & VARCHAR &  broj kreditne kartice\\ \hline 
+				cc\_expiry & DATE &  datum isteka kreditne kartice\\ \hline 
+				cc\_code & VARCHAR &  CVV kod kreditne kartice\\ \hline 
 				
 				
 			\end{longtabu}
@@ -275,7 +306,7 @@
 			\pagebreak
 			\emph{Models} u Djangu su Python razredi koji se automatski prenose u obliku relacija u bazu podataka korištenjem Djangovih karakterističnih \emph {migrate} funkcionalnosti.  Prilikom pisanja Modela potrebno je obratiti pozornost na njihovu povezanost i buduću brojnost u bazi podataka. 	
 			\begin{figure}[H]
-				\includegraphics[scale=0.55]{slike/Razredni_dijagrami_Models.PNG} 
+				\includegraphics[scale=0.50]{slike/Razredni_dijagrami_Models.PNG} 
 				\centering
 				\caption{Dijagram razreda - dio Models}
 				\label{fig:promjene}
@@ -303,24 +334,37 @@
  			
  			
 		\section{Dijagram stanja}
+
+			Dijagram stanja prikazuje stanja objekta te prijelaze iz jednog stanja u drugo temeljene na događajima.  Na slici  je prikazan dijagram stanja za zaposlenika. Nakon prijave, zaposleniku se prikazuje početna stranica. Učitaju se radno vrijeme i cijena pranja te sušenja kako bi se prikazali na početno stranici. Sa početne stranice, i bilo koje druge, može doći do stranica: Profil, Poslovi, Zaboravljeno, Zaposlenik i Rezervacije. Stranica Profil ima tri podstranice: Detalji, Lista rezervacija i Podaci za plaćanje. Detalje računa i podatke o plaćanju je moguće uređivati. Na stranicama Poslovi i Zaboravljeno moguće je napisati i objaviti objavu. Na stranici rezervacije je prikazan kalendar sa terminima. Odabirom zauzetog termina, on se može otkazati ili se može poslati mail korisniku. Za slobodni termin se može odabrati posudba košare te se može rezervirati. Na zaposleniku se mogu prihvatiti novi korisnici, vraćati košare i može se promijeniti vrijeme pauze.
 			
-			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			\textit{Potrebno je priložiti dijagram stanja i opisati ga. Dovoljan je jedan dijagram stanja koji prikazuje \textbf{značajan dio funkcionalnosti} sustava. Na primjer, stanja korisničkog sučelja i tijek korištenja neke ključne funkcionalnosti jesu značajan dio sustava, a registracija i prijava nisu. }
-			
-			
+			\begin{figure}[H]
+				\includegraphics[width=1\linewidth]{slike/dijagram-stanja.jpg}
+				\centering
+				\caption{Dijagram stanja}
+				\label{fig:dijagram_stanja}
+			\end{figure}
 			\eject 
 		
 		\section{Dijagram aktivnosti}
-			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			 \textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
-			
+		
+		Dijagram aktivnosti primjenjuje se za opis modela toka upravljanja ili toka podataka. Ne upotrebljava se za modeliranje događajima poticanog ponašanja. U modeliranju toka upravljanja svaki novi korak poduzima se nakon završenog prethodnog, a naglasak je na jednostavnosti. Na dijagramu aktivnosti 4.7 prikazan je
+		proces rezervacije termina u praonici. Korisnik se prijavi u sustav, odabire stranicu Rezervacije koja prikaže kalendar s dostupnim terminima za rezervaciju i odabire slobodan termin. Zatim mu se prikazuje forma preko koje može odabrati posudbu košare te napisati bilješku. Nakon toga odabire Rezerviraj čime se termin rezervira te se korisniku prikaže osvježen kalendar s njegovom upisanom rezervacijom termina.
+
+		
+				\begin{figure}[H]
+				\includegraphics[width=1\linewidth]{slike/Dijagram aktivnosti.png}
+				\centering
+				\caption{Dijagram aktivnosti}
+				\label{fig:dijagram_aktivnosti}
+			\end{figure}
 			\eject
 		\section{Dijagram komponenti}
 		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			Dijagram komponenti prikazan na slici \ref{fig:dijagram_komponenti} prikazuje komponente i njihovu ovisnost unutar aplikacije. \\Nuxt ima funkciju routera koji u ovisnosti o url-u na frontend web aplikacije šalje odgovarajuće HTML, CSS i Javascript dokumente. Sami frontend je podijeljen na logičke komponente koje su nazvane ovisno o imenu stranice tj. dijelu aplikacije kojemu se pristupa. Sve frontend komponente ovisne su o \textit{layouts} i \textit{components} komponentama iz kojih povlače podatke o zaglavlju stranice koje je vidljivo u svakom trenutku.\\ Django REST API komunicira s bazom podataka te poslužuje potrebne JSON podatke koji su mu dostupni unutar baze.
+			
+			\begin{figure}[H]
+				\includegraphics[width=.9\linewidth]{slike/dijagram_komponenti.PNG}
+				\centering
+				\caption{Dijagram komponenti}
+				\label{fig:dijagram_komponenti}
+			\end{figure}
